@@ -20,8 +20,11 @@
     "build:linux": "electron-vite build && electron-builder --linux --config"
   },
   "dependencies": {
+    "@codemirror/lang-json": "^6.0.1",
     "@electron-toolkit/preload": "^2.0.0",
     "@electron-toolkit/utils": "^2.0.0",
+    "@uiw/codemirror-theme-tokyo-night-storm": "^4.21.21",
+    "@uiw/react-codemirror": "^4.21.21",
     "electron-updater": "^6.1.1"
   },
   "devDependencies": {
