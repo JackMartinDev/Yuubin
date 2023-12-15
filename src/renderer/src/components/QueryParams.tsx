@@ -1,39 +1,55 @@
 import { useState } from "react"
 import styles from "./QueryParams.module.css"
-
-import type { RootState } from '../store/store'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from "react-redux";
+import { updateParams } from "@renderer/requestSlice";
 
 const QueryParams = () => {
     const [queries, setQueries] = useState([{key: "", value: ""}]);
+    const dispatch = useDispatch();
 
-    const url = useSelector((state: RootState) => state.request.url)
-    
+
     const incrementQueryCount = () =>{
         setQueries([...queries, {key: "", value: ""}]);
     }
 
-    const removeQuery = (index: number) =>{
-        const newArray = [...queries];
-        newArray.splice(index, 1);
-        setQueries(newArray)
+    const inputChangeHandler = (index: number, field:string, newValue: string) => {
+        const newArray = queries.map((query, queryIndex) =>
+            index === queryIndex ? { ...query, [field]: newValue } : query
+        );
+        setQueries(newArray);
+        dispatch(updateParams(newArray))
+    };
+
+    //TODO: Modify so it doesnt delete all with same key
+    const removeQuery = (key: string) =>{
+        setQueries((prev) => prev.filter((query) => query.key !== key))
+        //This delete doesnt work due to late state update
+        dispatch(updateParams(queries))
     }
 
     const queryInput = queries.map((query, index) => (
+        //Add key here by changing from a fragment
         <>
             <div className={styles.gridItem}>
-                <input type="text" />
+                <input 
+                    type="text" 
+                    value={query.key} 
+                    onChange={(e) => inputChangeHandler(index, "key" , e.target.value)}/>
             </div>
             <div className={styles.gridItem}>
-                <input type="text" />
+                <input 
+                    type="text" 
+                    value={query.value} 
+                    onChange={(e) => inputChangeHandler(index, "value" ,e.target.value)}/>
             </div> 
-            <button className={styles.gridItem} onClick={() => removeQuery(index)}>Delete</button>
+            <button 
+                className={styles.gridItem} 
+                onClick={() => removeQuery(query.key)}>Delete</button>
         </>
     ))
 
     return(
         <div>
-            <p>{url}</p>
             <div className={styles.grid}>
                 <div className={styles.gridItem}>
                     <h4>Name</h4>
@@ -48,7 +64,6 @@ const QueryParams = () => {
             <button onClick={incrementQueryCount}>
                 + Add Param
             </button>
-
         </div>
     )
 }
