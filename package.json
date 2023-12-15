@@ -23,9 +23,11 @@
     "@codemirror/lang-json": "^6.0.1",
     "@electron-toolkit/preload": "^2.0.0",
     "@electron-toolkit/utils": "^2.0.0",
+    "@reduxjs/toolkit": "^2.0.1",
     "@uiw/codemirror-theme-tokyo-night-storm": "^4.21.21",
     "@uiw/react-codemirror": "^4.21.21",
-    "electron-updater": "^6.1.1"
+    "electron-updater": "^6.1.1",
+    "react-redux": "^9.0.4"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^1.0.1",
