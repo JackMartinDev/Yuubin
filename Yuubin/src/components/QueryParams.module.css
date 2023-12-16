@@ -1,0 +1,25 @@
+.grid{
+    display: grid;
+    grid-template:
+    "a a a" auto
+    "b b b" auto;
+    border-bottom: 1px solid gray;
+}
+
+.gridItem{
+    padding: 5px;
+    border-top: 1px solid gray;
+    border-right: 1px solid gray;
+    border-left: 1px solid gray;
+}
+
+
+.gridItem input{
+    border: 1px solid black;
+    border-radius: 2px;
+    height: 25px;
+    font-size: 1rem;
+}
+button{
+    padding: 5px;
+}
