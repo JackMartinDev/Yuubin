@@ -27,10 +27,14 @@ export const requestSlice = createSlice({
         },
         updateParams: (state, action: PayloadAction<{key: string, value:string}[]>) =>{
             state.queryParams = action.payload
+        },
+        updateBody: (state, action: PayloadAction<string>) => {
+            state.body = action.payload
         }
+
     },
 })
 
-export const { updateUrl, updateVerb, updateParams } = requestSlice.actions
+export const { updateUrl, updateVerb, updateParams, updateBody } = requestSlice.actions
 
 export default requestSlice.reducer

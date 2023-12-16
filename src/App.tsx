@@ -1,20 +1,12 @@
-import CodeMirror from "@uiw/react-codemirror"
-import { json } from "@codemirror/lang-json"
-import { tokyoNightStorm } from "@uiw/codemirror-theme-tokyo-night-storm" 
-import { useCallback, useState } from "react"
 import SearchBar from "./components/SearchBar"
 import QueryParams from "./components/QueryParams"
+import RequestBody from "./components/RequestBody"
 
 function App(): JSX.Element {
-    const [value, setValue] = useState("console.log('Hello World!');")
-    const onChange = useCallback((val, viewUpdate) => {
-        console.log("val: ", val);
-        setValue(val);
-    }, []);
     return (
         <div className="container">
-            <h3>Hey you</h3>
-            <CodeMirror value={value} height="200px" theme={tokyoNightStorm} extensions={[json()]} onChange={onChange} />
+            <h3>REST Client</h3>
+            <RequestBody/>
             <SearchBar/>
             <QueryParams/>
         </div>
