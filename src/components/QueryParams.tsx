@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { updateParams } from "../requestSlice";
 
 const QueryParams = () => {
-    const [queries, setQueries] = useState([{key: "", value: ""}]);
+    const [queries, setQueries] = useState<{key: string, value: string}[]>([]);
     const dispatch = useDispatch();
 
 
@@ -22,9 +22,9 @@ const QueryParams = () => {
 
     //TODO: Modify so it doesnt delete all with same key
     const removeQuery = (key: string) =>{
-        setQueries((prev) => prev.filter((query) => query.key !== key))
-        //This delete doesnt work due to late state update
-        dispatch(updateParams(queries))
+        const newArray = queries.filter((query) => query.key !== key)
+        setQueries(newArray)
+        dispatch(updateParams(newArray))
     }
 
     const queryInput = queries.map((query, index) => (

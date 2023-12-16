@@ -5,18 +5,26 @@ import { HttpVerb, updateUrl, updateVerb } from "../requestSlice"
 import ResponseBody from "./ResponseBody"
 import { useState } from "react"
 
+interface RequestParams{
+    [key: string]: string
+}
+
 const SearchBar = () =>{
     const [response, setResponse] = useState();
-//  const params = useSelector((state: RootState) => state.request.queryParams)
+    const paramsArray = useSelector((state: RootState) => state.request.queryParams)
     const url = useSelector((state: RootState) => state.request.url)
     const method = useSelector((state: RootState) => state.request.httpVerb)
     const body = useSelector((state:RootState) => state.request.body)
     let data:string
+    let params: RequestParams
 
     const dispatch = useDispatch()
 
-
     const sendRequest = async () => {
+        console.log(paramsArray)
+        if(paramsArray){
+            params = paramsArray.reduce((obj, item) => (obj[item.key] = item.value, obj) ,{});
+        }
         try{
             if(body){ 
                 data = JSON.parse(body);
@@ -25,9 +33,11 @@ const SearchBar = () =>{
             console.log("JSON data is malformed");
             return
         }
+
         const res = await axios({
             url,
             method,
+            params,
             data,
         })
         const resData = await res.data;
