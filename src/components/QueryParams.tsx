@@ -1,23 +1,27 @@
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import styles from "./QueryParams.module.css"
 import { useDispatch } from "react-redux";
 import { updateParams } from "../requestSlice";
+import { debounce } from "../utils/utils"
 
 const QueryParams = () => {
     const [queries, setQueries] = useState<{key: string, value: string}[]>([]);
     const dispatch = useDispatch();
 
-
     const incrementQueryCount = () =>{
         setQueries([...queries, {key: "", value: ""}]);
     }
+    
+    const debouncedDispatch = useCallback(debounce((value: typeof queries) => {
+        dispatch(updateParams(value))
+        }, 500), []);
 
     const inputChangeHandler = (index: number, field:string, newValue: string) => {
         const newArray = queries.map((query, queryIndex) =>
             index === queryIndex ? { ...query, [field]: newValue } : query
         );
         setQueries(newArray);
-        dispatch(updateParams(newArray))
+        debouncedDispatch(newArray);
     };
 
     //TODO: Modify so it doesnt delete all with same key
