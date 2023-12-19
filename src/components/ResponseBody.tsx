@@ -1,15 +1,20 @@
 import CodeMirror from "@uiw/react-codemirror"
 import { json } from "@codemirror/lang-json"
 import { tokyoNightStorm } from "@uiw/codemirror-theme-tokyo-night-storm" 
+import type { RootState } from "../store/store"
+import { useSelector } from "react-redux"
 
-interface Props {
-    value: string
-}
-
-const ResponseBody = (props: Props) => {
+const ResponseBody = () => {
+    const body = useSelector((state: RootState) => state.response.response)
+    const time = useSelector((state: RootState) => state.response.elapsed)
+    const size = useSelector((state: RootState) => state.response.size)
+    const status = useSelector((state: RootState) => state.response.status)
     return(
         <div>
-            <CodeMirror value={props.value} height="200px" theme={tokyoNightStorm} extensions={[json()]} readOnly />
+            <p>{status}</p>
+            <p>{time}</p>
+            <p>{size}</p>
+            {body && <CodeMirror value={JSON.stringify(body, null, 2)} height="200px" theme={tokyoNightStorm} extensions={[json()]} readOnly />}
         </div>
     )
 }

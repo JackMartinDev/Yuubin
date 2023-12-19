@@ -1,16 +1,21 @@
 import type { RootState } from "../store/store"
 import { useSelector, useDispatch } from "react-redux"
-import axios from "axios"
+import axios, { AxiosResponse } from "axios"
 import { HttpVerb, updateUrl, updateVerb } from "../requestSlice"
-import ResponseBody from "./ResponseBody"
-import { useState } from "react"
+import { updateElapsed, updateHeaders, updateResponse, updateSize, updateStatus } from "../responseSlice"
+import prettyBytes from "pretty-bytes"
 
 interface RequestParams{
     [key: string]: string
 }
 
+declare module 'axios' {
+    export interface AxiosRequestConfig {
+        metadata?: { startTime: number };
+    }
+}
+
 const SearchBar = () =>{
-    const [response, setResponse] = useState();
     const paramsArray = useSelector((state: RootState) => state.request.queryParams)
     const url = useSelector((state: RootState) => state.request.url)
     const method = useSelector((state: RootState) => state.request.httpVerb)
@@ -20,8 +25,34 @@ const SearchBar = () =>{
 
     const dispatch = useDispatch()
 
+//@ts-ignore
+axios.interceptors.request.use(config => {
+    config.metadata = { startTime: new Date().getTime() };
+    return config;
+}, (error: any) => {
+        return Promise.reject(error);
+});
+
+    axios.interceptors.response.use((response: AxiosResponse) => {
+        const endTime = new Date().getTime();
+        const duration = response.config.metadata ? endTime - response.config.metadata.startTime : null;
+
+        if (duration !== null) {
+            dispatch(updateElapsed(duration));
+        }
+
+        return response;
+    }, (error: any) => {
+            if (error.config && error.config.metadata) {
+                const endTime = new Date().getTime();
+                const duration = endTime - error.config.metadata.startTime;
+                dispatch(updateElapsed(duration));
+            }
+            return Promise.reject(error);
+        });
+
+
     const sendRequest = async () => {
-        console.log(paramsArray)
         if(paramsArray){
             params = paramsArray.reduce((obj, item) => (obj[item.key] = item.value, obj) ,{});
         }
@@ -40,8 +71,12 @@ const SearchBar = () =>{
             params,
             data,
         })
+
+        dispatch(updateResponse(res.data));
+        dispatch(updateStatus(res.status));
+        dispatch(updateSize(prettyBytes(JSON.stringify(res.data).length + JSON.stringify(res.headers).length)));
+        dispatch(updateHeaders(JSON.stringify(res.headers)));
         const resData = await res.data;
-        setResponse(resData)
         console.log(resData)
     }
 
@@ -66,7 +101,6 @@ const SearchBar = () =>{
             </select>
             <input type="url" id="url" placeholder="Enter URL" onChange={(e) => onUrlChangeHandler(e.target.value)}/>
             <button onClick={sendRequest}>Send</button>
-            <ResponseBody value={JSON.stringify(response, null, 2)}/>
         </div>
     )
 }
