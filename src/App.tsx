@@ -5,9 +5,9 @@ import RequestBody from "./components/RequestBody"
 function App(): JSX.Element {
     return (
         <div className="container">
-            <h3>REST Client</h3>
-            <RequestBody/>
+
             <SearchBar/>
+            <RequestBody/>
             <QueryParams/>
         </div>
     )
