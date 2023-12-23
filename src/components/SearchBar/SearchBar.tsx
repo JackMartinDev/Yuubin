@@ -5,13 +5,6 @@ import styles from "./SearchBar.module.css"
 import Select, { SingleValue } from "react-select"
 import useSendRequest from "../../hooks/useSendRequest"
 
-
-declare module 'axios' {
-    export interface AxiosRequestConfig {
-        metadata?: { startTime: number };
-    }
-}
-
 interface OptionType {
   value: HttpVerb;
   label: HttpVerb;
@@ -27,10 +20,31 @@ const options: OptionType[] = [
     { value: 'HEAD', label: 'HEAD' },
 ]
 
+const selectStyles = {
+    control: (baseStyles, state) => ({
+        ...baseStyles,
+        border: 'none',
+        cursor: 'pointer',
+        borderRadius: 'none',
+        background: 'transparent',
+    }),
+    indicatorSeparator: (baseStyles, state) => ({
+        ...baseStyles,
+        display: 'none',
+    }),
+    option: (baseStyles, state) => ({
+        ...baseStyles,
+        cursor: 'pointer',
+    }),
+    menu: (baseStyles, state) => ({
+        ...baseStyles,
+        backgroundColor: 'lightgray',
+    }),
+}
+
 const SearchBar = () =>{
     const [selectedOption, setSelectedOption] = useState<OptionType>(options[0]);
     const dispatch = useDispatch()
-
     const sendRequest = useSendRequest();
 
     const onMethodChangeHander = (option: SingleValue<OptionType>) =>{
@@ -45,9 +59,10 @@ const SearchBar = () =>{
 
     return(
         <div className={styles.body}>
-            <Select options={options} onChange={onMethodChangeHander} value={selectedOption}/>
-            <input type="url" id="url" placeholder="Enter URL" onChange={(e) => onUrlChangeHandler(e.target.value)}/>
-            <button onClick={sendRequest}>Send</button>
+            <Select options={options} onChange={onMethodChangeHander} value={selectedOption}
+                styles={selectStyles}/>
+            <input className={styles.url} type="url" id="url" placeholder="Enter URL" onChange={(e) => onUrlChangeHandler(e.target.value)}/>
+            <button className={styles.btn} onClick={sendRequest}>Send</button>
         </div>
     )
 }

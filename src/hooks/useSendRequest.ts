@@ -8,6 +8,12 @@ interface RequestParams{
     [key: string]: string
 }
 
+declare module 'axios' {
+    export interface AxiosRequestConfig {
+        metadata?: { startTime: number };
+    }
+}
+
 const useSendRequest = () => {    
     const paramsArray = useSelector((state: RootState) => state.request.queryParams)
     const url = useSelector((state: RootState) => state.request.url)
