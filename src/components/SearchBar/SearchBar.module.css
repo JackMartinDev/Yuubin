@@ -3,14 +3,7 @@
     padding: 0.5rem;
     background-color: gray;
     border-radius: 2px;
+    display: flex;
+    gap: 10px;
 }
 
-.dropdown {
-    appearance: none;
-    border: none;
-    background-color: inherit;
-}
-
-.dropdown:hover{
-    cursor: pointer;
-}
