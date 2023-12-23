@@ -22,7 +22,7 @@ const RequestBody = () => {
 
     return(
         <div>
-            <CodeMirror value={value} height="200px" theme={tokyoNightStorm} extensions={[json()]} onChange={onChange} />
+            <CodeMirror value={value} height="500px" theme={tokyoNightStorm} extensions={[json()]} onChange={onChange} />
         </div>
     )
 }

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { AxiosResponseHeaders, HttpStatusCode } from "axios";
+import { HttpStatusCode } from "axios";
 
 export interface ResponseState{
     response: string | null,

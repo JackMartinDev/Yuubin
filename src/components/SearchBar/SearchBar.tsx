@@ -1,9 +1,10 @@
-import type { RootState } from "../store/store"
+import type { RootState } from "../../store/store"
 import { useSelector, useDispatch } from "react-redux"
 import axios, { AxiosResponse } from "axios"
-import { HttpVerb, updateUrl, updateVerb } from "../requestSlice"
-import { updateElapsed, updateHeaders, updateResponse, updateSize, updateStatus } from "../responseSlice"
+import { HttpVerb, updateUrl, updateVerb } from "../../requestSlice"
+import { updateElapsed, updateHeaders, updateResponse, updateSize, updateStatus } from "../../responseSlice"
 import prettyBytes from "pretty-bytes"
+import styles from "./SearchBar.module.css"
 
 interface RequestParams{
     [key: string]: string
@@ -25,7 +26,6 @@ const SearchBar = () =>{
 
     const dispatch = useDispatch()
 
-//@ts-ignore
 axios.interceptors.request.use(config => {
     config.metadata = { startTime: new Date().getTime() };
     return config;
@@ -89,8 +89,8 @@ axios.interceptors.request.use(config => {
     }
 
     return(
-        <div>
-            <select name="method" id="method" onChange={(e) => onMethodChangeHander(e.target.value as HttpVerb)}>
+        <div className={styles.body}>
+            <select className={styles.dropdown} name="method" id="method" onChange={(e) => onMethodChangeHander(e.target.value as HttpVerb)}>
                 <option value="GET">GET</option>
                 <option value="POST">POST</option>
                 <option value="PUT">PUT</option>

@@ -14,7 +14,7 @@ const ResponseBody = () => {
             <p>{status}</p>
             <p>{time}</p>
             <p>{size}</p>
-            {body && <CodeMirror value={JSON.stringify(body, null, 2)} height="200px" theme={tokyoNightStorm} extensions={[json()]} readOnly />}
+            {body && <CodeMirror value={JSON.stringify(body, null, 2)} height="500px" theme={tokyoNightStorm} extensions={[json()]} readOnly />}
         </div>
     )
 }

@@ -1,0 +1,16 @@
+.body{
+    margin: 0.5rem;
+    padding: 0.5rem;
+    background-color: gray;
+    border-radius: 2px;
+}
+
+.dropdown {
+    appearance: none;
+    border: none;
+    background-color: inherit;
+}
+
+.dropdown:hover{
+    cursor: pointer;
+}

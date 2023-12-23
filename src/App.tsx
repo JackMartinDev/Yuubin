@@ -1,16 +1,9 @@
-import SearchBar from "./components/SearchBar"
-import QueryParams from "./components/QueryParams"
-import RequestBody from "./components/RequestBody"
-import ResponseBody from "./components/ResponseBody"
+import Client from "./components/Client/Client"
 
 function App(): JSX.Element {
     return (
         <div className="container">
-
-            <SearchBar/>
-            <RequestBody/>
-            <QueryParams/>
-            <ResponseBody/>
+            <Client/>
         </div>
     )
 }
