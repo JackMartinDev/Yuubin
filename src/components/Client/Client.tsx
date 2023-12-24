@@ -5,11 +5,13 @@ import ResponseBody from "../ResponseBody/ResponseBody"
 import SearchBar from "../SearchBar/SearchBar"
 import styles from "./Client.module.css"
 import { Resizable } from "re-resizable"
-
+import { useSelector } from "react-redux"
+import { RootState } from "../../store/store"
 const panels = ["Query", "Body", "Headers", "Auth"]
 
 const Client = (): JSX.Element => {
     const [active, setActive] = useState(0);
+    const status = useSelector((state:RootState) => state.response.status)
 
     const tabs = panels.map((panel, index) => (
         <div
@@ -37,13 +39,13 @@ const Client = (): JSX.Element => {
                         { active === 3 && <p>Auth Tab</p> }
                     </div>
                 <Resizable 
-                    maxWidth={650}
-                    minWidth={400}
+                    defaultSize={{width: '50vw', height: 500}}
+                    maxWidth={'70vw'}
+                    minWidth={'30vw'}
                     enable={{ top:false, right:false, bottom:false, left:true, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}
-
                 >
                     <div className={styles.response}>
-                        <ResponseBody/>
+                        {status ? <ResponseBody/> : <p style={{textAlign: 'center'}}>Make a request using the URL bar above</p>}
                     </div>
                 </Resizable>
             </div>
