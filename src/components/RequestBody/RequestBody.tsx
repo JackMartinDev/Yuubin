@@ -3,8 +3,8 @@ import { json } from "@codemirror/lang-json"
 import { tokyoNightStorm } from "@uiw/codemirror-theme-tokyo-night-storm" 
 import { useCallback, useState } from "react"
 import { useDispatch } from "react-redux"
-import { updateBody } from "../requestSlice"
-import { debounce } from "../utils/utils"
+import { updateBody } from "../../requestSlice"
+import { debounce } from "../../utils/utils"
 
 const RequestBody = () => {
     const dispatch = useDispatch()

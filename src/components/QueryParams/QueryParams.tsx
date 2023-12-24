@@ -1,11 +1,13 @@
 import { useCallback, useState } from "react"
 import styles from "./QueryParams.module.css"
-import { useDispatch } from "react-redux";
-import { updateParams } from "../requestSlice";
-import { debounce } from "../utils/utils"
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import { updateParams } from "../../requestSlice";
+import { debounce } from "../../utils/utils"
 
 const QueryParams = () => {
-    const [queries, setQueries] = useState<{key: string, value: string}[]>([]);
+    const init = useSelector((state: RootState) => state.request.queryParams)
+    const [queries, setQueries] = useState<{key: string, value: string}[]>(init);
     const dispatch = useDispatch();
 
     const incrementQueryCount = () =>{

@@ -5,14 +5,33 @@
 }
 
 .body{
+    margin: 0.5rem;
     display: flex;
+    height: 85vh;
 }
 
+
 .request{
-    border-right: 1px solid gray;
     flex: 1;
+    border-right: 1px solid gray;
 }
 
 .response{
     flex: 1;
 }
+
+.tabs{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    margin-bottom: 10px;
+}
+
+.tab {
+    display: block;
+    text-decoration: none;
+    line-height: 1.5;
+    font-size: 14px;
+    cursor: pointer;
+}
+

@@ -8,11 +8,9 @@
 }
 
 .url{
+    flex: 1; 
 }
 
 .btn{
-    background: none;
-    border: none;
 }
-
 

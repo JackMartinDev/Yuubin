@@ -23,10 +23,10 @@ const options: OptionType[] = [
 const selectStyles = {
     control: (baseStyles, state) => ({
         ...baseStyles,
-        border: 'none',
+        borderColor: 'gray',
         cursor: 'pointer',
-        borderRadius: 'none',
-        background: 'transparent',
+        borderRadius: '2px',
+        //background: 'transparent',
     }),
     indicatorSeparator: (baseStyles, state) => ({
         ...baseStyles,
