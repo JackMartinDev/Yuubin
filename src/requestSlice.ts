@@ -7,12 +7,13 @@ export interface RequestState{
     httpVerb: HttpVerb,
     url: string,
     body?: string,
-    queryParams?: {key: string, value: string}[],
+    queryParams: {key: string, value: string}[],
 }
 
 const initialState: RequestState = {
     httpVerb: "GET",
     url: "",
+    queryParams: []
 }
 
 export const requestSlice = createSlice({

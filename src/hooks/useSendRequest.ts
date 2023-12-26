@@ -53,7 +53,9 @@ const useSendRequest = () => {
 
     const sendRequest = async () => {
         if(paramsArray){
-            params = paramsArray.reduce((obj, item) => (obj[item.key] = item.value, obj) ,{});
+            //remove empty key value pairs
+            const filteredArray = paramsArray.filter((pair) => pair.key !== "" && pair.value !== "")
+            params = filteredArray.reduce((obj, item) => (obj[item.key] = item.value, obj) ,{});
         }
         try{
             if(body){ 
