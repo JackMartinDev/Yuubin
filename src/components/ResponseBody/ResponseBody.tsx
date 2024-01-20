@@ -14,7 +14,7 @@ const ResponseBody = () => {
     return(
         <div>
             <div className={styles.stats}>
-                <p>{status}</p>
+                <p>{status === 200 ? `${status} OK` : "Error" }</p>
                 <p>{time}ms</p>
                 <p>{size}</p>
             </div>

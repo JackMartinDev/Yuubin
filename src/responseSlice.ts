@@ -24,7 +24,7 @@ export const responseSlice = createSlice({
     name: "response",
     initialState,
     reducers: {
-        updateResponse: (state, action: PayloadAction<string>) => {
+        updateResponse: (state, action: PayloadAction<string | null>) => {
             state.response = action.payload
         },
         updateStatus: (state, action: PayloadAction<HttpStatusCode>) => {

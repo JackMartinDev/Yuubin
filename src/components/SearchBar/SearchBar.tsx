@@ -46,6 +46,11 @@ const SearchBar = () =>{
     const [selectedOption, setSelectedOption] = useState<OptionType>(options[0]);
     const dispatch = useDispatch()
     const sendRequest = useSendRequest();
+    
+    const onSubmitHandler = (e:React.FormEvent) => {
+        e.preventDefault(); 
+        sendRequest();
+    }
 
     const onMethodChangeHander = (option: SingleValue<OptionType>) =>{
         setSelectedOption(option as OptionType)
@@ -58,12 +63,12 @@ const SearchBar = () =>{
     }
 
     return(
-        <div className={styles.body}>
+        <form onSubmit={onSubmitHandler} className={styles.body}>
             <Select options={options} onChange={onMethodChangeHander} value={selectedOption}
                 styles={selectStyles}/>
             <input className={styles.url} type="url" id="url" placeholder="Enter URL" onChange={(e) => onUrlChangeHandler(e.target.value)}/>
-            <button className={styles.btn} onClick={sendRequest}>Send</button>
-        </div>
+            <button className={styles.btn} type="submit">Send</button>
+        </form>
     )
 }
 

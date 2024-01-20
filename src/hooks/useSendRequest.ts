@@ -23,13 +23,15 @@ const useSendRequest = () => {
     let data:string
     let params: RequestParams
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     axios.interceptors.request.use(config => {
         dispatch(updateLoading(true));
         config.metadata = { startTime: new Date().getTime() };
         return config;
     }, (error: any) => {
+            dispatch(updateStatus(400));
+            dispatch(updateLoading(false));
             return Promise.reject(error);
         });
 
@@ -49,6 +51,11 @@ const useSendRequest = () => {
                 const duration = endTime - error.config.metadata.startTime;
                 dispatch(updateElapsed(duration));
             }
+            dispatch(updateStatus(400));
+            dispatch(updateSize("0"));
+            dispatch(updateElapsed(0))
+            dispatch(updateResponse(null))
+            dispatch(updateLoading(false));
             return Promise.reject(error);
         });
 
@@ -64,6 +71,7 @@ const useSendRequest = () => {
                 data = JSON.parse(body);
             }
         }catch{
+            //Do something meaningful here
             console.log("JSON data is malformed");
             return
         }
