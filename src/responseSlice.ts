@@ -8,6 +8,7 @@ export interface ResponseState{
     elapsed: number | null,
     size: string | null,
     headers: string | null,
+    loading: boolean,
 }
 
 const initialState: ResponseState = {
@@ -15,7 +16,8 @@ const initialState: ResponseState = {
     status: null,
     elapsed: null,
     size: null,
-    headers: null
+    headers: null,
+    loading: false,
 }
 
 export const responseSlice = createSlice({
@@ -36,11 +38,15 @@ export const responseSlice = createSlice({
         },
         updateHeaders: (state, action: PayloadAction<string>) => {
             state.headers = action.payload
+        },
+        updateLoading: (state, action: PayloadAction<boolean>) => {
+            state.loading = action.payload
         }
+
 
     },
 })
 
-export const { updateResponse, updateStatus, updateElapsed, updateSize, updateHeaders } = responseSlice.actions
+export const { updateResponse, updateStatus, updateElapsed, updateSize, updateHeaders, updateLoading } = responseSlice.actions
 
 export default responseSlice.reducer

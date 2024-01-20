@@ -1,5 +1,5 @@
 body {
-  font-family:
+    font-family:
     Roboto,
     -apple-system,
     BlinkMacSystemFont,
@@ -13,11 +13,11 @@ body {
 }
 
 * {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 }
 
 ul {
-  list-style: none;
+    list-style: none;
 }

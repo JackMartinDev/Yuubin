@@ -1,7 +1,7 @@
 import type { RootState } from "../store/store"
 import { useSelector, useDispatch } from "react-redux"
 import axios, { AxiosResponse } from "axios"
-import { updateElapsed, updateHeaders, updateResponse, updateSize, updateStatus } from "../responseSlice"
+import { updateElapsed, updateHeaders, updateResponse, updateSize, updateStatus, updateLoading } from "../responseSlice"
 import prettyBytes from "pretty-bytes"
 
 interface RequestParams{
@@ -26,6 +26,7 @@ const useSendRequest = () => {
     const dispatch = useDispatch()
 
     axios.interceptors.request.use(config => {
+        dispatch(updateLoading(true));
         config.metadata = { startTime: new Date().getTime() };
         return config;
     }, (error: any) => {
@@ -33,6 +34,7 @@ const useSendRequest = () => {
         });
 
     axios.interceptors.response.use((response: AxiosResponse) => {
+        dispatch(updateLoading(false));
         const endTime = new Date().getTime();
         const duration = response.config.metadata ? endTime - response.config.metadata.startTime : null;
 

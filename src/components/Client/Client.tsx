@@ -12,6 +12,7 @@ const panels = ["Query", "Body", "Headers", "Auth"]
 const Client = (): JSX.Element => {
     const [active, setActive] = useState(0);
     const status = useSelector((state:RootState) => state.response.status)
+    const loading = useSelector((state:RootState) => state.response.loading)
 
     const tabs = panels.map((panel, index) => (
         <div
@@ -39,13 +40,13 @@ const Client = (): JSX.Element => {
                         { active === 3 && <p>Auth Tab</p> }
                     </div>
                 <Resizable 
-                    defaultSize={{width: '50vw', height: 500}}
+                    defaultSize={{width: '50vw', height: "100%"}}
                     maxWidth={'70vw'}
                     minWidth={'30vw'}
                     enable={{ top:false, right:false, bottom:false, left:true, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}
                 >
                     <div className={styles.response}>
-                        {status ? <ResponseBody/> : <p style={{textAlign: 'center'}}>Make a request using the URL bar above</p>}
+                        {loading ? <p>Loading...</p> : status ? <ResponseBody/> : <p style={{textAlign: 'center'}}>Make a request using the URL bar above</p>}
                     </div>
                 </Resizable>
             </div>
