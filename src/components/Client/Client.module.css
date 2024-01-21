@@ -14,10 +14,12 @@
 .request{
     flex: 1;
     border-right: 1px solid gray; 
+    padding-right: 10px;
 }
 
 .response{
     flex: 1;
+    padding-left: 10px;
 }
 
 .tabs{

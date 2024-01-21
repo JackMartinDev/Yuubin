@@ -27,6 +27,7 @@ const selectStyles = {
         cursor: 'pointer',
         borderRadius: '2px',
         //background: 'transparent',
+        boxShadow: state.isFocused ? 'none': 'none',
     }),
     indicatorSeparator: (baseStyles, state) => ({
         ...baseStyles,

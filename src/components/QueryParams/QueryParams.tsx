@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { updateParams } from "../../requestSlice";
 import { debounce } from "../../utils/utils"
+import { IconTrash } from "@tabler/icons-react";
 
 const QueryParams = () => {
     const init = useSelector((state: RootState) => state.request.queryParams)
@@ -49,10 +50,11 @@ const QueryParams = () => {
                     value={query.value} 
                     onChange={(e) => inputChangeHandler(index, "value" ,e.target.value)}
                 />
+
             </div> 
-            <button 
-                className={styles.gridItem} 
-                onClick={() => removeQuery(query.key)}>Delete</button>
+            <div className={styles.delete}>
+                <IconTrash onClick={() => removeQuery(query.key)} className={styles.deleteIcon}/>
+            </div>
         </>
     ))
 

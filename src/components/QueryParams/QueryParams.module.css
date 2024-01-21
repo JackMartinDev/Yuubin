@@ -21,3 +21,19 @@
 button{
     padding: 5px;
 }
+
+.delete{
+    border-top: 1px solid gray;
+    border-right: 1px solid gray;
+    border-left: 1px solid gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.deleteIcon{
+}
+
+.deleteIcon:hover {
+    cursor: pointer;
+}
