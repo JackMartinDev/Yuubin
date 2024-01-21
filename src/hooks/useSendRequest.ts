@@ -1,7 +1,7 @@
 import type { RootState } from "../store/store"
 import { useSelector, useDispatch } from "react-redux"
-import axios, { AxiosResponse } from "axios"
-import { updateElapsed, updateHeaders, updateResponse, updateSize, updateStatus, updateLoading } from "../responseSlice"
+import axios, { AxiosResponse, AxiosError } from "axios"
+import { updateElapsed, updateHeaders, updateResponse, updateSize, updateStatus, updateLoading, updateError } from "../responseSlice"
 import prettyBytes from "pretty-bytes"
 
 interface RequestParams{
@@ -29,9 +29,11 @@ const useSendRequest = () => {
         dispatch(updateLoading(true));
         config.metadata = { startTime: new Date().getTime() };
         return config;
-    }, (error: any) => {
+    }, (error: AxiosError) => {
+            dispatch(updateError(true));
             dispatch(updateStatus(400));
             dispatch(updateLoading(false));
+            console.log("request error");
             return Promise.reject(error);
         });
 
@@ -45,17 +47,20 @@ const useSendRequest = () => {
         }
 
         return response;
-    }, (error: any) => {
+    }, (error: AxiosError) => {
+            dispatch(updateError(true));
             if (error.config && error.config.metadata) {
                 const endTime = new Date().getTime();
                 const duration = endTime - error.config.metadata.startTime;
                 dispatch(updateElapsed(duration));
             }
-            dispatch(updateStatus(400));
-            dispatch(updateSize("0"));
-            dispatch(updateElapsed(0))
-            dispatch(updateResponse(null))
+            const status = error.response ? error.response.status : null;
+
+            console.log(status)
             dispatch(updateLoading(false));
+            status ? dispatch(updateStatus(status)) : dispatch(updateStatus("Error"));
+            error.response ? dispatch(updateResponse(error.response.data as string)) : dispatch(updateResponse(null));
+            error.response ? dispatch(updateSize(prettyBytes(JSON.stringify(error.response.data).length + JSON.stringify(error.response.headers).length))) : dispatch(updateSize("0 B"));
             return Promise.reject(error);
         });
 
@@ -83,6 +88,7 @@ const useSendRequest = () => {
             data,
         })
 
+        dispatch(updateError(false));
         dispatch(updateResponse(res.data));
         dispatch(updateStatus(res.status));
         dispatch(updateSize(prettyBytes(JSON.stringify(res.data).length + JSON.stringify(res.headers).length)));

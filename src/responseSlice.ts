@@ -4,11 +4,12 @@ import { HttpStatusCode } from "axios";
 
 export interface ResponseState{
     response: string | null,
-    status: HttpStatusCode | null,
+    status: HttpStatusCode | "Error" | null,
     elapsed: number | null,
     size: string | null,
     headers: string | null,
     loading: boolean,
+    isError: boolean,
 }
 
 const initialState: ResponseState = {
@@ -18,6 +19,7 @@ const initialState: ResponseState = {
     size: null,
     headers: null,
     loading: false,
+    isError: false,
 }
 
 export const responseSlice = createSlice({
@@ -27,7 +29,7 @@ export const responseSlice = createSlice({
         updateResponse: (state, action: PayloadAction<string | null>) => {
             state.response = action.payload
         },
-        updateStatus: (state, action: PayloadAction<HttpStatusCode>) => {
+        updateStatus: (state, action: PayloadAction<HttpStatusCode | null | "Error">) => {
             state.status = action.payload
         },
         updateElapsed: (state, action: PayloadAction<number>) =>{
@@ -41,12 +43,13 @@ export const responseSlice = createSlice({
         },
         updateLoading: (state, action: PayloadAction<boolean>) => {
             state.loading = action.payload
-        }
-
-
+        },
+        updateError: (state, action: PayloadAction<boolean>) => {
+            state.isError = action.payload
+        },
     },
 })
 
-export const { updateResponse, updateStatus, updateElapsed, updateSize, updateHeaders, updateLoading } = responseSlice.actions
+export const { updateResponse, updateStatus, updateElapsed, updateSize, updateHeaders, updateLoading, updateError } = responseSlice.actions
 
 export default responseSlice.reducer

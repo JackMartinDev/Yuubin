@@ -11,10 +11,12 @@ const ResponseBody = () => {
     const time = useSelector((state: RootState) => state.response.elapsed)
     const size = useSelector((state: RootState) => state.response.size)
     const status = useSelector((state: RootState) => state.response.status)
+    const error = useSelector((state: RootState) => state.response.isError)
+
     return(
         <div>
             <div className={styles.stats}>
-                <p>{status === 200 ? `${status} OK` : "Error" }</p>
+                <p style={error ? {color: "red"} : {color:"green"}}>{error ? !!status ? status : "Error" : `${status} OK`}</p>
                 <p>{time}ms</p>
                 <p>{size}</p>
             </div>
