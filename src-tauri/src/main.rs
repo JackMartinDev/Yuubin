@@ -16,12 +16,17 @@ fn main() {
     //TODO: Get this path from the frontend user input
     let path = "../../data/";
 
-//    for entry in WalkDir::new(path).into_iter().filter_map(|e| e.ok()) {
-//        println!("{}", entry.path().display());
-//        let contents = fs::read_to_string(entry.path())
-//            .expect("Should have been able to read the file");
-//        println!("{}",contents);
-//    }
+    for entry in WalkDir::new(path).into_iter().filter_map(|e| e.ok()) {
+        println!("{}", entry.path().display());
+
+        //Handle unwrap
+        let md = fs::metadata(entry.path()).unwrap();
+        if md.is_file() {
+            let contents = fs::read_to_string(entry.path())
+                .expect("Should have been able to read the file");
+            println!("{}",contents);
+        };
+    }
 
     let mut watcher = create_file_watcher();
 
