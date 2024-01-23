@@ -3,6 +3,8 @@
 
 use notify::{event::RemoveKind, EventKind, INotifyWatcher, RecursiveMode, Result, Watcher};
 use std::path::Path;
+use std::fs;
+use walkdir::WalkDir;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -13,6 +15,14 @@ fn greet(name: &str) -> String {
 fn main() {
     //TODO: Get this path from the frontend user input
     let path = "../../data/";
+
+//    for entry in WalkDir::new(path).into_iter().filter_map(|e| e.ok()) {
+//        println!("{}", entry.path().display());
+//        let contents = fs::read_to_string(entry.path())
+//            .expect("Should have been able to read the file");
+//        println!("{}",contents);
+//    }
+
     let mut watcher = create_file_watcher();
 
     watcher
@@ -41,4 +51,9 @@ fn create_file_watcher() -> INotifyWatcher {
         .expect("error creating file watcher");
 
     return watcher;
+}
+
+//TODO: Recursively read all of the contents of the data folder and serialise to a JSON object
+fn read_data() {
+
 }
