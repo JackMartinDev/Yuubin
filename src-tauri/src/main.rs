@@ -19,18 +19,27 @@ enum HttpMethod {
     HEAD
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
+struct MetaData {
+    name: String,
+    sequence: u8,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 struct Request {
-    method: HttpMethod,
+    method: String,
     url: String,
     body: Option<String>,
     auth: Option<String>,
+    meta: MetaData,
 }
 
 #[derive(Serialize, Deserialize)]
 struct Collection {
+    name: String,
     requests: Vec<Request>
 }
+
 #[derive(Serialize, Deserialize)]
 struct Data {
     collections: Vec<Collection>
@@ -48,10 +57,10 @@ fn main() {
     let path = "../../data/";
 
     //Handler unwrap
-    parse_object().unwrap();
+    parse_object(Path::new(path)).unwrap();
 
     for entry in WalkDir::new(path).into_iter().filter_map(|e| e.ok()) {
-
+        
         //Handle unwrap
         let md = fs::metadata(entry.path()).unwrap();
         
@@ -59,6 +68,7 @@ fn main() {
             println!("file: {}", entry.path().display());
             let contents = fs::read_to_string(entry.path())
                 .expect("Should have been able to read the file");
+
             println!("{}",contents);
         }else if md.is_dir() {
             println!("dir: {}", entry.path().display());
@@ -102,25 +112,22 @@ fn read_data() {
 
 }
 
-fn parse_object() -> Result<()> {
-    let req1 = Request{
-        method: HttpMethod::GET,
-        url: String::from("www.google.com"),
-        body: None,
-        auth: None,
-    };
+fn parse_object(path: &Path) -> Result<String> {
+    let contents = fs::read_to_string("../../Projects/data/col/req.txt")
+        .expect("Should have been able to read the file");
 
-    let req2 = Request{
-        method: HttpMethod::POST,
-        url: String::from("www.google.com"),
-        body: None,
-        auth: Some(String::from("Bearer Token12389ded9egbc")),
-    };
+    let contents2 = fs::read_to_string("../../Projects/data/col1/req.txt")
+        .expect("Should have been able to read the file");
+
+    //    //unwrap
+    let config: Request  = {toml::from_str(&contents).unwrap()};
+    let config2: Request  = toml::from_str(&contents2).unwrap();
+
 
     let col1 = Collection {
-        requests: vec![req1, req2],
+        name: "collection 1".to_owned(),
+        requests: vec![config, config2],
     };
-
 
     let data = Data {
         collections: vec![col1]
@@ -129,6 +136,7 @@ fn parse_object() -> Result<()> {
     let json = serde_json::to_string(&data)?;
 
     println!("{}", json);
+    //println!("{:?}", config);
 
-    Ok(())
+    Ok(json)
 }
