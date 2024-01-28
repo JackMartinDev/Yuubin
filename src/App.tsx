@@ -11,14 +11,8 @@ async function startSerialEventListener() {
     });
 }
 
-async function startFileEventListener() {
-    await listen<Payload>('event', (event) => {
-        console.log("Event triggered from rust!\nPayload: " + event.payload.message);
-    });
-}
 function App(): JSX.Element {
     startSerialEventListener();
-    startFileEventListener();
     return (
         <div className="container">
             <Client/>
