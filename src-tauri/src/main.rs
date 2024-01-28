@@ -1,11 +1,10 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use tauri::Manager;
 use notify::{event::RemoveKind, EventKind, INotifyWatcher, RecursiveMode, Result as NotifyResult, Watcher};
-use std::path::Path;
-use std::fs;
+use std::{fs, io::Error, path::Path};
 use walkdir::WalkDir;
-use serde_json::Result;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
@@ -34,17 +33,21 @@ struct Request {
     meta: MetaData,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 struct Collection {
     name: String,
     requests: Vec<Request>
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 struct Data {
     collections: Vec<Collection>
 }
 
+#[derive(Clone, serde::Serialize)]
+struct Payload {
+    message: String,
+}
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -53,30 +56,7 @@ fn greet(name: &str) -> String {
 }
 
 fn main() {
-    //TODO: Get this path from the frontend user input
-    let path = "../../data/";
-
-    //Handler unwrap
-    parse_object(Path::new(path)).unwrap();
-
-    for entry in WalkDir::new(path).into_iter().filter_map(|e| e.ok()) {
-        
-        //Handle unwrap
-        let md = fs::metadata(entry.path()).unwrap();
-        
-        if md.is_file() {
-            println!("file: {}", entry.path().display());
-            let contents = fs::read_to_string(entry.path())
-                .expect("Should have been able to read the file");
-
-            println!("{}",contents);
-        }else if md.is_dir() {
-            println!("dir: {}", entry.path().display());
-        };
-        
-
-    }
-
+    let path = Path::new("../../data/");
     let mut watcher = create_file_watcher();
 
     watcher
@@ -84,6 +64,28 @@ fn main() {
         .expect("error watching folder");
 
     tauri::Builder::default()
+        .setup(|app| {
+            let splashscreen_window = app.get_window("splashscreen").unwrap();
+            let main_window = app.get_window("main").unwrap();
+            // we perform the initialization code on a new task so the app doesn't freeze
+            tauri::async_runtime::spawn(async move {
+                // initialize your app here instead of sleeping :)
+                println!("Initializing...");
+                //TODO: Get this path from the frontend user input
+                let path = Path::new("../../data/");
+
+                //Handler unwrap
+                let data = parse_object(path).unwrap();
+                println!("{}", data);
+                std::thread::sleep(std::time::Duration::from_secs(2));
+                println!("Done initializing.");
+                main_window.emit("event-name", Payload { message: data }).unwrap();
+                // After it's done, close the splashscreen and display the main window
+                splashscreen_window.close().unwrap();
+                main_window.show().unwrap();
+            });
+            Ok(())
+        })
         .invoke_handler(tauri::generate_handler![greet])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -95,7 +97,9 @@ fn create_file_watcher() -> INotifyWatcher {
             // TODO: Track anytime there is a change/delete in the file system
             // and send that information to the front end to update the UI
             match event.kind {
-                EventKind::Remove(RemoveKind::File) => println!("Removed file!"),
+                EventKind::Remove(RemoveKind::File) => {
+                    println!("Removed file!");
+                },
                 EventKind::Remove(RemoveKind::Folder) => println!("Removed folder!"),
                 _ => println!("Changed: {:?}", {event})
             }
@@ -107,36 +111,53 @@ fn create_file_watcher() -> INotifyWatcher {
     return watcher;
 }
 
-//TODO: Recursively read all of the contents of the data folder and serialise to a JSON object
-fn read_data() {
 
-}
-
-fn parse_object(path: &Path) -> Result<String> {
-    let contents = fs::read_to_string("../../Projects/data/col/req.txt")
-        .expect("Should have been able to read the file");
-
-    let contents2 = fs::read_to_string("../../Projects/data/col1/req.txt")
-        .expect("Should have been able to read the file");
-
-    //    //unwrap
-    let config: Request  = {toml::from_str(&contents).unwrap()};
-    let config2: Request  = toml::from_str(&contents2).unwrap();
-
-
-    let col1 = Collection {
-        name: "collection 1".to_owned(),
-        requests: vec![config, config2],
+fn parse_object(path: &Path) -> Result<String, Error> {
+    let mut data = Data {
+        collections: Vec::new(),
     };
 
-    let data = Data {
-        collections: vec![col1]
-    };
+    for entry in WalkDir::new(path) {
+        match entry {
+            Ok(entry) => {
+                //Skip root path to prevent it being parsed as a collection.
+                if entry.path() == path {
+                    println!("This is the root");
+                    continue;
+                };
+                if entry.file_type().is_dir() {
+                    let mut collection = Collection {
+                        name: entry.file_name().to_string_lossy().to_string(),
+                        requests: Vec::new(),
+                    };
 
-    let json = serde_json::to_string(&data)?;
-
-    println!("{}", json);
-    //println!("{:?}", config);
+                    // Iterate over request files within the collection folder
+                    for request_entry in WalkDir::new(entry.path()) {
+                        match request_entry {
+                            Ok(request_entry) => {
+                                if request_entry.file_type().is_file()
+                                    && request_entry.path().extension().map(|e| e == "toml").unwrap_or(false)
+                                {
+                                    //handle unwrap
+                                    let file_content =
+                                        fs::read_to_string(request_entry.path()).unwrap();
+                                    //handle unwrap
+                                    let request: Request =
+                                        toml::from_str(&file_content).unwrap();
+                                    collection.requests.push(request);
+                                }
+                            }
+                            Err(err) => eprintln!("Error accessing request entry: {}", err),
+                        }
+                    }
+                    data.collections.push(collection);
+                }
+            }
+            Err(err) => eprintln!("Error accessing entry: {}", err),
+        }
+    }
+    //Unwrap
+    let json = serde_json::to_string(&data).unwrap();
 
     Ok(json)
 }
