@@ -55,6 +55,13 @@ fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
+#[tauri::command]
+fn sync_files() -> String {
+    let path = Path::new("../../data/");
+
+    //Handler unwrap
+    parse_object(path).unwrap()
+}
 fn main() {
     let path = Path::new("../../data/");
     let mut watcher = create_file_watcher();
@@ -86,7 +93,7 @@ fn main() {
             });
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![sync_files])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -111,13 +118,12 @@ fn create_file_watcher() -> INotifyWatcher {
     return watcher;
 }
 
-
 fn parse_object(path: &Path) -> Result<String, Error> {
     let mut data = Data {
         collections: Vec::new(),
     };
 
-    for entry in WalkDir::new(path) {
+    for entry in WalkDir::new(path).max_depth(1) {
         match entry {
             Ok(entry) => {
                 //Skip root path to prevent it being parsed as a collection.
@@ -132,7 +138,7 @@ fn parse_object(path: &Path) -> Result<String, Error> {
                     };
 
                     // Iterate over request files within the collection folder
-                    for request_entry in WalkDir::new(entry.path()) {
+                    for request_entry in WalkDir::new(entry.path()).max_depth(1) {
                         match request_entry {
                             Ok(request_entry) => {
                                 if request_entry.file_type().is_file()
