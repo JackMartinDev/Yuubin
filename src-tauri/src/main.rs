@@ -62,6 +62,31 @@ fn sync_files() -> String {
     //Handler unwrap
     parse_object(path).unwrap()
 }
+
+fn edit_file(path: String, contents: String) -> String{
+    //Read path from the front end
+    let path = Path::new(&path);
+
+    //Parse json into a struct
+    
+    //Parse struct into toml
+    
+    //Rewrite the file
+
+    //Return the new state of the file system
+
+    "temp".to_owned()
+}
+
+fn delete_file(path: String) -> String {
+    //Read path from the front end
+    let path = Path::new(&path);
+
+    //Delete file/folder
+    
+    //Return the new state of the file system
+    "temp".to_owned()
+}
 fn main() {
     let path = Path::new("../../data/");
     let mut watcher = create_file_watcher();
