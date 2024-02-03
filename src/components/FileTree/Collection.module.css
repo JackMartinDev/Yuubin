@@ -1,0 +1,16 @@
+.accordion {}
+
+.accordion:hover{
+    background-color: #f8f9fa;
+    cursor: pointer;
+}
+
+.content{
+    max-height: 0px;
+    overflow: hidden;
+}
+
+.show{
+    height: auto;
+    max-height: 9999px;
+}
