@@ -111,10 +111,10 @@ fn main() {
                 println!("{}", data);
                 std::thread::sleep(std::time::Duration::from_secs(2));
                 println!("Done initializing.");
-                main_window.emit("event-name", Payload { message: data }).unwrap();
                 // After it's done, close the splashscreen and display the main window
                 splashscreen_window.close().unwrap();
                 main_window.show().unwrap();
+                main_window.emit("event-name", Payload { message: data }).unwrap();
             });
             Ok(())
         })

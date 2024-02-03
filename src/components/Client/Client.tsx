@@ -9,7 +9,6 @@ import { useSelector } from "react-redux"
 import { RootState } from "../../store/store"
 const panels = ["Query", "Body", "Headers", "Auth"]
 
-import { invoke } from '@tauri-apps/api/tauri'
 const Client = (): JSX.Element => {
     const [active, setActive] = useState(0);
     const status = useSelector((state:RootState) => state.response.status)
@@ -29,9 +28,6 @@ const Client = (): JSX.Element => {
        ));
     return(
         <>
-            <button onClick={()=>{invoke('sync_files').then((message) => console.log(message))}}>
-                refresh
-            </button>
             <SearchBar/>
             <div className={styles.body}>
                     <div className={styles.request}>

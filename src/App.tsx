@@ -1,20 +1,10 @@
 import Client from "./components/Client/Client"
-import { listen } from '@tauri-apps/api/event'
-
-type Payload = {
-    message: string;
-}
-
-async function startSerialEventListener() {
-    await listen<Payload>('event-name', (event) => {
-        console.log("Event triggered from rust!\nPayload: " + event.payload.message);
-    });
-}
+import FileTree from "./components/FileTree/FileTree";
 
 function App(): JSX.Element {
-    startSerialEventListener();
     return (
         <div className="container">
+            <FileTree />
             <Client/>
         </div>
     )
