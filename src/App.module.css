@@ -1,0 +1,11 @@
+.container {
+    display: flex;
+}
+
+.file {
+    flex: 2;
+}
+
+.client {
+    flex: 8
+}

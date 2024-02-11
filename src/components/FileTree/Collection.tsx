@@ -12,11 +12,12 @@ const Collection = ({collection}: Props): JSX.Element => {
         setIsToggled(!isToggled)
     }
 
+    //TODO: On click set the values of this request to redux of the current }
     return(
         <div className={classes.accordion} onClick={toggle}>
             <p>{collection.name}</p>
             <div className={cx(classes.content, {[classes.show]: isToggled})}>
-                {collection.requests.map((request) => (<li>{request.url}</li>))}
+                {collection.requests.map((request) => (<div onClick={()=>{console.log(request.url)}}>{request.method}{request.meta.name}</div>))}
             </div>
         </div>
     )

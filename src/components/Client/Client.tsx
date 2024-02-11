@@ -3,7 +3,7 @@ import QueryParams from "../QueryParams/QueryParams"
 import RequestBody from "../RequestBody/RequestBody"
 import ResponseBody from "../ResponseBody/ResponseBody"
 import SearchBar from "../SearchBar/SearchBar"
-import styles from "./Client.module.css"
+import classes from "./Client.module.css"
 import { Resizable } from "re-resizable"
 import { useSelector } from "react-redux"
 import { RootState } from "../../store/store"
@@ -21,7 +21,7 @@ const Client = (): JSX.Element => {
                 setActive(index);
             }}
             key={panel}
-            className={styles.tab}
+            className={classes.tab}
         >
             {panel}
        </div>
@@ -29,9 +29,9 @@ const Client = (): JSX.Element => {
     return(
         <>
             <SearchBar/>
-            <div className={styles.body}>
-                    <div className={styles.request}>
-                        <div className={styles.tabs}>
+            <div className={classes.body}>
+                    <div className={classes.request}>
+                        <div className={classes.tabs}>
                             {tabs}
                         </div>
                         { active === 0 && <QueryParams/> }
@@ -40,12 +40,12 @@ const Client = (): JSX.Element => {
                         { active === 3 && <p>Auth Tab</p> }
                     </div>
                 <Resizable 
-                    defaultSize={{width: '50vw', height: "100%"}}
-                    maxWidth={'70vw'}
-                    minWidth={'30vw'}
+                    defaultSize={{width: '100%', height: "100%"}}
+                    maxWidth={'70%'}
+                    minWidth={'30%'}
                     enable={{ top:false, right:false, bottom:false, left:true, topRight:false, bottomRight:false, bottomLeft:false, topLeft:false }}
                 >
-                    <div className={styles.response}>
+                    <div className={classes.response}>
                         {loading ? <p>Loading...</p> : status ? <ResponseBody/> : <p style={{textAlign: 'center'}}>Make a request using the URL bar above</p>}
                     </div>
                 </Resizable>

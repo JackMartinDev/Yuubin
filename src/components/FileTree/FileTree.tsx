@@ -15,13 +15,13 @@ const FileTree = () => {
     },[]);
 
     return (
-        <>
+        <div className={classes.container}>
             File tree
             {files?.collections.map(collection => (<Collection key={crypto.randomUUID()} collection={collection}/>))}
             <button onClick={syncFileSystem}>
                 refresh
             </button>
-        </>
+        </div>
     )
 }
 

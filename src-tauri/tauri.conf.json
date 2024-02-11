@@ -35,10 +35,10 @@
         "windows": [
             {
                 "fullscreen": false,
-                "resizable": false,
+                "resizable": true,
                 "title": "Yuubin",
-                "width": 1000,
-                "height": 700,
+                "width": 1280,
+                "height": 760,
                 "visible": false
             },
             {
