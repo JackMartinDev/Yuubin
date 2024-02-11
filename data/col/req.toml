@@ -1,5 +1,5 @@
 method = "GET"
-url = "www.google.com"
+url = "https://jsonplaceholder.typicode.com/todos/1"
 
 [meta]
 name = "req"

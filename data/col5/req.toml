@@ -1,5 +1,5 @@
 method = "POST"
-url = "www.lanex.com"
+url = "https://jsonplaceholder.typicode.com/todos"
 body = "{name:Jack}"
 
 [meta]

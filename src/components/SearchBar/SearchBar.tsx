@@ -51,7 +51,6 @@ const SearchBar = () =>{
     const sendRequest = useSendRequest();
     
     const url = useSelector((state: RootState) => state.request.url)
-
     const method = useSelector((state: RootState) => state.request.httpVerb)
 
     useEffect(() => {
