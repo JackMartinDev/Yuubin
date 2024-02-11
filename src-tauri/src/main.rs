@@ -57,7 +57,7 @@ fn greet(name: &str) -> String {
 
 #[tauri::command]
 fn sync_files() -> String {
-    let path = Path::new("../../data/");
+    let path = Path::new("../data/");
 
     //Handler unwrap
     parse_object(path).unwrap()
@@ -88,7 +88,7 @@ fn delete_file(path: String) -> String {
     "temp".to_owned()
 }
 fn main() {
-    let path = Path::new("../../data/");
+    let path = Path::new("../data/");
     let mut watcher = create_file_watcher();
 
     watcher
@@ -104,7 +104,7 @@ fn main() {
                 // initialize your app here instead of sleeping :)
                 println!("Initializing...");
                 //TODO: Get this path from the frontend user input
-                let path = Path::new("../../data/");
+                let path = Path::new("../data/");
 
                 //Handler unwrap
                 let data = parse_object(path).unwrap();
@@ -113,8 +113,8 @@ fn main() {
                 println!("Done initializing.");
                 // After it's done, close the splashscreen and display the main window
                 splashscreen_window.close().unwrap();
-                main_window.show().unwrap();
                 main_window.emit("event-name", Payload { message: data }).unwrap();
+                main_window.show().unwrap();
             });
             Ok(())
         })

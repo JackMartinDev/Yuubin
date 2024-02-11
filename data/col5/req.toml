@@ -1,0 +1,7 @@
+method = "POST"
+url = "www.lanex.com"
+body = "{name:Jack}"
+
+[meta]
+name = "req2"
+sequence = 2
