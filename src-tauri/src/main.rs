@@ -2,7 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use tauri::Manager;
-use notify::{event::RemoveKind, EventKind, INotifyWatcher, RecursiveMode, Result as NotifyResult, Watcher};
+//use notify::{event::RemoveKind, EventKind, INotifyWatcher, RecursiveMode, Result as NotifyResult, Watcher};
 use std::{fs, io::Error, path::Path};
 use walkdir::WalkDir;
 use serde::{Deserialize, Serialize};
@@ -89,11 +89,11 @@ fn delete_file(path: String) -> String {
 }
 fn main() {
     let path = Path::new("../data/");
-    let mut watcher = create_file_watcher();
-
-    watcher
-        .watch(Path::new(path), RecursiveMode::Recursive)
-        .expect("error watching folder");
+//    let mut watcher = create_file_watcher();
+//
+//    watcher
+//        .watch(Path::new(path), RecursiveMode::Recursive)
+//        .expect("error watching folder");
 
     tauri::Builder::default()
         .setup(|app| {
@@ -123,25 +123,25 @@ fn main() {
         .expect("error while running tauri application");
 }
 
-fn create_file_watcher() -> INotifyWatcher {
-    let watcher = notify::recommended_watcher(move |res: NotifyResult<notify::event::Event>| match res {
-        Ok(event) => {
-            // TODO: Track anytime there is a change/delete in the file system
-            // and send that information to the front end to update the UI
-            match event.kind {
-                EventKind::Remove(RemoveKind::File) => {
-                    println!("Removed file!");
-                },
-                EventKind::Remove(RemoveKind::Folder) => println!("Removed folder!"),
-                _ => println!("Changed: {:?}", {event})
-            }
-        }
-        Err(e) => println!("watch error: {:?}", e),
-    })
-        .expect("error creating file watcher");
-
-    return watcher;
-}
+//fn create_file_watcher() -> INotifyWatcher {
+//    let watcher = notify::recommended_watcher(move |res: NotifyResult<notify::event::Event>| match res {
+//        Ok(event) => {
+//            // TODO: Track anytime there is a change/delete in the file system
+//            // and send that information to the front end to update the UI
+//            match event.kind {
+//                EventKind::Remove(RemoveKind::File) => {
+//                    println!("Removed file!");
+//                },
+//                EventKind::Remove(RemoveKind::Folder) => println!("Removed folder!"),
+//                _ => println!("Changed: {:?}", {event})
+//            }
+//        }
+//        Err(e) => println!("watch error: {:?}", e),
+//    })
+//        .expect("error creating file watcher");
+//
+//    return watcher;
+//}
 
 fn parse_object(path: &Path) -> Result<String, Error> {
     let mut data = Data {

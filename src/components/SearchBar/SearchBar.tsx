@@ -1,9 +1,11 @@
 import { useDispatch } from "react-redux"
 import { HttpVerb, updateUrl, updateVerb } from "../../requestSlice"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import styles from "./SearchBar.module.css"
 import Select, { SingleValue } from "react-select"
 import useSendRequest from "../../hooks/useSendRequest"
+import { useSelector } from "react-redux"
+import { RootState } from "../../store/store"
 
 interface OptionType {
   value: HttpVerb;
@@ -48,6 +50,15 @@ const SearchBar = () =>{
     const dispatch = useDispatch()
     const sendRequest = useSendRequest();
     
+    const url = useSelector((state: RootState) => state.request.url)
+
+    const method = useSelector((state: RootState) => state.request.httpVerb)
+
+    useEffect(() => {
+        const httpVerb: OptionType = {value: method, label: method}
+        setSelectedOption(httpVerb)
+    },[method])
+
     const onSubmitHandler = (e:React.FormEvent) => {
         e.preventDefault(); 
         sendRequest();
@@ -65,9 +76,8 @@ const SearchBar = () =>{
 
     return(
         <form onSubmit={onSubmitHandler} className={styles.body}>
-            <Select options={options} onChange={onMethodChangeHander} value={selectedOption}
-                styles={selectStyles}/>
-            <input className={styles.url} type="url" id="url" placeholder="Enter URL" onChange={(e) => onUrlChangeHandler(e.target.value)}/>
+            <Select options={options} onChange={onMethodChangeHander} value={selectedOption} styles={selectStyles}/>
+            <input className={styles.url} type="url" id="url" defaultValue={url} placeholder="Enter URL" onChange={(e) => onUrlChangeHandler(e.target.value)}/>
             <button className={styles.btn} type="submit">Send</button>
         </form>
     )

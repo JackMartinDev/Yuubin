@@ -1,0 +1,10 @@
+*{}
+
+.request {
+    margin-left: 1.5rem;
+}
+
+.request:hover{
+    background-color: #f8f9fa;
+    cursor: pointer;
+}

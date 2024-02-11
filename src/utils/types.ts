@@ -4,7 +4,7 @@ type MetaData = {
 }
 
 type YuubinRequest = {
-    method: string
+    method: HttpVerb,
     url: string,
     body?: string,
     auth?: string,
@@ -19,4 +19,6 @@ type Collection = {
 type Data = {
     collections: Collection[]
 }
+
+type HttpVerb = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"  | "OPTIONS" | "HEAD"
 

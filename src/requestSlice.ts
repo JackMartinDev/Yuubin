@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-export type HttpVerb = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"  | "OPTIONS" | "HEAD"
 
 export interface RequestState{
     httpVerb: HttpVerb,
@@ -29,7 +28,7 @@ export const requestSlice = createSlice({
         updateParams: (state, action: PayloadAction<{key: string, value:string}[]>) =>{
             state.queryParams = action.payload
         },
-        updateBody: (state, action: PayloadAction<string>) => {
+        updateBody: (state, action: PayloadAction<string | undefined>) => {
             state.body = action.payload
         }
 
