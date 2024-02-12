@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux"
-import { HttpVerb, updateUrl, updateVerb } from "../../requestSlice"
+import { updateUrl, updateVerb } from "../../requestSlice"
 import { useEffect, useState } from "react"
 import styles from "./SearchBar.module.css"
 import Select, { SingleValue } from "react-select"

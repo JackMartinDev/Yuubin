@@ -16,7 +16,9 @@ const FileTree = () => {
 
     return (
         <div className={classes.container}>
-            File tree
+            <h1>File tree</h1>
+            <input type="text" placeholder="Search collections"/>
+            <button>+</button>
             {files?.collections.map(collection => (<Collection key={crypto.randomUUID()} collection={collection}/>))}
             <button onClick={syncFileSystem}>
                 refresh

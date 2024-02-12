@@ -1,4 +1,7 @@
-.accordion {}
+.accordion{
+    display: flex;
+    justify-content: left; 
+}
 
 .accordion:hover{
     cursor: pointer;
@@ -12,4 +15,12 @@
 .show{
     height: auto;
     max-height: 9999px;
+}
+
+.icon{
+    margin-right: 0.25rem;
+}
+
+.toggle{
+    rotate: 90deg;
 }
