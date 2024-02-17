@@ -25,23 +25,29 @@ const options: OptionType[] = [
 const selectStyles = {
     control: (baseStyles, state) => ({
         ...baseStyles,
-        borderColor: 'gray',
+        border: 'none',
         cursor: 'pointer',
-        borderRadius: '2px',
-        //background: 'transparent',
+        width: '125px',
+        fontSize: '0.9rem',
+        fontWeight: '600',
+        background: 'transparent',
         boxShadow: state.isFocused ? 'none': 'none',
     }),
     indicatorSeparator: (baseStyles, state) => ({
         ...baseStyles,
         display: 'none',
     }),
-    option: (baseStyles, state) => ({
+    option: (baseStyles, {isFocused, isSelected}) => ({
         ...baseStyles,
+        fontSize: '0.9rem',
         cursor: 'pointer',
+        backgroundColor: isFocused ? 'lightgrey' : 'white',
+        color: 'black',
     }),
     menu: (baseStyles, state) => ({
         ...baseStyles,
-        backgroundColor: 'lightgray',
+        backgroundColor: 'white',
+        boxShadow: '0px 2px 5px rgb(100,100,100);'
     }),
 }
 
