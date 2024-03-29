@@ -8,13 +8,12 @@
     margin: 0.5rem;
     display: flex;
     height: 85vh;
+    border: solid 1px red;
 }
 
 
 .request{
     flex: 1;
-    border-right: 1px solid gray; 
-    padding-right: 10px;
 }
 
 .response{

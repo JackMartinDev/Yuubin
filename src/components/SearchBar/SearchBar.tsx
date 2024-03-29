@@ -2,10 +2,10 @@ import { useDispatch } from "react-redux"
 import { updateUrl, updateVerb } from "../../requestSlice"
 import { useEffect, useState } from "react"
 import styles from "./SearchBar.module.css"
-import Select, { SingleValue } from "react-select"
 import useSendRequest from "../../hooks/useSendRequest"
 import { useSelector } from "react-redux"
 import { RootState } from "../../store/store"
+import { Button, Select, TextInput } from "@mantine/core"
 
 interface OptionType {
   value: HttpVerb;
@@ -21,29 +21,6 @@ const options: OptionType[] = [
     { value: 'OPTIONS', label: 'OPTIONS' },
     { value: 'HEAD', label: 'HEAD' },
 ]
-
-const selectStyles = {
-    control: (baseStyles, state) => ({
-        ...baseStyles,
-        borderColor: 'gray',
-        cursor: 'pointer',
-        borderRadius: '2px',
-        //background: 'transparent',
-        boxShadow: state.isFocused ? 'none': 'none',
-    }),
-    indicatorSeparator: (baseStyles, state) => ({
-        ...baseStyles,
-        display: 'none',
-    }),
-    option: (baseStyles, state) => ({
-        ...baseStyles,
-        cursor: 'pointer',
-    }),
-    menu: (baseStyles, state) => ({
-        ...baseStyles,
-        backgroundColor: 'lightgray',
-    }),
-}
 
 const SearchBar = () =>{
     const [selectedOption, setSelectedOption] = useState<OptionType>(options[0]);
@@ -63,8 +40,8 @@ const SearchBar = () =>{
         sendRequest();
     }
 
-    const onMethodChangeHander = (option: SingleValue<OptionType>) =>{
-        setSelectedOption(option as OptionType)
+    const onMethodChangeHander = (option) =>{
+        setSelectedOption(option)
         dispatch(updateVerb(option!.value))
     }
     
@@ -75,9 +52,16 @@ const SearchBar = () =>{
 
     return(
         <form onSubmit={onSubmitHandler} className={styles.body}>
-            <Select options={options} onChange={onMethodChangeHander} value={selectedOption} styles={selectStyles}/>
-            <input className={styles.url} type="url" id="url" defaultValue={url} placeholder="Enter URL" onChange={(e) => onUrlChangeHandler(e.target.value)}/>
-            <button className={styles.btn} type="submit">Send</button>
+            <Select
+                w={150}
+                withCheckIcon={false}
+                placeholder="GET"
+                allowDeselect={false}
+                withScrollArea={false}
+                data={['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD']}
+            />
+            <TextInput type="url" defaultValue={url} placeholder="Enter URL" w="100%"  onChange={(e) => onUrlChangeHandler(e.target.value)}/>
+            <Button type="submit" w={100} variant="default" color="gray">Send</Button>
         </form>
     )
 }

@@ -3,9 +3,9 @@
 }
 
 .file {
-    flex: 2;
+    background-color: lightgray;
+    height: 90vh;
 }
 
 .client {
-    flex: 8
 }
