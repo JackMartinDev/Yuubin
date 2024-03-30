@@ -5,21 +5,21 @@ import SearchBar from "../SearchBar/SearchBar"
 import { useSelector } from "react-redux"
 import { RootState } from "../../store/store"
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { Paper, Tabs } from "@mantine/core"
+import { Box, Paper, Tabs } from "@mantine/core"
 
 const Client = (): JSX.Element => {
     const status = useSelector((state:RootState) => state.response.status)
     const loading = useSelector((state:RootState) => state.response.loading)
 
     return(
-        <>
+        <Box m="sm">
             <SearchBar/>
             <div >
-                <PanelGroup direction="horizontal">
+                <PanelGroup direction="horizontal" style={{height: "90vh"}}>
                     <Panel defaultSize={50} minSize={30}>
-                        <Paper  mih="100%"  >
+                        <Paper mih="100%">
 
-                            <Tabs variant="outline" defaultValue="query">
+                            <Tabs variant="outline" defaultValue="query" mt="sm">
                                 <Tabs.List>
                                     <Tabs.Tab value="query">
                                         Query
@@ -35,25 +35,25 @@ const Client = (): JSX.Element => {
                                     </Tabs.Tab>
                                 </Tabs.List>
 
-                                <Tabs.Panel value="query">
+                                <Tabs.Panel value="query" mt="sm">
                                     <QueryParams/>
                                 </Tabs.Panel>
 
-                                <Tabs.Panel value="body">
+                                <Tabs.Panel value="body" mt="sm">
                                     <RequestBody/>
                                 </Tabs.Panel>
 
-                                <Tabs.Panel value="headers">
+                                <Tabs.Panel value="headers" mt="sm">
                                     Headers
                                 </Tabs.Panel>
 
-                                <Tabs.Panel value="auth">
+                                <Tabs.Panel value="auth" mt="sm">
                                     Auth
                                 </Tabs.Panel>
                             </Tabs>
                         </Paper>
                     </Panel>
-                    <PanelResizeHandle />
+                    <PanelResizeHandle style={{backgroundColor: "#DEE2E6", width: "1px"}}/>
                     <Panel defaultSize={50} minSize={30}>
                         <Paper mih="100%" >
 
@@ -64,7 +64,7 @@ const Client = (): JSX.Element => {
                     </Panel>
                 </PanelGroup>
             </div>
-        </>
+        </Box>
     )
 }
 

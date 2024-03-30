@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { invoke } from '@tauri-apps/api/tauri'
-import classes from "./FileTree.module.css"
 import Collection from "./Collection";
+import { Box, Button, TextInput, Title, rem } from "@mantine/core";
+import { IconSearch } from "@tabler/icons-react";
 
 const FileTree = () => {
     const [files, setFiles] = useState<Data>();
@@ -14,16 +15,18 @@ const FileTree = () => {
         syncFileSystem()
     },[]);
 
+    const icon = <IconSearch style={{ width: rem(16), height: rem(16) }} />;
+
     return (
-        <div className={classes.container}>
-            <h1>File tree</h1>
-            <input type="text" placeholder="Search collections"/>
-            <button>+</button>
+        <Box p="xs">
+            <Title>File tree</Title>
+            <TextInput placeholder="Search collections" leftSection={icon}/>
+            <Button variant="default" color="gray">+</Button>
             {files?.collections.map(collection => (<Collection key={crypto.randomUUID()} collection={collection}/>))}
-            <button onClick={syncFileSystem}>
+            <Button variant="default" color="gray" onClick={syncFileSystem}>
                 refresh
-            </button>
-        </div>
+            </Button>
+        </Box>
     )
 }
 

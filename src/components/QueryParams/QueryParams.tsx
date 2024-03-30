@@ -1,10 +1,10 @@
 import { useCallback, useState } from "react"
-import styles from "./QueryParams.module.css"
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { updateParams } from "../../requestSlice";
 import { debounce } from "../../utils/utils"
 import { IconTrash } from "@tabler/icons-react";
+import { ActionIcon, Button, Checkbox, Flex, Grid, Group, TextInput } from "@mantine/core";
 
 const QueryParams = () => {
     const init = useSelector((state: RootState) => state.request.queryParams)
@@ -14,10 +14,10 @@ const QueryParams = () => {
     const incrementQueryCount = () =>{
         setQueries([...queries, {key: "", value: ""}]);
     }
-    
+
     const debouncedDispatch = useCallback(debounce((value: typeof queries) => {
         dispatch(updateParams(value))
-        }, 500), []);
+    }, 500), []);
 
     const inputChangeHandler = (index: number, field:string, newValue: string) => {
         const newArray = queries.map((query, queryIndex) =>
@@ -35,45 +35,52 @@ const QueryParams = () => {
     }
 
     const queryInput = queries.map((query, index) => (
-        //Add key here by changing from a fragment
         <>
-            <div className={styles.gridItem}>
-                <input 
-                    type="text" 
-                    value={query.key} 
-                    onChange={(e) => inputChangeHandler(index, "key" , e.target.value)}
-                />
-            </div>
-            <div className={styles.gridItem}>
-                <input 
-                    type="text" 
-                    value={query.value} 
-                    onChange={(e) => inputChangeHandler(index, "value" ,e.target.value)}
-                />
+            <Grid.Col span={4}>
+                <TextInput value={query.key} onChange={(e) => inputChangeHandler(index, "key" , e.target.value)}/>
+            </Grid.Col>
 
-            </div> 
-            <div className={styles.delete}>
-                <IconTrash onClick={() => removeQuery(query.key)} className={styles.deleteIcon}/>
-            </div>
+            <Grid.Col span={6}>
+                <TextInput value={query.value} onChange={(e) => inputChangeHandler(index, "value" ,e.target.value)}/>
+            </Grid.Col>
+            <Grid.Col span={2}>
+                <Flex align="center" direction="row" justify="space-evenly" wrap="wrap" h="100%">
+                <Checkbox size="xs"
+                    defaultChecked
+                />
+                <ActionIcon
+                    variant="default" 
+                    aria-label="Delete"
+                    onClick={() => removeQuery(query.key)}
+
+                >
+                    <IconTrash style={{ width: '80%', height: '70%' }} stroke={1.5} />
+                </ActionIcon>
+                </Flex>
+
+            </Grid.Col>
         </>
     ))
 
     return(
         <div>
-            <div className={styles.grid}>
-                <div className={styles.gridItem}>
-                    <h4>Name</h4>
-                </div>
-                <div className={styles.gridItem}>
-                    <h4>Value</h4>
-                </div> 
-                <div className={styles.gridItem}>
-                </div>
+            <Grid mb={16} gutter={8}>
+                <Grid.Col span={4}>
+                    Name
+                </Grid.Col>
+
+                <Grid.Col span={6}>
+                    Value
+                </Grid.Col>
+
+                <Grid.Col span={2} >
+                </Grid.Col>
                 {queryInput}
-            </div>
-            <button onClick={incrementQueryCount}>
+            </Grid>
+
+            <Button onClick={incrementQueryCount} variant="default" color="gray">
                 + Add Param
-            </button>
+            </Button>
         </div>
     )
 }
