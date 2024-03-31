@@ -15,7 +15,7 @@ const Client = (): JSX.Element => {
         <Box m="sm">
             <SearchBar/>
             <div >
-                <PanelGroup direction="horizontal" style={{height: "90vh"}}>
+                <PanelGroup direction="horizontal" style={{height: "85vh"}}>
                     <Panel defaultSize={50} minSize={30}>
                         <Paper mih="100%">
 
