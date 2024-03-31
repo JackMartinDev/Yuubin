@@ -1,10 +1,11 @@
 import CodeMirror from "@uiw/react-codemirror"
-import { json } from "@codemirror/lang-json"
+import { json, jsonParseLinter } from "@codemirror/lang-json"
 import { tokyoNightStorm } from "@uiw/codemirror-theme-tokyo-night-storm" 
 import { useCallback, useState } from "react"
 import { useDispatch } from "react-redux"
 import { updateBody } from "../../requestSlice"
 import { debounce } from "../../utils/utils"
+import { lintGutter, linter } from "@codemirror/lint"
 
 const RequestBody = () => {
     const dispatch = useDispatch()
@@ -22,7 +23,7 @@ const RequestBody = () => {
 
     return(
         <div>
-            <CodeMirror value={value} height="500px" theme={tokyoNightStorm} extensions={[json()]} onChange={onChange} />
+            <CodeMirror value={value} height="500px" extensions={[json(), linter(jsonParseLinter()), lintGutter()]}  onChange={onChange} />
         </div>
     )
 }

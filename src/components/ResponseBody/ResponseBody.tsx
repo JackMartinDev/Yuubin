@@ -20,7 +20,7 @@ const ResponseBody = () => {
                 <p>{time}ms</p>
                 <p>{size}</p>
             </div>
-            {body && <CodeMirror value={JSON.stringify(body, null, 2)} height="500px" theme={tokyoNightStorm} extensions={[json(), EditorView.lineWrapping]} readOnly />}
+            {body && <CodeMirror value={JSON.stringify(body, null, 2)} height="500px" extensions={[json(), EditorView.lineWrapping]} readOnly />}
         </div>
     )
 }
