@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux"
 import { updateBody } from "../../requestSlice"
 import { debounce } from "../../utils/utils"
 import { lintGutter, linter } from "@codemirror/lint"
+import { Box } from "@mantine/core"
 
 const RequestBody = () => {
     const dispatch = useDispatch()
@@ -22,9 +23,9 @@ const RequestBody = () => {
     }, []);
 
     return(
-        <div>
+        <Box mr={16}>
             <CodeMirror value={value} height="500px" extensions={[json(), linter(jsonParseLinter()), lintGutter()]}  onChange={onChange} />
-        </div>
+        </Box>
     )
 }
 

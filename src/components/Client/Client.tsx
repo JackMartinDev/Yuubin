@@ -6,19 +6,20 @@ import { useSelector } from "react-redux"
 import { RootState } from "../../store/store"
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { Box, Paper, Tabs } from "@mantine/core"
+import Headers from "../Headers/Headers"
+import Authentication from "../Authentication/Authentication"
 
 const Client = (): JSX.Element => {
     const status = useSelector((state:RootState) => state.response.status)
     const loading = useSelector((state:RootState) => state.response.loading)
 
     return(
-        <Box m="sm">
+        <Box>
             <SearchBar/>
-            <div >
+            <Box>
                 <PanelGroup direction="horizontal" style={{height: "85vh"}}>
                     <Panel defaultSize={50} minSize={30}>
                         <Paper mih="100%">
-
                             <Tabs variant="outline" defaultValue="query" mt="sm">
                                 <Tabs.List>
                                     <Tabs.Tab value="query">
@@ -44,11 +45,11 @@ const Client = (): JSX.Element => {
                                 </Tabs.Panel>
 
                                 <Tabs.Panel value="headers" mt="sm">
-                                    Headers
+                                    <Headers/>
                                 </Tabs.Panel>
 
                                 <Tabs.Panel value="auth" mt="sm">
-                                    Auth
+                                    <Authentication/>
                                 </Tabs.Panel>
                             </Tabs>
                         </Paper>
@@ -63,7 +64,7 @@ const Client = (): JSX.Element => {
                         </Paper>
                     </Panel>
                 </PanelGroup>
-            </div>
+            </Box>
         </Box>
     )
 }

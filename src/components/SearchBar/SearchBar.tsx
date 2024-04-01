@@ -60,7 +60,7 @@ const SearchBar = () =>{
                 withScrollArea={false}
                 data={['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD']}
             />
-            <TextInput type="url" defaultValue={url} placeholder="Enter URL" w="100%"  onChange={(e) => onUrlChangeHandler(e.target.value)}/>
+            <TextInput type="url"  placeholder="Enter URL" w="100%"  onChange={(e) => onUrlChangeHandler(e.target.value)}/>
             <Button type="submit" w={100} variant="default" color="gray">Send</Button>
         </form>
     )

@@ -15,7 +15,7 @@ function App(): JSX.Element {
                 </Panel>
                 <PanelResizeHandle />
                 <Panel defaultSize={90} minSize={70}>
-                    <Tabs variant="outline" defaultValue="tab 1">
+                    <Tabs variant="outline" defaultValue="tab 1" mx="md">
                         <Tabs.List>
                             <Tabs.Tab value="tab 1" p="xs">
                                 <Flex align="center" gap="xs">
