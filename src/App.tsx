@@ -3,6 +3,7 @@ import FileTree from "./components/FileTree/FileTree";
 import classes from "./App.module.css"
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { CloseButton, Flex, Tabs, Text } from "@mantine/core";
+
 function App(): JSX.Element {
     return (
         <div  className={classes.container}>
