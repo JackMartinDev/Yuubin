@@ -5,7 +5,7 @@ import styles from "./SearchBar.module.css"
 import useSendRequest from "../../hooks/useSendRequest"
 import { useSelector } from "react-redux"
 import { RootState } from "../../store/store"
-import { Button, Select, TextInput } from "@mantine/core"
+import { Box, Button, Select, TextInput } from "@mantine/core"
 
 interface OptionType {
   value: HttpVerb;
@@ -51,18 +51,20 @@ const SearchBar = () =>{
     }
 
     return(
+        <Box bg="#F5F5F5">
         <form onSubmit={onSubmitHandler} className={styles.body}>
             <Select
                 w={150}
                 withCheckIcon={false}
-                placeholder="GET"
+                defaultValue="GET"
                 allowDeselect={false}
                 withScrollArea={false}
                 data={['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD']}
             />
-            <TextInput type="url"  placeholder="Enter URL" w="100%"  onChange={(e) => onUrlChangeHandler(e.target.value)}/>
+            <TextInput type="url" w="100%" onChange={(e) => onUrlChangeHandler(e.target.value)}/>
             <Button type="submit" w={100} variant="default" color="gray">Send</Button>
         </form>
+        </Box>
     )
 }
 
