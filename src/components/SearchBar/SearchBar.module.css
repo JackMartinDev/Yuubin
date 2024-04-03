@@ -1,7 +1,5 @@
 .body{
-    margin: 0.5rem;
-    padding: 0.1rem 0.25rem;
-    background-color: #e8ebed;
+    padding: 0.5rem;
     border-radius: 2px;
     display: flex;
     gap: 10px;

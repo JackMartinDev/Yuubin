@@ -11,6 +11,11 @@
   },
   "dependencies": {
     "@codemirror/lang-json": "^6.0.1",
+    "@codemirror/lint": "^6.5.0",
+    "@lezer/highlight": "^1.2.0",
+    "@mantine/core": "^7.7.0",
+    "@mantine/form": "^7.7.0",
+    "@mantine/hooks": "^7.7.0",
     "@reduxjs/toolkit": "^2.0.1",
     "@tabler/icons-react": "^2.46.0",
     "@tauri-apps/api": "^1.5.2",
@@ -19,17 +24,19 @@
     "axios": "^1.6.2",
     "clsx": "^2.1.0",
     "pretty-bytes": "^6.1.1",
-    "re-resizable": "^6.9.11",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^9.0.4",
-    "react-select": "^5.8.0"
+    "react-resizable-panels": "^2.0.16"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.5.7",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react": "^4.0.3",
+    "postcss": "^8.4.38",
+    "postcss-preset-mantine": "^1.13.0",
+    "postcss-simple-vars": "^7.0.1",
     "typescript": "^5.0.2",
     "vite": "^4.4.4"
   }

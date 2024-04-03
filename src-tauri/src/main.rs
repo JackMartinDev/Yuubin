@@ -22,6 +22,7 @@ enum HttpMethod {
 struct MetaData {
     name: String,
     sequence: u8,
+    id: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

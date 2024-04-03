@@ -1,29 +1,55 @@
-import { useState, useEffect } from "react";
-import { invoke } from '@tauri-apps/api/tauri'
-import classes from "./FileTree.module.css"
 import Collection from "./Collection";
+import { Accordion, AccordionControlProps, ActionIcon, Box, Button, Center, TextInput, Title, rem } from "@mantine/core";
+import { IconDots, IconSearch } from "@tabler/icons-react";
 
-const FileTree = () => {
-    const [files, setFiles] = useState<Data>();
+interface Props {
+    files: Data
+    onChange: (val:string | null) => void
+}
 
-    const syncFileSystem = () => {
-        invoke('sync_files').then((files) => setFiles(JSON.parse(files as string)))
-    }
-
-    useEffect(() => {
-        syncFileSystem()
-    },[]);
+const FileTree = ({files, onChange}: Props) => {
+    const icon = <IconSearch style={{ width: rem(16), height: rem(16) }} />;
 
     return (
-        <div className={classes.container}>
-            <h1>File tree</h1>
-            <input type="text" placeholder="Search collections"/>
-            <button>+</button>
-            {files?.collections.map(collection => (<Collection key={crypto.randomUUID()} collection={collection}/>))}
-            <button onClick={syncFileSystem}>
-                refresh
-            </button>
-        </div>
+        <Box bg="#F5F5F5" h="100%">
+            <Title order={1}>Collections</Title>
+            <TextInput placeholder="Search collections" leftSection={icon} mb="sm" m="xs"/>
+            {files.collections.map(collection => (<Collection key={crypto.randomUUID()} onChange={onChange} collection={collection}/>))}
+            <Button variant="default" color="gray">+</Button>
+        </Box>
+    )
+}
+
+const AccordionControl = (props: AccordionControlProps) => {
+    return (
+        <Center>
+            <Accordion.Control {...props} />
+            <ActionIcon size="lg" variant="subtle" color="gray">
+                <IconDots size="1rem" />
+            </ActionIcon>
+        </Center>
+    );
+}
+
+const CollectionAccordion = () => {
+    return (
+        <Accordion chevronPosition="left" maw={400} mx="auto">
+            <Accordion.Item value="item-1">
+                <AccordionControl>Control 1</AccordionControl>
+                <Accordion.Panel>Panel 1</Accordion.Panel>
+            </Accordion.Item>
+
+            <Accordion.Item value="item-2">
+                <AccordionControl>Control 2</AccordionControl>
+                <Accordion.Panel>Panel 2</Accordion.Panel>
+            </Accordion.Item>
+
+            <Accordion.Item value="item-3">
+                <AccordionControl>Control 3</AccordionControl>
+                <Accordion.Panel>Panel 3</Accordion.Panel>
+            </Accordion.Item>
+        </Accordion>
+
     )
 }
 
