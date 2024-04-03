@@ -1,6 +1,6 @@
 import classes from "./Request.module.css"
 import { useDispatch } from "react-redux"
-import { updateUrl, updateVerb, updateBody } from "../../requestSlice"
+import { updateActiveRequest } from "../../requestSlice"
 import { ActionIcon, Group, Text } from "@mantine/core"
 import { IconDots } from "@tabler/icons-react"
 import { useHover } from "@mantine/hooks"
@@ -9,20 +9,18 @@ import { IconTrash } from '@tabler/icons-react';
 
 type Props = {
     request: YuubinRequest,  
-    onChange: (val:string | null) => void
 }
 
-const Request = ({request, onChange}:Props) => {
+const Request = ({ request }:Props) => {
     const dispatch = useDispatch();
     const { hovered, ref } = useHover();
 
     const onClickHandler = () => {
-        dispatch(updateUrl(request.url));
-        dispatch(updateVerb(request.method));
-        dispatch(updateBody(request.body));
+        dispatch(updateActiveRequest(request.meta.id));
     }
+
     return(
-        <Group className={classes.request} onClick={() => onChange(request.meta.id)} justify="space-between" ref={ref}>
+        <Group className={classes.request} onClick={onClickHandler} justify="space-between" ref={ref}>
             <Text>{request.method} {request.meta.name}</Text>
             <Menu shadow="md" width={200}>
                 <Menu.Target>

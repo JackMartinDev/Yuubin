@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import classes from "./Collection.module.css" 
 import cx from "clsx"
 import Request from "./Request";
@@ -7,10 +7,9 @@ import { Box } from "@mantine/core";
 
 type Props = {
     collection: Collection 
-    onChange: (val:string | null) => void
 }
 
-const Collection = ({collection, onChange}: Props): JSX.Element => {
+const Collection = ({ collection }: Props): JSX.Element => {
     const [isToggled, setIsToggled] = useState(false);
     
     const toggle = () => {
@@ -25,10 +24,10 @@ const Collection = ({collection, onChange}: Props): JSX.Element => {
                 <p>{collection.name}</p>
             </div>
             <div className={cx(classes.content, {[classes.show]: isToggled})}>
-                {collection.requests.map((request) => <Request request={request} onChange={onChange}/>)}
+                {collection.requests.map((request) => <Request request={request}/>)}
             </div>
         </Box>
     )
 }
 
-export default Collection
+export default React.memo(Collection)
