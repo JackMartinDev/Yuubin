@@ -1,6 +1,5 @@
 import CodeMirror, { EditorView } from "@uiw/react-codemirror"
 import { json, jsonParseLinter } from "@codemirror/lang-json"
-import { tokyoNightStorm } from "@uiw/codemirror-theme-tokyo-night-storm" 
 import { useCallback, useState } from "react"
 import { useDispatch } from "react-redux"
 import { updateBody } from "../../requestSlice"
@@ -9,9 +8,13 @@ import { lintGutter, linter } from "@codemirror/lint"
 import {createTheme} from '@uiw/codemirror-themes';
 import { Box } from "@mantine/core"
 
-const RequestBody = () => {
+interface Props {
+    body?: string
+}
+
+const RequestBody = ({body}: Props) => {
     const dispatch = useDispatch()
-    const [value, setValue] = useState("{}")
+    const [value, setValue] = useState(body ? body : "{}")
 
     const debouncedDispatch = useCallback(debounce((value: string) => {
         console.log("val: ", value);

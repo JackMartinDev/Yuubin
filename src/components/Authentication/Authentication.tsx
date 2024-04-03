@@ -1,11 +1,16 @@
 import { Box, Text, TextInput } from "@mantine/core"
 
-const Authentication = () => {
+interface Props {
+    token: string
+}
 
+const Authentication = ({token}:Props) => {
+
+    //Adjust this to state
     return(
         <Box mr={16}>
             <Text>Bearer Token</Text>
-            <TextInput mt="xs"/>
+            <TextInput defaultValue={token} mt="xs"/>
         </Box>
     )
 }

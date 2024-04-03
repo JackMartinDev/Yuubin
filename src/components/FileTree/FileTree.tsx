@@ -1,33 +1,20 @@
-import { useState, useEffect } from "react";
-import { invoke } from '@tauri-apps/api/tauri'
 import Collection from "./Collection";
 import { Accordion, AccordionControlProps, ActionIcon, Box, Button, Center, TextInput, Title, rem } from "@mantine/core";
 import { IconDots, IconSearch } from "@tabler/icons-react";
 
-const FileTree = () => {
-    const [files, setFiles] = useState<Data>();
+interface Props {
+    files: Data
+    onChange: (val:string | null) => void
+}
 
-    const testFiles = {"collections":[{"name":"col5","requests":[{"method":"POST","url":"https://jsonplaceholder.typicode.com/todos","body":"{name:Jack}","auth":null,"meta":{"name":"req2","sequence":2}}]},{"name":"col","requests":[{"method":"GET","url":"www.facebook.com","body":null,"auth":null,"meta":{"name":"req2","sequence":2}},{"method":"GET","url":"https://jsonplaceholder.typicode.com/todos/1","body":null,"auth":null,"meta":{"name":"req","sequence":3}}]}]}
-
-    const syncFileSystem = () => {
-        invoke('sync_files').then((files) => setFiles(JSON.parse(files as string)))
-    }
-    console.log(JSON.stringify(files))
-
-    useEffect(() => {
-        syncFileSystem()
-    },[]);
-
+const FileTree = ({files, onChange}: Props) => {
     const icon = <IconSearch style={{ width: rem(16), height: rem(16) }} />;
 
     return (
         <Box bg="#F5F5F5" h="100%">
             <Title order={1}>Collections</Title>
             <TextInput placeholder="Search collections" leftSection={icon} mb="sm" m="xs"/>
-            {testFiles?.collections.map(collection => (<Collection key={crypto.randomUUID()} collection={collection}/>))}
-            <Button variant="default" color="gray" onClick={syncFileSystem}>
-                refresh
-            </Button>
+            {files.collections.map(collection => (<Collection key={crypto.randomUUID()} onChange={onChange} collection={collection}/>))}
             <Button variant="default" color="gray">+</Button>
         </Box>
     )

@@ -4,21 +4,15 @@ import { updateUrl, updateVerb, updateBody } from "../../requestSlice"
 import { ActionIcon, Group, Text } from "@mantine/core"
 import { IconDots } from "@tabler/icons-react"
 import { useHover } from "@mantine/hooks"
-import { Menu, Button, rem } from '@mantine/core';
-import {
-  IconSettings,
-  IconSearch,
-  IconPhoto,
-  IconMessageCircle,
-  IconTrash,
-  IconArrowsLeftRight,
-} from '@tabler/icons-react';
+import { Menu,  rem } from '@mantine/core';
+import { IconTrash } from '@tabler/icons-react';
 
 type Props = {
-    request: YuubinRequest    
+    request: YuubinRequest,  
+    onChange: (val:string | null) => void
 }
 
-const Request = ({request}:Props) => {
+const Request = ({request, onChange}:Props) => {
     const dispatch = useDispatch();
     const { hovered, ref } = useHover();
 
@@ -28,8 +22,8 @@ const Request = ({request}:Props) => {
         dispatch(updateBody(request.body));
     }
     return(
-    <Group className={classes.request} onClick={onClickHandler} justify="space-between" ref={ref}>
-        <Text>{request.method} {request.meta.name}</Text>
+        <Group className={classes.request} onClick={() => onChange(request.meta.id)} justify="space-between" ref={ref}>
+            <Text>{request.method} {request.meta.name}</Text>
             <Menu shadow="md" width={200}>
                 <Menu.Target>
                     <ActionIcon variant="transparent" color="dark">
@@ -57,7 +51,7 @@ const Request = ({request}:Props) => {
 
                 </Menu.Dropdown>
             </Menu>
-    </Group>
+        </Group>
     )
 }
 export default Request

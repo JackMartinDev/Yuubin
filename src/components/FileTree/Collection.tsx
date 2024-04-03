@@ -7,9 +7,10 @@ import { Box } from "@mantine/core";
 
 type Props = {
     collection: Collection 
+    onChange: (val:string | null) => void
 }
 
-const Collection = ({collection}: Props): JSX.Element => {
+const Collection = ({collection, onChange}: Props): JSX.Element => {
     const [isToggled, setIsToggled] = useState(false);
     
     const toggle = () => {
@@ -24,7 +25,7 @@ const Collection = ({collection}: Props): JSX.Element => {
                 <p>{collection.name}</p>
             </div>
             <div className={cx(classes.content, {[classes.show]: isToggled})}>
-                {collection.requests.map((request) => <Request request={request}/>)}
+                {collection.requests.map((request) => <Request request={request} onChange={onChange}/>)}
             </div>
         </Box>
     )

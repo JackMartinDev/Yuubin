@@ -22,13 +22,18 @@ const options: OptionType[] = [
     { value: 'HEAD', label: 'HEAD' },
 ]
 
-const SearchBar = () =>{
+interface Props {
+    method: HttpVerb,
+    url: string
+}
+
+const SearchBar = ({url, method}: Props) =>{
     const [selectedOption, setSelectedOption] = useState<OptionType>(options[0]);
     const dispatch = useDispatch()
     const sendRequest = useSendRequest();
     
-    const url = useSelector((state: RootState) => state.request.url)
-    const method = useSelector((state: RootState) => state.request.httpVerb)
+//    const url = useSelector((state: RootState) => state.request.url)
+//    const method = useSelector((state: RootState) => state.request.httpVerb)
 
     useEffect(() => {
         const httpVerb: OptionType = {value: method, label: method}
@@ -56,12 +61,12 @@ const SearchBar = () =>{
             <Select
                 w={150}
                 withCheckIcon={false}
-                defaultValue="GET"
+                defaultValue={method}
                 allowDeselect={false}
                 withScrollArea={false}
                 data={['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD']}
             />
-            <TextInput type="url" w="100%" onChange={(e) => onUrlChangeHandler(e.target.value)}/>
+            <TextInput type="url" w="100%" defaultValue={url} onChange={(e) => onUrlChangeHandler(e.target.value)}/>
             <Button type="submit" w={100} variant="default" color="gray">Send</Button>
         </form>
         </Box>

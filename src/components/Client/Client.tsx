@@ -9,13 +9,17 @@ import { Box, Paper, Tabs } from "@mantine/core"
 import Headers from "../Headers/Headers"
 import Authentication from "../Authentication/Authentication"
 
-const Client = (): JSX.Element => {
+interface Props {
+    request: YuubinRequest
+}
+
+const Client = ({request}: Props): JSX.Element => {
     const status = useSelector((state:RootState) => state.response.status)
     const loading = useSelector((state:RootState) => state.response.loading)
 
     return(
         <Box>
-            <SearchBar/>
+            <SearchBar url={request.url} method={request.method}/>
             <Box>
                 <PanelGroup direction="horizontal" style={{height: "85vh"}}>
                     <Panel defaultSize={50} minSize={30}>
@@ -41,7 +45,7 @@ const Client = (): JSX.Element => {
                                 </Tabs.Panel>
 
                                 <Tabs.Panel value="body" mt="sm">
-                                    <RequestBody/>
+                                    <RequestBody body={request.body}/>
                                 </Tabs.Panel>
 
                                 <Tabs.Panel value="headers" mt="sm">
@@ -49,7 +53,7 @@ const Client = (): JSX.Element => {
                                 </Tabs.Panel>
 
                                 <Tabs.Panel value="auth" mt="sm">
-                                    <Authentication/>
+                                    <Authentication token={request.auth}/>
                                 </Tabs.Panel>
                             </Tabs>
                         </Paper>
