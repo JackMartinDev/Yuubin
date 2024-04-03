@@ -7,12 +7,14 @@ export interface RequestState{
     url: string,
     body?: string,
     queryParams: {key: string, value: string}[],
+    activeRequest: string
 }
 
 const initialState: RequestState = {
     httpVerb: "GET",
     url: "",
-    queryParams: []
+    queryParams: [],
+    activeRequest: "1"
 }
 
 export const requestSlice = createSlice({
@@ -30,11 +32,15 @@ export const requestSlice = createSlice({
         },
         updateBody: (state, action: PayloadAction<string | undefined>) => {
             state.body = action.payload
+        },
+        updateActiveRequest: (state, action: PayloadAction<string>) => {
+            state.activeRequest = action.payload
         }
+
 
     },
 })
 
-export const { updateUrl, updateVerb, updateParams, updateBody } = requestSlice.actions
+export const { updateUrl, updateVerb, updateParams, updateBody, updateActiveRequest } = requestSlice.actions
 
 export default requestSlice.reducer
