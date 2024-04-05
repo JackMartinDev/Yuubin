@@ -14,12 +14,7 @@ declare module 'axios' {
     }
 }
 
-const useSendRequest = () => {    
-    const paramsArray = useSelector((state: RootState) => state.request.queryParams)
-    const url = useSelector((state: RootState) => state.request.url)
-    const method = useSelector((state: RootState) => state.request.httpVerb)
-    const body = useSelector((state:RootState) => state.request.body)
-
+const useSendRequest = (paramsArray: KeyValuePair[] | undefined, url: string, method: HttpVerb, body: string | undefined) => {    
     let data:string
     let params: RequestParams
 

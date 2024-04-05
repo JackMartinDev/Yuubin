@@ -28,7 +28,7 @@ const Client = ({request}: Props): JSX.Element => {
 
     const [response, setResponse] = useState();
 
-    const sendRequest = useSendRequest();
+    const sendRequest = useSendRequest(queryParams, url, method, body);
 
     const onSubmitHandler = () => {
         console.log("yo")
@@ -38,6 +38,7 @@ const Client = ({request}: Props): JSX.Element => {
         console.log(body)
         console.log(queryParams)
         console.log(headers)
+        sendRequest()
     }
 
     return(
@@ -88,7 +89,6 @@ const Client = ({request}: Props): JSX.Element => {
                     <PanelResizeHandle style={{backgroundColor: "#DEE2E6", width: "1px"}}/>
                     <Panel defaultSize={50} minSize={30}>
                         <Paper mih="100%" >
-
                             <div>
                                 {loading ? <p>Loading...</p> : status ? <ResponseBody/> : <p style={{textAlign: 'center'}}>Make a request using the URL bar above</p>}
                             </div>

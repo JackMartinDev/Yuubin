@@ -13,11 +13,6 @@ interface Props {
 const RequestBody = ({body, onBodyChange}: Props) => {
     const [localBody, setLocalBody] = useState(body ? body : "{}")
 
-//    const debouncedDispatch = useCallback(debounce((value: string) => {
-//        console.log("val: ", value);
-//        dispatch(updateBody(value))
-//        }, 500), []);
-
     useEffect(() => {
         onBodyChange(localBody);
     }, [localBody, onBodyChange]);

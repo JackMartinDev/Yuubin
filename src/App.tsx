@@ -37,7 +37,7 @@ function App(): JSX.Element {
 
     //Have the default tab
     return (
-        <div  className={classes.container}>
+        <div className={classes.container}>
             <PanelGroup direction="horizontal">
                 <Panel defaultSize={15} minSize={10}>
                     <div className={classes.file}>
@@ -57,7 +57,6 @@ function App(): JSX.Element {
                                 </Tabs.Tab>
                             ))}
                         </Tabs.List>
-
 
                         {tabbedRequests.map(request => (
                             <Tabs.Panel value={request.meta.id} mt="sm">

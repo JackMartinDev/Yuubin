@@ -1,8 +1,4 @@
-import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/store";
-import { updateParams } from "../../requestSlice";
-import { debounce } from "../../utils/utils"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { IconTrash } from "@tabler/icons-react";
 import { ActionIcon, Button, Checkbox, Flex, Grid, TextInput } from "@mantine/core";
 
@@ -54,7 +50,6 @@ const Headers = ( {header, onHeaderChange}:Props) => {
                         variant="default" 
                         aria-label="Delete"
                         onClick={() => removeheader(index)}
-
                     >
                         <IconTrash style={{ width: '80%', height: '70%' }} stroke={1.5} />
                     </ActionIcon>
