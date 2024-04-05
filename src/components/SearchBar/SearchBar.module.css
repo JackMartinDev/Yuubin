@@ -1,22 +1,6 @@
 .body{
-    padding: 0.5rem;
+    width: 100%;
     border-radius: 2px;
     display: flex;
     gap: 10px;
 }
-
-.url{
-    flex: 1; 
-    font-size: 1.1rem;
-    background-color: transparent;
-    border: none;
-}
-
-.btn{
-    border: none;
-    background-color: transparent;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-}
-

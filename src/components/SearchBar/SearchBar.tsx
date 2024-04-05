@@ -1,75 +1,38 @@
-import { useDispatch } from "react-redux"
-import { updateUrl, updateVerb } from "../../requestSlice"
-import { useEffect, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import styles from "./SearchBar.module.css"
-import useSendRequest from "../../hooks/useSendRequest"
-import { useSelector } from "react-redux"
-import { RootState } from "../../store/store"
-import { Box, Button, Select, TextInput } from "@mantine/core"
-
-interface OptionType {
-  value: HttpVerb;
-  label: HttpVerb;
-}
-
-const options: OptionType[] = [
-    { value: 'GET', label: 'GET' },
-    { value: 'POST', label: 'POST' },
-    { value: 'PUT', label: 'PUT' },
-    { value: 'PATCH', label: 'PATCH' },
-    { value: 'DELETE', label: 'DELETE' },
-    { value: 'OPTIONS', label: 'OPTIONS' },
-    { value: 'HEAD', label: 'HEAD' },
-]
+import { Select, TextInput } from "@mantine/core"
 
 interface Props {
     method: HttpVerb,
-    url: string
-}
+    url: string,
+    onUrlChange: Dispatch<SetStateAction<string>>,
+    onMethodChange:Dispatch<SetStateAction<HttpVerb>>}
 
-const SearchBar = ({url, method}: Props) =>{
-    const [selectedOption, setSelectedOption] = useState<OptionType>(options[0]);
-    const dispatch = useDispatch()
-    const sendRequest = useSendRequest();
-    
-//    const url = useSelector((state: RootState) => state.request.url)
-//    const method = useSelector((state: RootState) => state.request.httpVerb)
+const SearchBar = ({url, method, onUrlChange, onMethodChange}: Props) =>{
+    const [localUrl, setLocalUrl] = useState(url)
+    const [localMethod, setLocalMethod] = useState<HttpVerb>(method)
 
     useEffect(() => {
-        const httpVerb: OptionType = {value: method, label: method}
-        setSelectedOption(httpVerb)
-    },[method])
+        onUrlChange(localUrl);
+    }, [localUrl, onUrlChange]);
 
-    const onSubmitHandler = (e:React.FormEvent) => {
-        e.preventDefault(); 
-        sendRequest();
-    }
-
-    const onMethodChangeHander = (option) =>{
-        setSelectedOption(option)
-        dispatch(updateVerb(option!.value))
-    }
-    
-    //TODO:debounce
-    const onUrlChangeHandler = (url: string) =>{
-        dispatch(updateUrl(url))
-    }
+    useEffect(() => {
+        onMethodChange(localMethod);
+    }, [localMethod, onMethodChange]);
 
     return(
-        <Box bg="#F5F5F5">
-        <form onSubmit={onSubmitHandler} className={styles.body}>
+        <form className={styles.body}>
             <Select
                 w={150}
                 withCheckIcon={false}
-                defaultValue={method}
+                value={localMethod}
+                onChange={(value, _option) => setLocalMethod(value as HttpVerb)}
                 allowDeselect={false}
                 withScrollArea={false}
                 data={['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD']}
             />
-            <TextInput type="url" w="100%" defaultValue={url} onChange={(e) => onUrlChangeHandler(e.target.value)}/>
-            <Button type="submit" w={100} variant="default" color="gray">Send</Button>
+            <TextInput type="url" w="100%" value={localUrl} onChange={(e) => setLocalUrl(e.target.value)}/>
         </form>
-        </Box>
     )
 }
 

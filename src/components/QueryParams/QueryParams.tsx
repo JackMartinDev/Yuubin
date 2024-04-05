@@ -1,37 +1,35 @@
-import { useCallback, useState } from "react"
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/store";
-import { updateParams } from "../../requestSlice";
-import { debounce } from "../../utils/utils"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { IconTrash } from "@tabler/icons-react";
 import { ActionIcon, Button, Checkbox, Flex, Grid, TextInput } from "@mantine/core";
 
-const QueryParams = () => {
-    const init = useSelector((state: RootState) => state.request.queryParams)
-    const [queries, setQueries] = useState<{key: string, value: string}[]>(init);
-    const dispatch = useDispatch();
+type Props = {
+    queryParams: KeyValuePair[] | undefined, 
+    onParamsChange: Dispatch<SetStateAction<KeyValuePair[] | undefined>>,
+}
+
+const QueryParams = ({queryParams, onParamsChange}: Props) => {
+    const [queries, setQueries] = useState<KeyValuePair[]>(queryParams ? queryParams : []);
 
     const incrementQueryCount = () =>{
         setQueries([...queries, {key: "", value: ""}]);
     }
 
-    const debouncedDispatch = useCallback(debounce((value: typeof queries) => {
-        dispatch(updateParams(value))
-    }, 500), []);
+    useEffect(() => {
+        onParamsChange(queries);
+    }, [queries, onParamsChange]);
+
 
     const inputChangeHandler = (index: number, field:string, newValue: string) => {
         const newArray = queries.map((query, queryIndex) =>
             index === queryIndex ? { ...query, [field]: newValue } : query
         );
         setQueries(newArray);
-        debouncedDispatch(newArray);
     };
 
     //TODO: Modify so it doesnt delete all with same key
     const removeQuery = (key: string) =>{
         const newArray = queries.filter((query) => query.key !== key)
         setQueries(newArray)
-        dispatch(updateParams(newArray))
     }
 
     const queryInput = queries.map((query, index) => (

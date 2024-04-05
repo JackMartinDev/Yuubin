@@ -1,30 +1,27 @@
 import CodeMirror, { EditorView } from "@uiw/react-codemirror"
 import { json, jsonParseLinter } from "@codemirror/lang-json"
-import { useCallback, useState } from "react"
-import { useDispatch } from "react-redux"
-import { updateBody } from "../../requestSlice"
-import { debounce } from "../../utils/utils"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { lintGutter, linter } from "@codemirror/lint"
 import {createTheme} from '@uiw/codemirror-themes';
 import { Box } from "@mantine/core"
 
 interface Props {
     body?: string
+    onBodyChange: Dispatch<SetStateAction<string | undefined>>,
 }
 
-const RequestBody = ({body}: Props) => {
-    const dispatch = useDispatch()
-    const [value, setValue] = useState(body ? body : "{}")
+const RequestBody = ({body, onBodyChange}: Props) => {
+    const [localBody, setLocalBody] = useState(body ? body : "{}")
 
-    const debouncedDispatch = useCallback(debounce((value: string) => {
-        console.log("val: ", value);
-        dispatch(updateBody(value))
-        }, 500), []);
+//    const debouncedDispatch = useCallback(debounce((value: string) => {
+//        console.log("val: ", value);
+//        dispatch(updateBody(value))
+//        }, 500), []);
 
-    const onChange = useCallback((val, viewUpdate) => {
-        setValue(val);
-        debouncedDispatch(val)
-    }, []);
+    useEffect(() => {
+        onBodyChange(localBody);
+    }, [localBody, onBodyChange]);
+
 
     const myTheme = createTheme({
         theme: "light",
@@ -50,10 +47,10 @@ const RequestBody = ({body}: Props) => {
     return(
         <Box mr={16}> 
             <CodeMirror 
-                value={value} 
+                value={localBody} 
                 theme={testTheme}
                 extensions={[json(), linter(jsonParseLinter()), lintGutter()]}  
-                onChange={onChange} 
+                onChange={(val, _viewUpdate) => setLocalBody(val)} 
             />
         </Box>
     )

@@ -5,9 +5,11 @@ import SearchBar from "../SearchBar/SearchBar"
 import { useSelector } from "react-redux"
 import { RootState } from "../../store/store"
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { Box, Paper, Tabs } from "@mantine/core"
+import { Box, Button, Flex, Paper, Tabs } from "@mantine/core"
 import Headers from "../Headers/Headers"
 import Authentication from "../Authentication/Authentication"
+import { useState } from "react"
+import useSendRequest from "../../hooks/useSendRequest"
 
 interface Props {
     request: YuubinRequest
@@ -17,9 +19,34 @@ const Client = ({request}: Props): JSX.Element => {
     const status = useSelector((state:RootState) => state.response.status)
     const loading = useSelector((state:RootState) => state.response.loading)
 
+    const [url, setUrl] = useState(request.url);
+    const [method, setMethod] = useState(request.method);
+    const [queryParams, setQueryParams] = useState(request.queryParams);
+    const [body, setBody] = useState(request.body);
+    const [headers, setHeaders] = useState(request.headers);
+    const [auth, setAuth] = useState(request.auth);
+
+    const [response, setResponse] = useState();
+
+    const sendRequest = useSendRequest();
+
+    const onSubmitHandler = () => {
+        console.log("yo")
+        console.log(url)
+        console.log(method)
+        console.log(auth)
+        console.log(body)
+        console.log(queryParams)
+        console.log(headers)
+    }
+
     return(
         <Box>
-            <SearchBar url={request.url} method={request.method}/>
+            <Flex bg="#F5F5F5" align="center" p="0.5rem" gap={10}>
+                <SearchBar url={url} method={method} onUrlChange={setUrl} onMethodChange={setMethod}/>
+                <Button type="submit" w={100} variant="default" color="gray" onClick={onSubmitHandler}>Send</Button>
+            </Flex>
+
             <Box>
                 <PanelGroup direction="horizontal" style={{height: "85vh"}}>
                     <Panel defaultSize={50} minSize={30}>
@@ -41,19 +68,19 @@ const Client = ({request}: Props): JSX.Element => {
                                 </Tabs.List>
 
                                 <Tabs.Panel value="query" mt="sm">
-                                    <QueryParams/>
+                                    <QueryParams queryParams={queryParams} onParamsChange={setQueryParams}/>
                                 </Tabs.Panel>
 
                                 <Tabs.Panel value="body" mt="sm">
-                                    <RequestBody body={request.body}/>
+                                    <RequestBody body={body} onBodyChange={setBody}/>
                                 </Tabs.Panel>
 
                                 <Tabs.Panel value="headers" mt="sm">
-                                    <Headers/>
+                                    <Headers header={headers} onHeaderChange={setHeaders}/>
                                 </Tabs.Panel>
 
                                 <Tabs.Panel value="auth" mt="sm">
-                                    <Authentication token={request.auth}/>
+                                    <Authentication auth={auth} onAuthChange={setAuth}/>
                                 </Tabs.Panel>
                             </Tabs>
                         </Paper>

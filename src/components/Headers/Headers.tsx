@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { updateParams } from "../../requestSlice";
@@ -6,32 +6,35 @@ import { debounce } from "../../utils/utils"
 import { IconTrash } from "@tabler/icons-react";
 import { ActionIcon, Button, Checkbox, Flex, Grid, TextInput } from "@mantine/core";
 
-const Headers = () => {
-    const init = useSelector((state: RootState) => state.request.queryParams)
-    const [headers, setHeaders] = useState<{key: string, value: string}[]>(init);
-    const dispatch = useDispatch();
+type Props = {
+    header: KeyValuePair[] | undefined, 
+    onHeaderChange: Dispatch<SetStateAction<KeyValuePair[] | undefined>>,
+}
+
+
+const Headers = ( {header, onHeaderChange}:Props) => {
+    const [headers, setHeaders] = useState<KeyValuePair[]>(header ? header : []);
+
+    useEffect(() => {
+        onHeaderChange(headers);
+    }, [headers, onHeaderChange]);
+
 
     const incrementheaderCount = () =>{
         setHeaders([...headers, {key: "", value: ""}]);
     }
-
-    const debouncedDispatch = useCallback(debounce((value: typeof headers) => {
-        dispatch(updateParams(value))
-    }, 500), []);
 
     const inputChangeHandler = (index: number, field:string, newValue: string) => {
         const newArray = headers.map((header, headerIndex) =>
             index === headerIndex ? { ...header, [field]: newValue } : header
         );
         setHeaders(newArray);
-        debouncedDispatch(newArray);
     };
 
     //TODO: Modify so it doesnt delete all with same key
     const removeheader = (key: string) =>{
         const newArray = headers.filter((header) => header.key !== key)
         setHeaders(newArray)
-        dispatch(updateParams(newArray))
     }
 
     const headerInput = headers.map((header, index) => (
