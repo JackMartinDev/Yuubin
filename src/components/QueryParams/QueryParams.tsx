@@ -26,9 +26,8 @@ const QueryParams = ({queryParams, onParamsChange}: Props) => {
         setQueries(newArray);
     };
 
-    //TODO: Modify so it doesnt delete all with same key
-    const removeQuery = (key: string) =>{
-        const newArray = queries.filter((query) => query.key !== key)
+    const removeQuery = (index: number) =>{
+        const newArray = queries.filter((_query, i) => i !== index)
         setQueries(newArray)
     }
 
@@ -49,7 +48,7 @@ const QueryParams = ({queryParams, onParamsChange}: Props) => {
                     <ActionIcon
                         variant="default" 
                         aria-label="Delete"
-                        onClick={() => removeQuery(query.key)}
+                        onClick={() => removeQuery(index)}
 
                     >
                         <IconTrash style={{ width: '80%', height: '70%' }} stroke={1.5} />

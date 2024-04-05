@@ -31,9 +31,8 @@ const Headers = ( {header, onHeaderChange}:Props) => {
         setHeaders(newArray);
     };
 
-    //TODO: Modify so it doesnt delete all with same key
-    const removeheader = (key: string) =>{
-        const newArray = headers.filter((header) => header.key !== key)
+    const removeheader = (index: number) =>{
+        const newArray = headers.filter((_header, i) => i !== index)
         setHeaders(newArray)
     }
 
@@ -54,7 +53,7 @@ const Headers = ( {header, onHeaderChange}:Props) => {
                     <ActionIcon
                         variant="default" 
                         aria-label="Delete"
-                        onClick={() => removeheader(header.key)}
+                        onClick={() => removeheader(index)}
 
                     >
                         <IconTrash style={{ width: '80%', height: '70%' }} stroke={1.5} />
