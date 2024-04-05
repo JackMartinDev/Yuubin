@@ -19,6 +19,7 @@ function App(): JSX.Element {
     const [tabbedRequests, setTabbedRequests] = useState<YuubinRequest[]>( testRequests);
 
     const activeTab = useSelector((state: RootState) => state.request.activeRequest)
+    console.log("App",activeTab)
 
     const syncFileSystem = () => {
         invoke('sync_files').then((files) => setFiles(JSON.parse(files as string)))
