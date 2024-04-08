@@ -16,7 +16,6 @@ const Request = ({ request }:Props) => {
     const { hovered, ref } = useHover();
 
     const onClickHandler = () => {
-        console.log("request", request.meta.id)
         dispatch(updateActiveRequest(request.meta.id));
     }
 
