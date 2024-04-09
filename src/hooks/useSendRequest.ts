@@ -76,6 +76,7 @@ const useSendRequest = (paramsArray: KeyValuePair[] | undefined, url: string, me
             return
         }
 
+        //Add try catch which returns the data on success and returns an error on fail
         const res = await axios({
             url,
             method,
@@ -83,6 +84,7 @@ const useSendRequest = (paramsArray: KeyValuePair[] | undefined, url: string, me
             data,
         })
 
+        //Return all of this response data and display in client
         dispatch(updateError(false));
         dispatch(updateResponse(res.data));
         dispatch(updateStatus(res.status));
