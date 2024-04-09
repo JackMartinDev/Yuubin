@@ -4,7 +4,7 @@ import { IconSearch } from "@tabler/icons-react";
 import React from "react";
 
 interface Props {
-    files: Data
+    files: Data,
 }
 
 const FileTree = ({ files }: Props) => {

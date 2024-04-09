@@ -7,18 +7,17 @@ import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store/store";
-import { updateActiveRequest } from "./requestSlice";
+import { updateActiveRequest, updateActiveTabs } from "./requestSlice";
 
 const testFiles: Data = {"collections":[{"name":"col5","requests":[{"method":"POST","url":"https://jsonplaceholder.typicode.com/todos","body":"{name:Jack}","auth":undefined,"meta":{"name":"req2","sequence":1, "id": "3"}}]},{"name":"col","requests":[{"method":"GET","url":"www.facebook.com","body":undefined,"auth":undefined,"meta":{"name":"req2","sequence":2, "id": "2"}},{"method":"GET","url":"https://jsonplaceholder.typicode.com/todos/1","body":undefined,"auth":undefined,"meta":{"name":"req","sequence":3, id:"1"}}]}]}
-
-const testRequests: YuubinRequest[] = [{"method":"POST","url":"https://jsonplaceholder.typicode.com/todos","body":'{"name":"Jack"}',"auth":undefined,"meta":{"name":"req2","sequence":1, "id": "3"}},{"method":"GET","url":"www.facebook.com","body":undefined,"auth":undefined,"meta":{"name":"req2","sequence":2, "id": "2"}},{"method":"GET","url":"https://jsonplaceholder.typicode.com/todos/1","body":undefined,"auth":"Bearer 12345","meta":{"name":"req","sequence":3, "id": "1"}}]
 
 function App(): JSX.Element {
     const dispatch = useDispatch()
     const [files, setFiles] = useState<Data>();
-    const [tabbedRequests, setTabbedRequests] = useState<YuubinRequest[]>( testRequests);
 
     const activeTab = useSelector((state: RootState) => state.request.activeRequest)
+    //Add fallback for if tabbedRequests.length === 0
+    const tabbedRequests = useSelector((state: RootState) => state.request.activeTabs)
 
     const syncFileSystem = () => {
         invoke('sync_files').then((files) => setFiles(JSON.parse(files as string)))
@@ -29,16 +28,15 @@ function App(): JSX.Element {
         syncFileSystem()
     },[]);
 
-    //Currently passing this function through 3 children, consider making this into a redux variable to reduce this
     const onChangeHandler = (tabId: string) => {
         dispatch(updateActiveRequest(tabId));
     }
 
     const onCloseHandler = (tabId: string) => {
-        setTabbedRequests(prev => prev.filter((request) => request.meta.id != tabId))
+        const newTabs = tabbedRequests.filter((request) => request.meta.id !== tabId)
+        dispatch(updateActiveTabs(newTabs))
     }
 
-    //Have the default tab
     return (
         <div className={classes.container}>
             <PanelGroup direction="horizontal">

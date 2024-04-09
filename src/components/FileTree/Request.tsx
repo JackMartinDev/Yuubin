@@ -1,11 +1,12 @@
 import classes from "./Request.module.css"
-import { useDispatch } from "react-redux"
-import { updateActiveRequest } from "../../requestSlice"
+import { useDispatch, useSelector } from "react-redux"
+import { updateActiveRequest, updateActiveTabs } from "../../requestSlice"
 import { ActionIcon, Group, Text } from "@mantine/core"
 import { IconDots } from "@tabler/icons-react"
 import { useHover } from "@mantine/hooks"
 import { Menu,  rem } from '@mantine/core';
 import { IconTrash } from '@tabler/icons-react';
+import { RootState } from "../../store/store"
 
 type Props = {
     request: YuubinRequest,  
@@ -14,8 +15,15 @@ type Props = {
 const Request = ({ request }:Props) => {
     const dispatch = useDispatch();
     const { hovered, ref } = useHover();
+    const tabbedRequests = useSelector((state: RootState) => state.request.activeTabs)
 
     const onClickHandler = () => {
+        const opened = tabbedRequests.filter((req) => request.meta.id === req.meta.id)
+
+        if(opened.length === 0) {
+            const newTabs = [...tabbedRequests, request]
+            dispatch(updateActiveTabs(newTabs))
+        }
         dispatch(updateActiveRequest(request.meta.id));
     }
 

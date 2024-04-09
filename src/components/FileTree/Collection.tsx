@@ -6,7 +6,7 @@ import { IconChevronRight } from "@tabler/icons-react"
 import { Box } from "@mantine/core";
 
 type Props = {
-    collection: Collection 
+    collection: Collection,
 }
 
 const Collection = ({ collection }: Props): JSX.Element => {
@@ -16,7 +16,6 @@ const Collection = ({ collection }: Props): JSX.Element => {
         setIsToggled(!isToggled)
     }
 
-    //TODO: On click set the values of this request to redux of the current }
     return(
         <Box mb={3}>
             <div className={classes.accordion} onClick={toggle}>
@@ -24,7 +23,7 @@ const Collection = ({ collection }: Props): JSX.Element => {
                 <p>{collection.name}</p>
             </div>
             <div className={cx(classes.content, {[classes.show]: isToggled})}>
-                {collection.requests.map((request) => <Request request={request}/>)}
+                {collection.requests.map((request) => <Request request={request} />)}
             </div>
         </Box>
     )
