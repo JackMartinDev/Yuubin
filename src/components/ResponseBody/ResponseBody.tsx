@@ -8,13 +8,27 @@ import { lintGutter } from "@codemirror/lint";
 import {createTheme} from '@uiw/codemirror-themes';
 import { Box } from "@mantine/core";
 import { tags as t } from '@lezer/highlight';
+import { HttpStatusCode } from "axios";
 
-const ResponseBody = () => {
-    const body = useSelector((state: RootState) => state.response.response)
-    const time = useSelector((state: RootState) => state.response.elapsed)
-    const size = useSelector((state: RootState) => state.response.size)
-    const status = useSelector((state: RootState) => state.response.status)
-    const error = useSelector((state: RootState) => state.response.isError)
+type Response = {
+    data: {},
+    duration: number,
+    size: string,
+    status: HttpStatusCode
+}
+
+type ResponseError = {
+    message: string,
+    status: number
+}
+
+
+type Props = {
+    response?: Response
+    error?: ResponseError
+}
+
+const ResponseBody = ({response, error}: Props) => {
 
     const myTheme = createTheme({
         theme: "light",
@@ -49,14 +63,21 @@ const ResponseBody = () => {
     })
 
     return(
+        //Refactor
         <Box ml="md">
-            <div className={styles.stats}>
-                <p style={error ? {color: "red"} : {color:"green"}}>{error ? !!status ? status : "Error" : `${status} OK`}</p>
-                <p>{time}ms</p>
-                <p>{size}</p>
-            </div>
-            {body && <CodeMirror 
-                value={JSON.stringify(body, null, 2)} 
+                {response ? 
+                <div className={styles.stats}>
+                    <p style={{color:"green"}}>{`${response.status} OK`}</p>
+                    <p>{response.duration}ms</p>
+                    <p>{response.size}</p>
+                </div>
+                :
+                <div className={styles.stats}>
+                <p style={{color: "red"}}>{`Error`}</p>
+                </div>
+                }
+            {(response || error) && <CodeMirror 
+                value={JSON.stringify(response ? response.data : error?.message, null, 2)} 
                 theme={myTheme} 
                 height="700px"
                 readOnly 

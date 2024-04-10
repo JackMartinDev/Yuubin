@@ -1,61 +1,39 @@
-import type { RootState } from "../store/store"
-import { useSelector, useDispatch } from "react-redux"
+import { useDispatch } from "react-redux"
 import axios, { AxiosResponse, AxiosError } from "axios"
-import { updateElapsed, updateHeaders, updateResponse, updateSize, updateStatus, updateLoading, updateError } from "../responseSlice"
+import { updateLoading } from "../responseSlice"
 import prettyBytes from "pretty-bytes"
 
 interface RequestParams{
     [key: string]: string
 }
 
-declare module 'axios' {
-    export interface AxiosRequestConfig {
-        metadata?: { startTime: number };
-    }
-}
-
 const useSendRequest = (paramsArray: KeyValuePair[] | undefined, url: string, method: HttpVerb, body: string | undefined) => {    
     let data:string
     let params: RequestParams
 
+    let startTime: number;
+    let endTime: number;
+
     const dispatch = useDispatch();
 
+    //Investigate if setting up the interceptor in the hook is okay
     axios.interceptors.request.use(config => {
         dispatch(updateLoading(true));
-        config.metadata = { startTime: new Date().getTime() };
+        startTime = new Date().getTime();
         return config;
     }, (error: AxiosError) => {
-            dispatch(updateError(true));
-            dispatch(updateStatus(400));
             dispatch(updateLoading(false));
-            console.log("request error");
+            console.log("request error", error);
             return Promise.reject(error);
         });
 
     axios.interceptors.response.use((response: AxiosResponse) => {
         dispatch(updateLoading(false));
-        const endTime = new Date().getTime();
-        const duration = response.config.metadata ? endTime - response.config.metadata.startTime : null;
-
-        if (duration !== null) {
-            dispatch(updateElapsed(duration));
-        }
-
+        endTime = new Date().getTime();
         return response;
     }, (error: AxiosError) => {
-            dispatch(updateError(true));
-            if (error.config && error.config.metadata) {
-                const endTime = new Date().getTime();
-                const duration = endTime - error.config.metadata.startTime;
-                dispatch(updateElapsed(duration));
-            }
-            const status = error.response ? error.response.status : null;
-
-            console.log(status)
             dispatch(updateLoading(false));
-            status ? dispatch(updateStatus(status)) : dispatch(updateStatus("Error"));
-            error.response ? dispatch(updateResponse(error.response.data as string)) : dispatch(updateResponse(null));
-            error.response ? dispatch(updateSize(prettyBytes(JSON.stringify(error.response.data).length + JSON.stringify(error.response.headers).length))) : dispatch(updateSize("0 B"));
+            console.log("response error", error);
             return Promise.reject(error);
         });
 
@@ -75,23 +53,34 @@ const useSendRequest = (paramsArray: KeyValuePair[] | undefined, url: string, me
             console.log("JSON data is malformed");
             return
         }
+        try{
+            const res = await axios({
+                url,
+                method,
+                params,
+                data,
+            })
 
-        //Add try catch which returns the data on success and returns an error on fail
-        const res = await axios({
-            url,
-            method,
-            params,
-            data,
-        })
+            const duration = endTime - startTime;
 
-        //Return all of this response data and display in client
-        dispatch(updateError(false));
-        dispatch(updateResponse(res.data));
-        dispatch(updateStatus(res.status));
-        dispatch(updateSize(prettyBytes(JSON.stringify(res.data).length + JSON.stringify(res.headers).length)));
-        dispatch(updateHeaders(JSON.stringify(res.headers)));
-        const resData = await res.data;
-        console.log(resData)
+            return {
+                data: res.data,
+                status: res.status,
+                //headers: res.headers,
+                size: prettyBytes(JSON.stringify(res.data).length + JSON.stringify(res.headers).length),
+                duration: duration
+            };
+        } catch(error) {
+            if (axios.isAxiosError(error)) {
+                throw {
+                    message: `Status ${error.response?.status}: ${error.message}`,
+                    status: error.response?.status
+                };
+            } else {
+                throw new Error("An unexpected error occurred");
+            }
+
+        }
     }
     return sendRequest
 }

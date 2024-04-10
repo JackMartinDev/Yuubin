@@ -10,9 +10,22 @@ import Headers from "../Headers/Headers"
 import Authentication from "../Authentication/Authentication"
 import { useState } from "react"
 import useSendRequest from "../../hooks/useSendRequest"
+import axios, { AxiosHeaders, HttpStatusCode } from "axios"
 
 interface Props {
     request: YuubinRequest
+}
+
+type Response = {
+    data: {},
+    duration: number,
+    size: string,
+    status: HttpStatusCode
+}
+
+type ResponseError = {
+    message: string,
+    status?: number
 }
 
 const Client = ({request}: Props): JSX.Element => {
@@ -26,19 +39,26 @@ const Client = ({request}: Props): JSX.Element => {
     const [headers, setHeaders] = useState(request.headers);
     const [auth, setAuth] = useState(request.auth);
 
-    const [response, setResponse] = useState();
+    const [response, setResponse] = useState<Response | undefined>(undefined);
+    const [error, setError] = useState<{message: string, status?: number} | undefined>(undefined)
 
     const sendRequest = useSendRequest(queryParams, url, method, body);
 
-    const onSubmitHandler = () => {
-        console.log("yo")
-        console.log(url)
-        console.log(method)
-        console.log(auth)
-        console.log(body)
-        console.log(queryParams)
-        console.log(headers)
-        sendRequest()
+    const onSubmitHandler = async() => {
+        try {
+            const response = await sendRequest()
+            console.log(response)
+            setResponse(response)
+            setError(undefined) 
+        } catch (error) {
+            console.log(error)
+            //Perform type checking
+                setError({
+                    message: error.message,
+                    status: error.status
+                });
+            setResponse(undefined);
+        }
     }
 
     return(
@@ -90,7 +110,11 @@ const Client = ({request}: Props): JSX.Element => {
                     <Panel defaultSize={50} minSize={30}>
                         <Paper mih="100%" >
                             <div>
-                                {loading ? <p>Loading...</p> : status ? <ResponseBody/> : <p style={{textAlign: 'center'}}>Make a request using the URL bar above</p>}
+                                {loading 
+                                    ? <p>Loading...</p> 
+                                    : response || error 
+                                        ? <ResponseBody response={response} error={error}/> 
+                                        : <p style={{textAlign: 'center'}}>Make a request using the URL bar above</p>}
                             </div>
                         </Paper>
                     </Panel>
