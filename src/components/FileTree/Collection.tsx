@@ -7,7 +7,7 @@ import { Box } from "@mantine/core";
 
 type Props = {
     collection: Collection,
-}
+   }
 
 const Collection = ({ collection }: Props): JSX.Element => {
     const [isToggled, setIsToggled] = useState(false);
@@ -23,7 +23,7 @@ const Collection = ({ collection }: Props): JSX.Element => {
                 <p>{collection.name}</p>
             </div>
             <div className={cx(classes.content, {[classes.show]: isToggled})}>
-                {collection.requests.map((request) => <Request request={request} />)}
+                {collection.requests.map((request) => <Request key={request.meta.id} request={request} />)}
             </div>
         </Box>
     )

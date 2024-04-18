@@ -5,7 +5,7 @@ import React from "react";
 
 interface Props {
     files: Data,
-}
+    }
 
 const FileTree = ({ files }: Props) => {
     const icon = <IconSearch style={{ width: rem(16), height: rem(16) }} />;
