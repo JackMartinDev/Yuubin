@@ -4,7 +4,7 @@ import { IconSearch } from "@tabler/icons-react";
 import React from "react";
 
 interface Props {
-    files: Data,
+    files: Collection[],
     }
 
 const FileTree = ({ files }: Props) => {
@@ -14,7 +14,7 @@ const FileTree = ({ files }: Props) => {
         <Box bg="#F5F5F5" h="100%">
             <Title order={1}>Collections</Title>
             <TextInput placeholder="Search collections" leftSection={icon} mb="sm" m="xs"/>
-            {files.collections.map(collection => (<Collection key={crypto.randomUUID()} collection={collection}/>))}
+            {files.map(collection => (<Collection key={crypto.randomUUID()} collection={collection}/>))}
             <Button variant="default" color="gray">+</Button>
         </Box>
     )

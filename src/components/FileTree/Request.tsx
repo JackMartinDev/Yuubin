@@ -1,6 +1,6 @@
 import classes from "./Request.module.css"
 import { useDispatch, useSelector } from "react-redux"
-import { updateActiveRequest, updateActiveTabs } from "../../requestSlice"
+import { updateActiveRequest, updateRequests, updatefiles } from "../../requestSlice"
 import { ActionIcon, Group, Text } from "@mantine/core"
 import { IconDots } from "@tabler/icons-react"
 import { useHover } from "@mantine/hooks"
@@ -15,16 +15,42 @@ type Props = {
 const Request = ({ request }:Props) => {
     const dispatch = useDispatch();
     const { hovered, ref } = useHover();
-    const tabbedRequests = useSelector((state: RootState) => state.request.activeTabs)
+    const activeRequests = useSelector((state: RootState) => state.request.activeRequests)
+    const files = useSelector((state: RootState) => state.request.files)
+    const activeTab = useSelector((state: RootState) => state.request.activeRequest)
 
     const onClickHandler = () => {
-        const opened = tabbedRequests.filter((req) => request.meta.id === req.meta.id)
+        const opened = activeRequests.includes(request.meta.id)
 
-        if(opened.length === 0) {
-            const newTabs = [...tabbedRequests, request]
-            dispatch(updateActiveTabs(newTabs))
+        if(!opened) {
+            const newTabs = [...activeRequests, request.meta.id]
+            dispatch(updateRequests(newTabs))
         }
         dispatch(updateActiveRequest(request.meta.id));
+    }
+
+    const deleteHandler = (event: React.MouseEvent) => {
+        event.stopPropagation()
+        const newTabs = activeRequests.filter(id => id!== request.meta.id)
+        const newCollections = files.map(collection => {
+            // Filter out the request with the given ID from each collection
+            const filteredRequests = collection.requests.filter(req => req.meta.id !== request.meta.id);
+
+            // Return a new collection object with the updated requests array
+            return {
+                ...collection,
+                requests: filteredRequests
+            };
+        })
+        dispatch(updatefiles(newCollections))
+        dispatch(updateRequests(newTabs))
+
+        if(activeTab === request.meta.id){
+            dispatch(updateActiveRequest(newTabs[newTabs.length -1]))
+        }
+
+        console.log(newCollections)
+        //.filter(collection => collection.requests.length > 0); // Optionally, remove collections that are empty after deletion 
     }
 
     return(
@@ -32,10 +58,9 @@ const Request = ({ request }:Props) => {
             <Text>{request.method} {request.meta.name}</Text>
             <Menu shadow="md" width={200}>
                 <Menu.Target>
-                    <ActionIcon variant="transparent" color="dark">
+                    <ActionIcon onClick={(event => (event.stopPropagation()))} variant="transparent" color="dark">
                         <IconDots style={{ width: '70%', height: '70%' }} stroke={1.5} />
                     </ActionIcon>
-
                 </Menu.Target>
 
                 <Menu.Dropdown>
@@ -50,6 +75,7 @@ const Request = ({ request }:Props) => {
                     </Menu.Item>
                     <Menu.Item
                         color="red"
+                        onClick={event => {deleteHandler(event)}}
                         leftSection={<IconTrash style={{ width: rem(14), height: rem(14) }} />}
                     >
                         Delete
