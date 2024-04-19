@@ -1,5 +1,5 @@
 import Collection from "./Collection";
-import { Box, Button, TextInput, Title, rem } from "@mantine/core";
+import { Box, TextInput, Title, rem } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
 import React from "react";
 
@@ -15,7 +15,6 @@ const FileTree = ({ files }: Props) => {
             <Title order={1}>Collections</Title>
             <TextInput placeholder="Search collections" leftSection={icon} mb="sm" m="xs"/>
             {files.map(collection => (<Collection key={crypto.randomUUID()} collection={collection}/>))}
-            <Button variant="default" color="gray">+</Button>
         </Box>
     )
 }

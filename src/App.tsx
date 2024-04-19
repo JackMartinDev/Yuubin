@@ -2,7 +2,7 @@ import Client from "./components/Client/Client"
 import FileTree from "./components/FileTree/FileTree";
 import classes from "./App.module.css"
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { CloseButton, Flex, Tabs, Text } from "@mantine/core";
+import { CloseButton, Flex, Tabs, Text, Title } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,9 +16,7 @@ function App(): JSX.Element {
     const activeTab = useSelector((state: RootState) => state.request.activeRequest)
 
     const testingFiles = useSelector((state: RootState) => state.request.files)
-    //Add fallback for if activeRequests.length === 0
     const activeRequests = useSelector((state: RootState) => state.request.activeRequests)
-    console.log("Active tab: " + activeRequests)
 
     const syncFileSystem = () => {
         invoke('sync_files').then((files) => setFiles(JSON.parse(files as string)))
@@ -53,37 +51,40 @@ function App(): JSX.Element {
                 </Panel>
                 <PanelResizeHandle />
                 <Panel defaultSize={90} minSize={70}>
-                    <Tabs variant="outline" value={activeTab} onChange={(val) => onChangeHandler(val!)} mx="md" mt="md" >
-                        <Tabs.List>
-                            {activeRequests.map(activeRequestId => 
-                                testingFiles.flatMap(collection => 
+                    {activeRequests.length > 0 ?
+                        <Tabs variant="outline" value={activeTab} onChange={(val) => onChangeHandler(val!)} mx="md" mt="md" >
+                            <Tabs.List>
+                                {activeRequests.map(activeRequestId => 
+                                    testingFiles.flatMap(collection => 
+                                        collection.requests
+                                        .filter(request => request.meta.id === activeRequestId)
+                                        .map(request => (
+                                            <Tabs.Tab key={request.meta.id} value={request.meta.id} p="xs">
+                                                <Flex align="center" gap="xs">
+                                                    <Text>{request.method} {request.meta.name}</Text>
+                                                    <CloseButton onClick={(event) => onCloseHandler(event, request.meta.id)} size="sm"/>
+                                                </Flex>
+                                            </Tabs.Tab>
+                                        ))
+                                    )
+                                )}
+                            </Tabs.List>
+
+                            {activeRequests.map(activeRequestId =>
+                                testingFiles.flatMap(collection =>
                                     collection.requests
-                                    .filter(request => request.meta.id === activeRequestId)
+                                    .filter(request => activeRequestId === request.meta.id)
                                     .map(request => (
-                                        <Tabs.Tab key={request.meta.id} value={request.meta.id} p="xs">
-                                            <Flex align="center" gap="xs">
-                                                <Text>{request.method} {request.meta.name}</Text>
-                                                <CloseButton onClick={(event) => onCloseHandler(event, request.meta.id)} size="sm"/>
-                                            </Flex>
-                                        </Tabs.Tab>
+                                        <Tabs.Panel value={request.meta.id} mt="sm" key={request.meta.id}>
+                                            <Client request={request}/>
+                                        </Tabs.Panel>
                                     ))
                                 )
-                            )}
-                        </Tabs.List>
-
-                        {activeRequests.map(activeRequestId =>
-                            testingFiles.flatMap(collection =>
-                                collection.requests
-                                .filter(request => activeRequestId === request.meta.id)
-                                .map(request => (
-                                    <Tabs.Panel value={request.meta.id} mt="sm" key={request.meta.id}>
-                                        <Client request={request}/>
-                                    </Tabs.Panel>
-                                ))
                             )
-                        )}
-
-                    </Tabs>
+                            }
+                        </Tabs>
+                        :<Title>Introduction Page</Title>
+                    }
 
                 </Panel>
             </PanelGroup>
