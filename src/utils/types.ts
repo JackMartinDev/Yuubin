@@ -1,6 +1,5 @@
 type MetaData = {
     name: string,
-    sequence: number,
     id: string
 }
 

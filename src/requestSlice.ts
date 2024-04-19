@@ -22,7 +22,7 @@ export const requestSlice = createSlice({
         updateActiveRequest: (state, action: PayloadAction<string>) => {
             console.log("ActiveRequest state before update:" + state.activeRequest)
             state.activeRequest = action.payload
-            console.log("ActiveRequest state before update:" + state.activeRequest)
+            console.log("ActiveRequest state after update:" + state.activeRequest)
         },
         updateRequests: (state, action: PayloadAction<string[]>) => {
             state.activeRequests = action.payload

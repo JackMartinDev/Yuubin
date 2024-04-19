@@ -4,5 +4,4 @@ body = "{name:Jack}"
 
 [meta]
 name = "req2"
-sequence = 1
 id = "3"

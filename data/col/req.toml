@@ -3,5 +3,4 @@ url = "https://jsonplaceholder.typicode.com/todos/1"
 
 [meta]
 name = "req90"
-sequence = 3
 id = "1"
