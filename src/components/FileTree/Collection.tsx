@@ -55,6 +55,7 @@ const Collection = ({ collection }: Props): JSX.Element => {
         close()
     }
 
+    //TODO make this into a form
     return(
         <Box mb={3}>
             <Modal opened={opened} onClose={close} title="New Request" centered size="md">

@@ -19,6 +19,7 @@ function App(): JSX.Element {
     const activeRequests = useSelector((state: RootState) => state.request.activeRequests)
 
     const syncFileSystem = () => {
+        //TODO: Remove collecion key from this object
         invoke('sync_files').then((files) => setFiles(JSON.parse(files as string)))
     }
 
