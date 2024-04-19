@@ -26,7 +26,6 @@ function App(): JSX.Element {
 
     useEffect(() => {
         syncFileSystem() //For desktop
-                        //Web site
     },[]);
 
     const onChangeHandler = (tabId: string) => {
@@ -44,9 +43,6 @@ function App(): JSX.Element {
         }
     }
 
-    //TODO: Instead of mapping over the files and rendering by the id, loop over the id array and then find that id in the collection
-    //Currently the order of the tabs is determined by the order of the files data which means closing and opening a tab will always
-    //keep it in the same place
     return (
         <div className={classes.container}>
             <PanelGroup direction="horizontal">
