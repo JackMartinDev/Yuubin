@@ -9,7 +9,7 @@ import { IconTrash } from '@tabler/icons-react';
 import { RootState } from "../../store/store"
 
 type Props = {
-    request: YuubinRequest,  
+    request: YuubinRequest 
 }
 
 const Request = ({ request }:Props) => {
@@ -61,7 +61,7 @@ const Request = ({ request }:Props) => {
             <Text>{request.method} {request.meta.name}</Text>
             <Menu shadow="md" width={200}>
                 <Menu.Target>
-                    <ActionIcon onClick={(event => (event.stopPropagation()))} variant="transparent" color="dark">
+                    <ActionIcon onClick={(event => (event.stopPropagation()))} variant="transparent" color="dark" style={hovered ? {visibility:"visible"}: {visibility:"hidden"}}>
                         <IconDots style={{ width: '70%', height: '70%' }} stroke={1.5} />
                     </ActionIcon>
                 </Menu.Target>
