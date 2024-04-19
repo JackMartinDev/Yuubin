@@ -26,7 +26,10 @@ const Request = ({ request }:Props) => {
             const newTabs = [...activeRequests, request.meta.id]
             dispatch(updateRequests(newTabs))
         }
-        dispatch(updateActiveRequest(request.meta.id));
+
+        if(activeTab != request.meta.id){
+            dispatch(updateActiveRequest(request.meta.id));
+        }
     }
 
     const deleteHandler = (event: React.MouseEvent) => {

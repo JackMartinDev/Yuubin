@@ -30,7 +30,9 @@ function App(): JSX.Element {
     },[]);
 
     const onChangeHandler = (tabId: string) => {
-        dispatch(updateActiveRequest(tabId));
+        if(activeTab != tabId){
+            dispatch(updateActiveRequest(tabId));
+        }
     }
 
     const onCloseHandler = (event:React.MouseEvent,tabId: string) => {
@@ -57,24 +59,32 @@ function App(): JSX.Element {
                 <Panel defaultSize={90} minSize={70}>
                     <Tabs variant="outline" value={activeTab} onChange={(val) => onChangeHandler(val!)} mx="md" mt="md" >
                         <Tabs.List>
-                            {testingFiles.map(collection => 
-                                collection.requests.filter(request => activeRequests.includes(request.meta.id)).map(request => (
-                                    <Tabs.Tab value={request.meta.id} p="xs" key={request.meta.id}>
-                                        <Flex align="center" gap="xs">
-                                            <Text>{request.method}{request.meta.name}</Text> 
-                                            <CloseButton onClick={(event) => onCloseHandler(event, request.meta.id)} size="sm"/>
-                                        </Flex>
-                                    </Tabs.Tab>
-                                ))
+                            {activeRequests.map(activeRequestId => 
+                                testingFiles.flatMap(collection => 
+                                    collection.requests
+                                    .filter(request => request.meta.id === activeRequestId)
+                                    .map(request => (
+                                        <Tabs.Tab key={request.meta.id} value={request.meta.id} p="xs">
+                                            <Flex align="center" gap="xs">
+                                                <Text>{request.method} {request.meta.name}</Text>
+                                                <CloseButton onClick={(event) => onCloseHandler(event, request.meta.id)} size="sm"/>
+                                            </Flex>
+                                        </Tabs.Tab>
+                                    ))
+                                )
                             )}
                         </Tabs.List>
 
-                        {testingFiles.map(collection =>
-                            collection.requests.filter(request => activeRequests.includes(request.meta.id)).map(request => (
-                                <Tabs.Panel value={request.meta.id} mt="sm" key={request.meta.id}>
-                                    <Client request={request}/>
-                                </Tabs.Panel>
-                            ))
+                        {activeRequests.map(activeRequestId =>
+                            testingFiles.flatMap(collection =>
+                                collection.requests
+                                .filter(request => activeRequestId === request.meta.id)
+                                .map(request => (
+                                    <Tabs.Panel value={request.meta.id} mt="sm" key={request.meta.id}>
+                                        <Client request={request}/>
+                                    </Tabs.Panel>
+                                ))
+                            )
                         )}
 
                     </Tabs>
