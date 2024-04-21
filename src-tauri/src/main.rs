@@ -3,7 +3,7 @@
 
 use tauri::Manager;
 //use notify::{event::RemoveKind, EventKind, INotifyWatcher, RecursiveMode, Result as NotifyResult, Watcher};
-use std::{fs, io::Error, path::Path};
+use std::{fs, io::{Error, ErrorKind}, path::Path};
 use walkdir::WalkDir;
 use serde::{Deserialize, Serialize};
 
@@ -59,8 +59,25 @@ fn greet(name: &str) -> String {
 fn sync_files() -> String {
     let path = Path::new("../data/");
 
-    //Handler unwrap
+    //Handle unwrap
     parse_object(path).unwrap()
+}
+
+#[tauri::command]
+fn delete_file(collection: String, request: String) -> String{
+    let path = Path::new("../data").join(collection).join(request).with_extension("toml");
+    //Expect
+    println!("File path: {:?}",path);
+    let message = match fs::remove_file(path){
+        Ok(()) => "Success",
+        Err(error) => match error.kind(){
+            ErrorKind::NotFound => "File not found",
+            ErrorKind::PermissionDenied => "Permission denied",
+            _ => "An unexpected error occured"
+        }
+    };
+    println!("{message}");
+    message.to_string()
 }
 
 fn edit_file(path: String, contents: String) -> String{
@@ -78,15 +95,6 @@ fn edit_file(path: String, contents: String) -> String{
     "temp".to_owned()
 }
 
-fn delete_file(path: String) -> String {
-    //Read path from the front end
-    let path = Path::new(&path);
-
-    //Delete file/folder
-    
-    //Return the new state of the file system
-    "temp".to_owned()
-}
 fn main() {
     let path = Path::new("../data/");
 //    let mut watcher = create_file_watcher();
@@ -118,7 +126,7 @@ fn main() {
             });
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![sync_files])
+        .invoke_handler(tauri::generate_handler![sync_files, delete_file])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

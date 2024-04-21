@@ -5,14 +5,17 @@ import { ActionIcon, Group, Text } from "@mantine/core"
 import { IconDots } from "@tabler/icons-react"
 import { useHover } from "@mantine/hooks"
 import { Menu,  rem } from '@mantine/core';
+import { modals } from '@mantine/modals';
 import { IconTrash } from '@tabler/icons-react';
-import { RootState } from "../../store/store"
+import { RootState } from "../../store/store";
+import { invoke } from '@tauri-apps/api/tauri';
 
 type Props = {
-    request: YuubinRequest 
+    request: YuubinRequest,
+    collectionName: string
 }
 
-const Request = ({ request }:Props) => {
+const Request = ({ request, collectionName }:Props) => {
     const dispatch = useDispatch();
     const { hovered, ref } = useHover();
     const activeRequests = useSelector((state: RootState) => state.request.activeRequests)
@@ -32,28 +35,56 @@ const Request = ({ request }:Props) => {
         }
     }
 
-    const deleteHandler = (event: React.MouseEvent) => {
+    const openDeleteModal = (event: React.MouseEvent) =>{
         event.stopPropagation()
-        const newTabs = activeRequests.filter(id => id!== request.meta.id)
-        const newCollections = files.map(collection => {
-            // Filter out the request with the given ID from each collection
-            const filteredRequests = collection.requests.filter(req => req.meta.id !== request.meta.id);
 
-            // Return a new collection object with the updated requests array
-            return {
-                ...collection,
-                requests: filteredRequests
-            };
-        })
-        dispatch(updatefiles(newCollections))
-        dispatch(updateRequests(newTabs))
+        modals.openConfirmModal({
+            title: "Delete Request",
+            children: (
+                <Text size="md">
+                    You are about to delete a request from your the {collectionName} collection. 
+                    Are you sure you want to proceed?
+                </Text>
+            ),
+            labels: { confirm: 'Delete Request', cancel: 'Cancel' },
+            centered: true,
+            confirmProps: { color: 'red' },
+            onCancel: () => console.log('Cancel'),
+            onConfirm: () => console.log('Delete ' + request.meta.name),
+        });
+    }
 
-        if(activeTab === request.meta.id){
-            dispatch(updateActiveRequest(newTabs[newTabs.length -1]))
-        }
+    const deleteHandler = (event: React.MouseEvent) => {
+        let requestName = request.meta.name;
+        event.stopPropagation()
 
-        console.log(newCollections)
-        //.filter(collection => collection.requests.length > 0); // Optionally, remove collections that are empty after deletion 
+        invoke('delete_file', {collection: collectionName, request: requestName})
+            .then((message) => {
+                if(message === "Success"){
+                    const newTabs = activeRequests.filter(id => id!== request.meta.id)
+                    const newCollections = files.map(collection => {
+                        // Filter out the request with the given ID from each collection
+                        const filteredRequests = collection.requests.filter(req => req.meta.id !== request.meta.id);
+
+                        // Return a new collection object with the updated requests array
+                        return {
+                            ...collection,
+                            requests: filteredRequests
+                        };
+                    })
+                    dispatch(updatefiles(newCollections))
+                    dispatch(updateRequests(newTabs))
+
+                    if(activeTab === request.meta.id){
+                        dispatch(updateActiveRequest(newTabs[newTabs.length -1]))
+                    }
+
+                    console.log(newCollections)
+                    //.filter(collection => collection.requests.length > 0); // Optionally, remove collections that are empty after deletion 
+                }else{
+                    console.log(message) 
+                }
+            })
     }
 
     return(
@@ -78,7 +109,7 @@ const Request = ({ request }:Props) => {
                     </Menu.Item>
                     <Menu.Item
                         color="red"
-                        onClick={event => {deleteHandler(event)}}
+                        onClick={event => {openDeleteModal(event)}}
                         leftSection={<IconTrash style={{ width: rem(14), height: rem(14) }} />}
                     >
                         Delete

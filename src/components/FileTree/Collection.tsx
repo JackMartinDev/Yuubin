@@ -115,7 +115,7 @@ const Collection = ({ collection }: Props): JSX.Element => {
             </Group>
 
             <div className={cx(classes.content, {[classes.show]: isToggled})}>
-                {collection.requests.map((request) => <Request key={request.meta.id} request={request} />)}
+                {collection.requests.map((request) => <Request key={request.meta.id} request={request} collectionName={collection.name}  />)}
             </div>
 
         </Box>
