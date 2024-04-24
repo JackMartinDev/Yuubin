@@ -3,7 +3,7 @@
 
 use tauri::Manager;
 //use notify::{event::RemoveKind, EventKind, INotifyWatcher, RecursiveMode, Result as NotifyResult, Watcher};
-use std::{fs::{self, remove_dir_all}, io::{Error, ErrorKind}, path::Path};
+use std::{fs::{self, remove_dir_all, File}, io::{Error, ErrorKind, Write}, path::Path};
 use walkdir::WalkDir;
 use serde::{Deserialize, Serialize};
 
@@ -87,6 +87,28 @@ fn delete_directory(collection: String){
     remove_dir_all(path).unwrap();
 }
 
+fn create_file(){
+    let meta = MetaData{
+        name: "TestReq".to_owned(),
+        id: "1ub13".to_owned()
+    };
+
+    let request = Request{
+        method: "DELETE".to_owned(),
+        url: "https://localhost:3000".to_owned(),
+        meta,
+        body: None,
+        auth: None
+    };
+
+    let toml = toml::to_string(&request).unwrap();
+
+    println!("{:?}", toml);
+
+    let mut file = File::create("../data/col/testing.toml").unwrap();
+    file.write_all(toml.as_bytes()).unwrap();
+}
+
 fn edit_file(path: String, contents: String) -> String{
     //Read path from the front end
     let path = Path::new(&path);
@@ -104,6 +126,7 @@ fn edit_file(path: String, contents: String) -> String{
 
 fn main() {
     let path = Path::new("../data/");
+    create_file();
 //    let mut watcher = create_file_watcher();
 //
 //    watcher
