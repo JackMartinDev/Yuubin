@@ -19,10 +19,6 @@ const Collection = ({ collection }: Props): JSX.Element => {
     const { hovered, ref } = useHover();
     const [opened, { open, close }] = useDisclosure(false);
 
-    const [requestName, setRequestName] = useState<string>("");
-    const [url, setUrl] = useState<string>("");
-    const [method, setMethod] = useState<HttpVerb>("GET");
-
     const files = useSelector((state: RootState) => state.request.files)
     const requests = useSelector((state: RootState) => state.request.activeRequests)
     const dispatch = useDispatch();
@@ -40,11 +36,11 @@ const Collection = ({ collection }: Props): JSX.Element => {
         },
 
         validate: {
-            name: hasLength({ min: 2, max: 10 },('Request Name is a required field'))
+            name: isNotEmpty('Request Name is a required field')
         },
     });
 
-    const [submittedValues, setSubmittedValues] = useState<typeof form.values | null>(null);
+    const [submittedValues, setSubmittedValues] = useState<typeof form.values>(form.values);
 
     const openModalHandler = (event: React.MouseEvent) =>{
         event.stopPropagation();
@@ -58,10 +54,11 @@ const Collection = ({ collection }: Props): JSX.Element => {
 
     const addRequestHandler = async(values: typeof form.values) => {
         setSubmittedValues(values)
+        const formValues = form.getValues()
 
-        const id = crypto.randomUUID()
-        const meta = {name: requestName, id}
-        const newRequest = {method, url, meta}
+        const id = crypto.randomUUID() as string
+        const meta = {name: formValues.name, id}
+        const newRequest = {method: formValues.method as HttpVerb, url:formValues.url, meta}
         const newFiles = files.map(col => {
             if (col.name === collection.name) {
                 return {
@@ -77,7 +74,6 @@ const Collection = ({ collection }: Props): JSX.Element => {
         close()
     }
 
-    //TODO make this into a form
     return(
         <Box mb={3}>
             <Modal opened={opened} onClose={close} title="New Request" centered size="md">
