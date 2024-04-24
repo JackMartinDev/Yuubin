@@ -66,7 +66,6 @@ fn sync_files() -> String {
 #[tauri::command]
 fn delete_file(collection: String, request: String) -> String{
     let path = Path::new("../data").join(collection).join(request).with_extension("toml");
-    //Expect
     println!("File path: {:?}",path);
     let message = match fs::remove_file(path){
         Ok(()) => "Success",

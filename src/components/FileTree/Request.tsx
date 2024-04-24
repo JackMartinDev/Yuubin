@@ -42,7 +42,7 @@ const Request = ({ request, collectionName }:Props) => {
             title: "Delete Request",
             children: (
                 <Text size="md">
-                    You are about to delete a request from your the {collectionName} collection. 
+                    You are about to delete a request from the {collectionName} collection. 
                     Are you sure you want to proceed?
                 </Text>
             ),
@@ -50,13 +50,12 @@ const Request = ({ request, collectionName }:Props) => {
             centered: true,
             confirmProps: { color: 'red' },
             onCancel: () => console.log('Cancel'),
-            onConfirm: () => console.log('Delete ' + request.meta.name),
+            onConfirm: () => deleteHandler(),
         });
     }
 
-    const deleteHandler = (event: React.MouseEvent) => {
+    const deleteHandler = () => {
         let requestName = request.meta.name;
-        event.stopPropagation()
 
         invoke('delete_file', {collection: collectionName, request: requestName})
             .then((message) => {
