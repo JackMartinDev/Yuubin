@@ -5,7 +5,7 @@ import Request from "./Request";
 import { IconChevronRight, IconDots, IconTrash } from "@tabler/icons-react"
 import { ActionIcon, Box, Button, Flex, Group, Menu, Modal, Select, Text, TextInput, rem } from "@mantine/core";
 import { useDisclosure, useHover } from "@mantine/hooks";
-import { hasLength, isNotEmpty, useForm } from '@mantine/form';
+import { isNotEmpty, useForm } from '@mantine/form';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { updateActiveRequest, updatefiles, updateRequests } from "../../requestSlice";
@@ -36,7 +36,7 @@ const Collection = ({ collection }: Props): JSX.Element => {
         },
 
         validate: {
-            name: isNotEmpty('Request Name is a required field')
+            name: isNotEmpty('Request Name is a required field'),
         },
     });
 
@@ -76,7 +76,7 @@ const Collection = ({ collection }: Props): JSX.Element => {
 
     return(
         <Box mb={3}>
-            <Modal opened={opened} onClose={close} title="New Request" centered size="md">
+            <Modal opened={opened} onClose={close} title="New Request" centered size="lg">
                 <form onSubmit={form.onSubmit((values) => addRequestHandler(values))}>
                     <TextInput 
                         {...form.getInputProps('name')}
@@ -98,7 +98,7 @@ const Collection = ({ collection }: Props): JSX.Element => {
                             data={['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD']}
                         />
                         <TextInput 
-                            type="url" 
+                            type="url"
                             w="100%" 
                             {...form.getInputProps('url')}
                             key={form.key('url')}
