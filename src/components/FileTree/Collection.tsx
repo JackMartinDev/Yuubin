@@ -5,6 +5,7 @@ import Request from "./Request";
 import { IconChevronRight, IconDots, IconTrash } from "@tabler/icons-react"
 import { ActionIcon, Box, Button, Flex, Group, Menu, Modal, Select, Text, TextInput, rem } from "@mantine/core";
 import { useDisclosure, useHover } from "@mantine/hooks";
+import { hasLength, isNotEmpty, useForm } from '@mantine/form';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { updateActiveRequest, updatefiles, updateRequests } from "../../requestSlice";
@@ -31,12 +32,33 @@ const Collection = ({ collection }: Props): JSX.Element => {
         setIsToggled(!isToggled)
     }
 
+    const form = useForm({
+        initialValues: {
+            name: `Request ${Math.floor(Math.random() * 1000)}`,
+            method: 'GET',
+            url: 'https://',
+        },
+
+        validate: {
+            name: hasLength({ min: 2, max: 10 },('Request Name is a required field'))
+        },
+    });
+
+    const [submittedValues, setSubmittedValues] = useState<typeof form.values | null>(null);
+
     const openModalHandler = (event: React.MouseEvent) =>{
         event.stopPropagation();
         open();
     }
 
-    const addRequestHandler = async() => {
+    const closeModalHandler = () => {
+        close();
+        form.reset()
+    }
+
+    const addRequestHandler = async(values: typeof form.values) => {
+        setSubmittedValues(values)
+
         const id = crypto.randomUUID()
         const meta = {name: requestName, id}
         const newRequest = {method, url, meta}
@@ -59,31 +81,45 @@ const Collection = ({ collection }: Props): JSX.Element => {
     return(
         <Box mb={3}>
             <Modal opened={opened} onClose={close} title="New Request" centered size="md">
-                <TextInput mb="sm" label="Request Name" value={requestName} onChange={(e) => setRequestName(e.target.value)}/>
-                <Text fw={500} size="sm">URL</Text>
-                <Flex gap={10} mb="sm">
-                    <Select
-                        w={150}
-                        withCheckIcon={false}
-                        value={method}
-                        onChange={(value, _option) => setMethod(value as HttpVerb)}
-                        allowDeselect={false}
-                        withScrollArea={false}
-                        data={['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD']}
+                <form onSubmit={form.onSubmit((values) => addRequestHandler(values))}>
+                    <TextInput 
+                        {...form.getInputProps('name')}
+                        key={form.key('name')}
+                        mb="sm" 
+                        label="Request Name" 
+                        placeholder="Request Name" 
+
                     />
-                    <TextInput type="url" w="100%" value={url} onChange={(e) => setUrl(e.target.value)}/>
-                </Flex>
-                <Flex justify="right" gap="sm">
-                    <Button variant="light" color="gray" onClick={close}>Cancel</Button>
-                    <Button variant="default" color="gray" onClick={addRequestHandler}>Create</Button>
-                </Flex>
+                    <Text fw={500} size="sm">URL</Text>
+                    <Flex gap={10} mb="sm">
+                        <Select
+                            {...form.getInputProps('method')}
+                            key={form.key('method')}
+                            w={150}
+                            withCheckIcon={false}
+                            allowDeselect={false}
+                            withScrollArea={false}
+                            data={['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD']}
+                        />
+                        <TextInput 
+                            type="url" 
+                            w="100%" 
+                            {...form.getInputProps('url')}
+                            key={form.key('url')}
+                        />
+                    </Flex>
+                    <Flex justify="right" gap="sm">
+                        <Button variant="light" color="gray" onClick={closeModalHandler}>Cancel</Button>
+                        <Button variant="default" color="gray" type="submit">Create</Button>
+                    </Flex>
+                </form>
 
             </Modal>
             <Group justify="space-between" className={classes.collection} onClick={toggle} ref={ref}>
-            <div className={classes.accordion}>
-                <span><IconChevronRight size={16} stroke={2} className={cx(classes.icon, {[classes.toggle]: isToggled})}/></span>
-                <p>{collection.name}</p>
-            </div>
+                <div className={classes.accordion}>
+                    <span><IconChevronRight size={16} stroke={2} className={cx(classes.icon, {[classes.toggle]: isToggled})}/></span>
+                    <p>{collection.name}</p>
+                </div>
                 <Menu shadow="md" width={200}>
                     <Menu.Target>
                         <ActionIcon onClick={(event => (event.stopPropagation()))} variant="transparent" color="dark" style={hovered ? {visibility:"visible"}: {visibility:"hidden"}}>
@@ -99,9 +135,6 @@ const Collection = ({ collection }: Props): JSX.Element => {
                         </Menu.Item>
                         <Menu.Item>
                             Rename
-                        </Menu.Item>
-                        <Menu.Item>
-                            Run
                         </Menu.Item>
                         <Menu.Item
                             color="red"

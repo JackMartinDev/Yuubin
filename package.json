@@ -14,7 +14,7 @@
     "@codemirror/lint": "^6.5.0",
     "@lezer/highlight": "^1.2.0",
     "@mantine/core": "^7.7.0",
-    "@mantine/form": "^7.7.0",
+    "@mantine/form": "^7.8.1",
     "@mantine/hooks": "^7.7.0",
     "@mantine/modals": "^7.8.0",
     "@reduxjs/toolkit": "^2.0.1",

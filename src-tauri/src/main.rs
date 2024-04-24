@@ -3,7 +3,7 @@
 
 use tauri::Manager;
 //use notify::{event::RemoveKind, EventKind, INotifyWatcher, RecursiveMode, Result as NotifyResult, Watcher};
-use std::{fs, io::{Error, ErrorKind}, path::Path};
+use std::{fs::{self, remove_dir_all}, io::{Error, ErrorKind}, path::Path};
 use walkdir::WalkDir;
 use serde::{Deserialize, Serialize};
 
@@ -66,7 +66,9 @@ fn sync_files() -> String {
 #[tauri::command]
 fn delete_file(collection: String, request: String) -> String{
     let path = Path::new("../data").join(collection).join(request).with_extension("toml");
+
     println!("File path: {:?}",path);
+    
     let message = match fs::remove_file(path){
         Ok(()) => "Success",
         Err(error) => match error.kind(){
@@ -77,6 +79,12 @@ fn delete_file(collection: String, request: String) -> String{
     };
     println!("{message}");
     message.to_string()
+}
+
+fn delete_directory(collection: String){
+    let path = Path::new("../data").join(collection);
+    println!("{:?}", path);
+    remove_dir_all(path).unwrap();
 }
 
 fn edit_file(path: String, contents: String) -> String{

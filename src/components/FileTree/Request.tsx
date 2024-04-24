@@ -103,9 +103,6 @@ const Request = ({ request, collectionName }:Props) => {
                     <Menu.Item>
                         Clone
                     </Menu.Item>
-                    <Menu.Item>
-                        Run
-                    </Menu.Item>
                     <Menu.Item
                         color="red"
                         onClick={event => {openDeleteModal(event)}}
