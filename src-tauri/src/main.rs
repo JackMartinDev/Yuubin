@@ -218,7 +218,7 @@ fn parse_object(path: &Path) -> Result<String, Error> {
         }
     }
     //Unwrap
-    let json = serde_json::to_string(&data).unwrap();
+    let json = serde_json::to_string(&data.collections).unwrap();
 
     Ok(json)
 }

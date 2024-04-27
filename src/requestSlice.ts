@@ -1,8 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-const testFiles:Collection[] = [{"name":"col5","requests":[{"method":"POST","url":"https://jsonplaceholder.typicode.com/todos","body":"{name:Jack}","auth":undefined,"meta":{"name":"req2","sequence":1,"id":"3"}}]},{"name":"col","requests":[{"method":"GET","url":"www.facebook.com","body":undefined,"auth":undefined,"meta":{"name":"req2","sequence":2,"id":"2"}},{"method":"GET","url":"https://jsonplaceholder.typicode.com/todos/1","body":undefined,"auth":undefined,"meta":{"name":"req","sequence":3,"id":"1"}}]}] 
-
 export interface RequestState{
     activeRequest: string
     activeRequests: string[]
@@ -11,8 +9,8 @@ export interface RequestState{
 
 const initialState: RequestState = {
     activeRequest: "1",
-    activeRequests: ["1","2","3"],
-    files: testFiles 
+    activeRequests: ["bc7b7e92-321e-4e21-bd6a-d38881fbcd96","2","3"],
+    files: [] 
 }
 
 export const requestSlice = createSlice({

@@ -3,24 +3,22 @@ import FileTree from "./components/FileTree/FileTree";
 import classes from "./App.module.css"
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { CloseButton, Flex, Tabs, Text, Title } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store/store";
-import { updateActiveRequest, updateRequests } from "./requestSlice";
+import { updateActiveRequest, updateRequests, updatefiles } from "./requestSlice";
 
 function App(): JSX.Element {
     const dispatch = useDispatch()
-    const [files, setFiles] = useState<Data>();
 
     const activeTab = useSelector((state: RootState) => state.request.activeRequest)
-
-    const testingFiles = useSelector((state: RootState) => state.request.files)
+    const files = useSelector((state:RootState) => state.request.files)
     const activeRequests = useSelector((state: RootState) => state.request.activeRequests)
 
     const syncFileSystem = () => {
         //TODO: Remove collecion key from this object
-        invoke('sync_files').then((files) => setFiles(JSON.parse(files as string)))
+        invoke('sync_files').then((files) => dispatch(updatefiles(JSON.parse(files as string))))
     }
 
     useEffect(() => {
@@ -47,7 +45,7 @@ function App(): JSX.Element {
             <PanelGroup direction="horizontal">
                 <Panel defaultSize={15} minSize={10}>
                     <div className={classes.file}>
-                        <FileTree files={testingFiles} />
+                        <FileTree files={files} />
                     </div>
                 </Panel>
                 <PanelResizeHandle />
@@ -56,7 +54,7 @@ function App(): JSX.Element {
                         <Tabs variant="outline" value={activeTab} onChange={(val) => onChangeHandler(val!)} mx="md" mt="md" >
                             <Tabs.List>
                                 {activeRequests.map(activeRequestId => 
-                                    testingFiles.flatMap(collection => 
+                                    files.flatMap(collection => 
                                         collection.requests
                                         .filter(request => request.meta.id === activeRequestId)
                                         .map(request => (
@@ -72,7 +70,7 @@ function App(): JSX.Element {
                             </Tabs.List>
 
                             {activeRequests.map(activeRequestId =>
-                                testingFiles.flatMap(collection =>
+                                files.flatMap(collection =>
                                     collection.requests
                                     .filter(request => activeRequestId === request.meta.id)
                                     .map(request => (
