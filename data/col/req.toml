@@ -1,6 +1,0 @@
-method = "GET"
-url = "https://jsonplaceholder.typicode.com/todos/1"
-
-[meta]
-name = "req90"
-id = "1"

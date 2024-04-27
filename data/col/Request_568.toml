@@ -1,0 +1,6 @@
+method = "GET"
+url = "https://test.test"
+
+[meta]
+name = "Request_568"
+id = "bc7b7e92-321e-4e21-bd6a-d38881fbcd96"

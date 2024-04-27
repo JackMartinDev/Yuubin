@@ -86,26 +86,19 @@ fn delete_directory(collection: String){
     println!("{:?}", path);
     remove_dir_all(path).unwrap();
 }
-
-fn create_file(){
-    let meta = MetaData{
-        name: "TestReq".to_owned(),
-        id: "1ub13".to_owned()
-    };
-
-    let request = Request{
-        method: "DELETE".to_owned(),
-        url: "https://localhost:3000".to_owned(),
-        meta,
-        body: None,
-        auth: None
-    };
-
+#[tauri::command]
+fn create_file(data: String, collection: String){
+    let request:Request = serde_json::from_str(&data).unwrap();
+    println!("{:?}", request);
+    
     let toml = toml::to_string(&request).unwrap();
 
     println!("{:?}", toml);
 
-    let mut file = File::create("../data/col/testing.toml").unwrap();
+    let path = Path::new("../data").join(collection).join(request.meta.name).with_extension("toml");
+
+
+    let mut file = File::create(&path).unwrap();
     file.write_all(toml.as_bytes()).unwrap();
 }
 
@@ -126,7 +119,6 @@ fn edit_file(path: String, contents: String) -> String{
 
 fn main() {
     let path = Path::new("../data/");
-    create_file();
 //    let mut watcher = create_file_watcher();
 //
 //    watcher
@@ -156,7 +148,7 @@ fn main() {
             });
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![sync_files, delete_file])
+        .invoke_handler(tauri::generate_handler![sync_files, delete_file, create_file])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

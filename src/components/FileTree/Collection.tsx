@@ -9,6 +9,7 @@ import { isNotEmpty, useForm } from '@mantine/form';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { updateActiveRequest, updatefiles, updateRequests } from "../../requestSlice";
+import { invoke } from "@tauri-apps/api/tauri";
 
 type Props = {
     collection: Collection,
@@ -30,7 +31,7 @@ const Collection = ({ collection }: Props): JSX.Element => {
 
     const form = useForm({
         initialValues: {
-            name: `Request ${Math.floor(Math.random() * 1000)}`,
+            name: `Request_${Math.floor(Math.random() * 1000)}`,
             method: 'GET',
             url: 'https://',
         },
@@ -57,8 +58,8 @@ const Collection = ({ collection }: Props): JSX.Element => {
         const formValues = form.getValues()
 
         const id = crypto.randomUUID() as string
-        const meta = {name: formValues.name, id}
-        const newRequest = {method: formValues.method as HttpVerb, url:formValues.url, meta}
+        const meta: MetaData = {name: formValues.name, id}
+        const newRequest:YuubinRequest = {method: formValues.method as HttpVerb, url:formValues.url, meta}
         const newFiles = files.map(col => {
             if (col.name === collection.name) {
                 return {
@@ -68,6 +69,7 @@ const Collection = ({ collection }: Props): JSX.Element => {
             }
             return col;         
         });
+        invoke('create_file', {data: JSON.stringify(newRequest), collection: collection.name})
         dispatch(updatefiles(newFiles))
         dispatch(updateRequests([...requests, id]))
         dispatch(updateActiveRequest(id))
