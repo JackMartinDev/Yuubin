@@ -58,8 +58,8 @@ const Request = ({ request, collectionName }:Props) => {
         let requestName = request.meta.name;
 
         invoke('delete_file', {collection: collectionName, request: requestName})
-            .then((message) => {
-                if(message === "Success"){
+            .then((res) => {
+                if(!res.error){
                     const newTabs = activeRequests.filter(id => id!== request.meta.id)
                     const newCollections = files.map(collection => {
                         // Filter out the request with the given ID from each collection
@@ -79,9 +79,10 @@ const Request = ({ request, collectionName }:Props) => {
                     }
 
                     console.log(newCollections)
+                    console.log(res.message) 
                     //.filter(collection => collection.requests.length > 0); // Optionally, remove collections that are empty after deletion 
                 }else{
-                    console.log(message) 
+                    console.log(res.message) 
                 }
             })
     }

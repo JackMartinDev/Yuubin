@@ -1,9 +1,9 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use tauri::Manager;
+use tauri::{http::status::StatusCode, Manager};
 //use notify::{event::RemoveKind, EventKind, INotifyWatcher, RecursiveMode, Result as NotifyResult, Watcher};
-use std::{fs::{self, remove_dir_all, File}, io::{Error, ErrorKind, Write}, path::Path};
+use std::{fs::{self, remove_dir_all, File}, io::{Error, ErrorKind, Write}, path::Path, u8};
 use walkdir::WalkDir;
 use serde::{Deserialize, Serialize};
 
@@ -49,10 +49,10 @@ struct Payload {
     message: String,
 }
 
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
+#[derive(Serialize, Deserialize, Debug)]
+struct Response {
+    error: bool,
+    message: String
 }
 
 #[tauri::command]
@@ -64,21 +64,34 @@ fn sync_files() -> String {
 }
 
 #[tauri::command]
-fn delete_file(collection: String, request: String) -> String{
+fn delete_file(collection: String, request: String) -> Response{
     let path = Path::new("../data").join(collection).join(request).with_extension("toml");
 
-    println!("File path: {:?}",path);
+    println!("Attempting to delete file at path: {:?}", path);
     
-    let message = match fs::remove_file(path){
-        Ok(()) => "Success",
-        Err(error) => match error.kind(){
-            ErrorKind::NotFound => "File not found",
-            ErrorKind::PermissionDenied => "Permission denied",
-            _ => "An unexpected error occured"
-        }
-    };
-    println!("{message}");
-    message.to_string()
+    match fs::remove_file(path){
+        Ok(()) => Response{
+            error:false, 
+            message:"Success".to_string()
+        },
+        Err(error) => handle_delete_file_error(error)
+    }
+}
+
+fn handle_delete_file_error(error: std::io::Error) -> Response{
+    match error.kind(){
+        ErrorKind::NotFound => Response{
+            error:true, 
+            message:"File not found".to_string()
+        },
+        ErrorKind::PermissionDenied => Response{
+            error:true, 
+            message:"Permission denied".to_string()
+        },
+        _ => Response{
+            error:true, 
+            message: format!("An error occured: {}", error)}
+    }
 }
 
 fn delete_directory(collection: String){
@@ -86,6 +99,7 @@ fn delete_directory(collection: String){
     println!("{:?}", path);
     remove_dir_all(path).unwrap();
 }
+
 #[tauri::command]
 fn create_file(data: String, collection: String){
     let request:Request = serde_json::from_str(&data).unwrap();
