@@ -3,7 +3,7 @@
 
 use tauri::Manager;
 //use notify::{event::RemoveKind, EventKind, INotifyWatcher, RecursiveMode, Result as NotifyResult, Watcher};
-use std::{fs::{self, metadata, remove_dir_all, File, OpenOptions}, io::{Error, ErrorKind, Write}, path::Path, u8};
+use std::{fs::{self, create_dir, metadata, remove_dir_all, File, OpenOptions}, io::{Error, ErrorKind, Write}, path::Path, u8};
 use walkdir::WalkDir;
 use serde::{Deserialize, Serialize};
 
@@ -217,14 +217,12 @@ fn rename_file(data:String, collection:String, old_request_name: String) -> Resp
     let path = Path::new("../data").join(&collection).join(old_request_name).with_extension("toml");
     let new_path = Path::new("../data").join(&collection).join(request.meta.name).with_extension("toml");
 
-        // TODOFirst, check if the original file exists
-    if metadata(&path).is_err() {
+    if !metadata(&new_path).is_err() {
         return Response {
             error: true,
-            message: "File does not exist".to_string(),
+            message: "New file already exists".to_string(),
         };
     }
-
 
     match fs::rename(path, &new_path){
         Ok(()) => match fs::write(&new_path, toml){
@@ -244,7 +242,7 @@ fn rename_file(data:String, collection:String, old_request_name: String) -> Resp
     }
 }
 
-
+#[tauri::command]
 fn delete_directory(collection: String) -> Response{
     let path = Path::new("../data").join(collection);
     println!("{:?}", path);
@@ -256,6 +254,47 @@ fn delete_directory(collection: String) -> Response{
         Err(e) => Response{
             error: true,
             message: format!("Failed to remove directory: {}", e)
+        }
+    }
+}
+//TODO test
+#[tauri::command]
+fn create_directory(collection: String) -> Response{
+    let path = Path::new("../data").join(collection);
+    println!("{:?}", path);
+    match create_dir(path){
+        Ok(()) => Response{
+            error: false,
+            message: "Directory created succesfully".to_owned()
+        },
+        Err(e) => Response{
+            error: true,
+            message: format!("Failed to create directory: {}", e)
+        }
+    }
+}
+
+//TODO test
+#[tauri::command]
+fn rename_directory(collection: String, new_collection: String) -> Response{
+    let path = Path::new("../data").join(&collection);
+    let new_path = Path::new("../data").join(&new_collection);
+
+    if !metadata(&new_path).is_err() {
+        return Response {
+            error: true,
+            message: "New directory already exists".to_string(),
+        };
+    }
+
+    match fs::rename(path, &new_path){
+        Ok(()) => Response{
+            error: false, 
+            message: "File renamed succesfully".to_owned()
+        },
+        Err(e) => Response{
+            error: true,
+            message: format!("Failed up update file: {}",e)
         }
     }
 }
