@@ -1,7 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use tauri::{http::status::StatusCode, Manager};
+use tauri::Manager;
 //use notify::{event::RemoveKind, EventKind, INotifyWatcher, RecursiveMode, Result as NotifyResult, Watcher};
 use std::{fs::{self, remove_dir_all, File}, io::{Error, ErrorKind, Write}, path::Path, u8};
 use walkdir::WalkDir;
@@ -49,6 +49,19 @@ struct Payload {
     message: String,
 }
 
+//#[derive(Serialize, Deserialize, Debug)]
+//enum Theme {
+//    DARK,
+//    LIGHT
+//}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct Config {
+    active_tabs: Vec<String>,
+    //save_on_quit: bool,
+    //theme: Theme
+}
+
 #[derive(Serialize, Deserialize, Debug)]
 struct Response {
     error: bool,
@@ -94,41 +107,172 @@ fn handle_delete_file_error(error: std::io::Error) -> Response{
     }
 }
 
-fn delete_directory(collection: String){
-    let path = Path::new("../data").join(collection);
-    println!("{:?}", path);
-    remove_dir_all(path).unwrap();
-}
-
 #[tauri::command]
-fn create_file(data: String, collection: String){
-    let request:Request = serde_json::from_str(&data).unwrap();
+fn create_file(data: String, collection: String) -> Response{
+    let request:Request = match serde_json::from_str(&data){
+        Ok(req) => req,
+        Err(e) => return Response{
+            error: true,
+            message: format!("Failed to parse JSON: {}", e) 
+        }
+    };
     println!("{:?}", request);
     
-    let toml = toml::to_string(&request).unwrap();
+    let toml =  match toml::to_string(&request){
+        Ok(toml) => toml,
+        Err(e) => return Response{
+            error: true,
+            message: format!("Failed to serialise TOML: {}", e)
+        }
+    };
 
     println!("{:?}", toml);
 
     let path = Path::new("../data").join(collection).join(request.meta.name).with_extension("toml");
 
+    let mut file = match File::create_new(&path){
+        Ok(file) => file,
+        Err(e) => return Response{
+            error: true,
+            message: format!("Failed to create file: {}", e)
+        }
+    };
 
-    let mut file = File::create(&path).unwrap();
-    file.write_all(toml.as_bytes()).unwrap();
+    match file.write_all(toml.as_bytes()){
+        Ok(()) => Response{
+            error: false, 
+            message: "Succesfully created file".to_owned()
+        },
+        Err(e) => Response{
+            error: true, 
+            message: format!("Failed to write to file: {}", e)
+        }
+    }
 }
 
-fn edit_file(path: String, contents: String) -> String{
-    //Read path from the front end
-    let path = Path::new(&path);
-
-    //Parse json into a struct
+#[tauri::command]
+fn edit_file(data: String, collection: String) -> Response{
+    let request:Request = match serde_json::from_str(&data){
+        Ok(req) => req,
+        Err(e) => return Response{
+            error: true,
+            message: format!("Failed to parse JSON: {}", e) 
+        }
+    };
+    println!("{:?}", request);
     
-    //Parse struct into toml
+    let toml =  match toml::to_string(&request){
+        Ok(toml) => toml,
+        Err(e) => return Response{
+            error: true,
+            message: format!("Failed to serialise TOML: {}", e)
+        }
+    };
+
+    println!("{:?}", toml);
+
+    let path = Path::new("../data").join(collection).join(request.meta.name).with_extension("toml");
+
+    //Cange from create
+    let mut file = match File::create(&path){
+        Ok(file) => file,
+        Err(e) => return Response{
+            error: true,
+            message: format!("Failed to create file: {}", e)
+        }
+    };
+
+    match file.write_all(toml.as_bytes()){
+        Ok(()) => Response{
+            error: false, 
+            message: "Succesfully updated file".to_owned()
+        },
+        Err(e) => Response{
+            error: true, 
+            message: format!("Failed to write to file: {}", e)
+        }
+    }
+}
+
+#[tauri::command]
+fn rename_file(collection:String, request_name:String, new_request_name: String) -> Response{
+    let path = Path::new("../data").join(&collection).join(request_name).with_extension("toml");
+    let new_path = Path::new("../data").join(&collection).join(new_request_name).with_extension("toml");
+
+    match fs::rename(path, new_path){
+        Ok(()) => Response{
+            error: false, 
+            message: "File renamed succesfully".to_owned()
+        },
+        Err(e) => Response{
+            error: true,
+            message: format!("Failed to rename file: {}", e)
+        }   
+    }
+}
+
+enum FileModifyType{
+    CREATE,
+    EDIT,
+    RENAME
+}
+
+fn modify_file(operation: FileModifyType, data: String, collection: String, request: String, new_request_name: Option<String>) -> Response{
+    let request:Request = match serde_json::from_str(&data){
+        Ok(req) => req,
+        Err(e) => return Response{
+            error: true,
+            message: format!("Failed to parse JSON: {}", e) 
+        }
+    };
+    println!("{:?}", request);
     
-    //Rewrite the file
+    let toml =  match toml::to_string(&request){
+        Ok(toml) => toml,
+        Err(e) => return Response{
+            error: true,
+            message: format!("Failed to serialise TOML: {}", e)
+        }
+    };
 
-    //Return the new state of the file system
+    println!("{:?}", toml);
 
-    "temp".to_owned()
+    let path = Path::new("../data").join(collection).join(request.meta.name).with_extension("toml");
+
+    let mut file = match File::create_new(&path){
+        Ok(file) => file,
+        Err(e) => return Response{
+            error: true,
+            message: format!("Failed to create file: {}", e)
+        }
+    };
+
+    match file.write_all(toml.as_bytes()){
+        Ok(()) => Response{
+            error: false, 
+            message: "Succesfully created file".to_owned()
+        },
+        Err(e) => Response{
+            error: true, 
+            message: format!("Failed to write to file: {}", e)
+        }
+    }
+}
+
+
+fn delete_directory(collection: String) -> Response{
+    let path = Path::new("../data").join(collection);
+    println!("{:?}", path);
+    match remove_dir_all(path){
+        Ok(()) => Response{
+            error: false,
+            message: "Directory removed succesfully".to_owned()
+        },
+        Err(e) => Response{
+            error: true,
+            message: format!("Failed to remove directory: {}", e)
+        }
+    }
 }
 
 fn main() {
@@ -162,7 +306,7 @@ fn main() {
             });
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![sync_files, delete_file, create_file])
+        .invoke_handler(tauri::generate_handler![sync_files, delete_file, create_file, edit_file, rename_file])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

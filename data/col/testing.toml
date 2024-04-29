@@ -1,6 +1,0 @@
-method = "DELETE"
-url = "https://localhost:3000"
-
-[meta]
-name = "TestReq"
-id = "1ub13"

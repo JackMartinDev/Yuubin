@@ -69,11 +69,18 @@ const Collection = ({ collection }: Props): JSX.Element => {
             }
             return col;         
         });
+
         invoke('create_file', {data: JSON.stringify(newRequest), collection: collection.name})
-        dispatch(updatefiles(newFiles))
-        dispatch(updateRequests([...requests, id]))
-        dispatch(updateActiveRequest(id))
-        close()
+            .then((res) => {
+                if(!res.error){
+                    dispatch(updatefiles(newFiles))
+                    dispatch(updateRequests([...requests, id]))
+                    dispatch(updateActiveRequest(id))
+                    close()
+                }else{
+                    console.log(res.message)
+                }
+            })
     }
 
     return(
