@@ -3,7 +3,7 @@
 
 use tauri::Manager;
 //use notify::{event::RemoveKind, EventKind, INotifyWatcher, RecursiveMode, Result as NotifyResult, Watcher};
-use std::{fs::{self, remove_dir_all, File}, io::{Error, ErrorKind, Write}, path::Path, u8};
+use std::{fs::{self, metadata, remove_dir_all, File, OpenOptions}, io::{Error, ErrorKind, Write}, path::Path, u8};
 use walkdir::WalkDir;
 use serde::{Deserialize, Serialize};
 
@@ -173,12 +173,11 @@ fn edit_file(data: String, collection: String) -> Response{
 
     let path = Path::new("../data").join(collection).join(request.meta.name).with_extension("toml");
 
-    //Cange from create
-    let mut file = match File::create(&path){
+    let mut file = match OpenOptions::new().write(true).open(path) {
         Ok(file) => file,
         Err(e) => return Response{
             error: true,
-            message: format!("Failed to create file: {}", e)
+            message: format!("Failed to open file: {}", e)
         }
     };
 
@@ -195,29 +194,7 @@ fn edit_file(data: String, collection: String) -> Response{
 }
 
 #[tauri::command]
-fn rename_file(collection:String, request_name:String, new_request_name: String) -> Response{
-    let path = Path::new("../data").join(&collection).join(request_name).with_extension("toml");
-    let new_path = Path::new("../data").join(&collection).join(new_request_name).with_extension("toml");
-
-    match fs::rename(path, new_path){
-        Ok(()) => Response{
-            error: false, 
-            message: "File renamed succesfully".to_owned()
-        },
-        Err(e) => Response{
-            error: true,
-            message: format!("Failed to rename file: {}", e)
-        }   
-    }
-}
-
-enum FileModifyType{
-    CREATE,
-    EDIT,
-    RENAME
-}
-
-fn modify_file(operation: FileModifyType, data: String, collection: String, request: String, new_request_name: Option<String>) -> Response{
+fn rename_file(data:String, collection:String, old_request_name: String) -> Response{
     let request:Request = match serde_json::from_str(&data){
         Ok(req) => req,
         Err(e) => return Response{
@@ -237,25 +214,33 @@ fn modify_file(operation: FileModifyType, data: String, collection: String, requ
 
     println!("{:?}", toml);
 
-    let path = Path::new("../data").join(collection).join(request.meta.name).with_extension("toml");
+    let path = Path::new("../data").join(&collection).join(old_request_name).with_extension("toml");
+    let new_path = Path::new("../data").join(&collection).join(request.meta.name).with_extension("toml");
 
-    let mut file = match File::create_new(&path){
-        Ok(file) => file,
-        Err(e) => return Response{
+        // TODOFirst, check if the original file exists
+    if metadata(&path).is_err() {
+        return Response {
             error: true,
-            message: format!("Failed to create file: {}", e)
-        }
-    };
+            message: "File does not exist".to_string(),
+        };
+    }
 
-    match file.write_all(toml.as_bytes()){
-        Ok(()) => Response{
-            error: false, 
-            message: "Succesfully created file".to_owned()
-        },
+
+    match fs::rename(path, &new_path){
+        Ok(()) => match fs::write(&new_path, toml){
+            Ok(()) => Response{
+                error: false, 
+                message: "File renamed succesfully".to_owned()
+            },
+            Err(e) => Response{
+                error: true,
+                message: format!("Failed up update file: {}",e)
+            }
+        }, 
         Err(e) => Response{
-            error: true, 
-            message: format!("Failed to write to file: {}", e)
-        }
+            error: true,
+            message: format!("Failed to rename file: {}", e)
+        }   
     }
 }
 
@@ -357,6 +342,9 @@ fn parse_object(path: &Path) -> Result<String, Error> {
                                 if request_entry.file_type().is_file()
                                     && request_entry.path().extension().map(|e| e == "toml").unwrap_or(false)
                                 {
+                                    //Consider using this for the object
+                                    let request_name = request_entry.path().file_stem().unwrap();
+                                    println!("{:?}",request_name);
                                     //handle unwrap
                                     let file_content =
                                         fs::read_to_string(request_entry.path()).unwrap();
