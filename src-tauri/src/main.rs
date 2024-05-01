@@ -351,7 +351,7 @@ fn main() {
             });
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![sync_files, sync_config, delete_file, create_file, edit_file, rename_file])
+        .invoke_handler(tauri::generate_handler![sync_files, sync_config, delete_file, create_file, edit_file, rename_file, delete_directory, create_directory])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

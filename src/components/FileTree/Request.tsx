@@ -18,8 +18,8 @@ type Props = {
 const Request = ({ request, collectionName }:Props) => {
     const dispatch = useDispatch();
     const { hovered, ref } = useHover();
-    const activeRequests = useSelector((state: RootState) => state.request.activeRequests)
     const files = useSelector((state: RootState) => state.request.files)
+    const activeRequests = useSelector((state: RootState) => state.request.activeRequests)
     const activeTab = useSelector((state: RootState) => state.request.activeRequest)
 
     const onClickHandler = () => {

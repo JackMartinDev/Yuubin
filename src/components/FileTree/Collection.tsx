@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { updateActiveRequest, updatefiles, updateRequests } from "../../requestSlice";
 import { invoke } from "@tauri-apps/api/tauri";
+import { modals } from "@mantine/modals";
 
 type Props = {
     collection: Collection,
@@ -22,6 +23,9 @@ const Collection = ({ collection }: Props): JSX.Element => {
 
     const files = useSelector((state: RootState) => state.request.files)
     const requests = useSelector((state: RootState) => state.request.activeRequests)
+    const activeRequests = useSelector((state: RootState) => state.request.activeRequests)
+    const activeTab = useSelector((state: RootState) => state.request.activeRequest)
+
     const dispatch = useDispatch();
 
 
@@ -52,6 +56,50 @@ const Collection = ({ collection }: Props): JSX.Element => {
         close();
         form.reset()
     }
+
+
+        const openDeleteModal = (event: React.MouseEvent) =>{
+        event.stopPropagation()
+
+        modals.openConfirmModal({
+            title: "Delete Request",
+            children: (
+                <Text size="md">
+                    You are about to delete a the collection {collection.name} and all of its requests. 
+                    Are you sure you want to proceed?
+                </Text>
+            ),
+            labels: { confirm: 'Delete Request', cancel: 'Cancel' },
+            centered: true,
+            confirmProps: { color: 'red' },
+            onCancel: () => console.log('Cancel'),
+            onConfirm: () => deleteHandler(),
+        });
+    }
+
+    const deleteHandler = () => {
+        invoke('delete_directory', {collection: collection.name})
+            .then((res) => {
+                if(!res.error){
+                    const collectionIds = collection.requests.map(req =>  req.meta.id)
+                    const newTabs = activeRequests.filter(id => !collectionIds.includes(id))
+                    const newCollections = files.filter(col => col.name !== collection.name)                        
+
+                    dispatch(updatefiles(newCollections))
+                    dispatch(updateRequests(newTabs))
+
+                    if(collectionIds.includes(activeTab)){
+                        dispatch(updateActiveRequest(newTabs[newTabs.length -1]))
+                    }
+                    console.log(newTabs)
+                    console.log(newCollections)
+                    console.log(res.message) 
+                }else{
+                    console.log(res.message) 
+                }
+            })
+    }
+
 
     const addRequestHandler = async(values: typeof form.values) => {
         setSubmittedValues(values)
@@ -144,6 +192,7 @@ const Collection = ({ collection }: Props): JSX.Element => {
                         <Menu.Item
                             color="red"
                             leftSection={<IconTrash style={{ width: rem(14), height: rem(14) }} />}
+                            onClick={event => {openDeleteModal(event)}}
                         >
                             Delete
                         </Menu.Item>
