@@ -150,7 +150,7 @@ fn create_file(data: String, collection: String) -> Response{
         };
     }
 
-
+//Maybe look into this https://doc.rust-lang.org/std/fs/struct.OpenOptions.html#method.create_new
     let mut file = match File::create(&path){
         Ok(file) => file,
         Err(e) => return Response{
