@@ -2,7 +2,7 @@ import classes from "./Request.module.css"
 import { useDispatch, useSelector } from "react-redux"
 import { updateActiveRequest, updateRequests, updatefiles } from "../../requestSlice"
 import { ActionIcon, Group, Text } from "@mantine/core"
-import { IconDots } from "@tabler/icons-react"
+import { IconBallpen, IconDots, IconPlayerPlay, IconPlayerPlayFilled } from "@tabler/icons-react"
 import { useHover } from "@mantine/hooks"
 import { Menu,  rem } from '@mantine/core';
 import { modals } from '@mantine/modals';
@@ -98,16 +98,20 @@ const Request = ({ request, collectionName }:Props) => {
                 </Menu.Target>
 
                 <Menu.Dropdown>
-                    <Menu.Item>
-                        Rename
+                    <Menu.Item
+                        leftSection={<IconPlayerPlay style={{ width: rem(16), height: rem(16)}}/>}
+                    >
+                        Run
                     </Menu.Item>
-                    <Menu.Item>
-                        Clone
+                    <Menu.Item
+                        leftSection={<IconBallpen style={{ width: rem(16), height: rem(16)}}/>}
+                    >
+                        Rename
                     </Menu.Item>
                     <Menu.Item
                         color="red"
                         onClick={event => {openDeleteModal(event)}}
-                        leftSection={<IconTrash style={{ width: rem(14), height: rem(14) }} />}
+                        leftSection={<IconTrash style={{ width: rem(16), height: rem(16) }} />}
                     >
                         Delete
                     </Menu.Item>

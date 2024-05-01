@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import classes from "./Collection.module.css" 
 import cx from "clsx"
 import Request from "./Request";
-import { IconChevronRight, IconDots, IconTrash } from "@tabler/icons-react"
+import { IconBallpen, IconChevronRight, IconDots, IconPlus, IconTrash } from "@tabler/icons-react"
 import { ActionIcon, Box, Button, Flex, Group, Menu, Modal, Select, Text, TextInput, rem } from "@mantine/core";
 import { useDisclosure, useHover } from "@mantine/hooks";
 import { isNotEmpty, useForm } from '@mantine/form';
@@ -35,7 +35,7 @@ const Collection = ({ collection }: Props): JSX.Element => {
 
     const form = useForm({
         initialValues: {
-            name: `Request_${Math.floor(Math.random() * 1000)}`,
+            name: 'Request_',
             method: 'GET',
             url: 'https://',
         },
@@ -124,6 +124,7 @@ const Collection = ({ collection }: Props): JSX.Element => {
                     dispatch(updatefiles(newFiles))
                     dispatch(updateRequests([...requests, id]))
                     dispatch(updateActiveRequest(id))
+                    form.reset()
                     close()
                 }else{
                     console.log(res.message)
@@ -183,15 +184,18 @@ const Collection = ({ collection }: Props): JSX.Element => {
                     <Menu.Dropdown>
                         <Menu.Item
                             onClick={event => openModalHandler(event)}
+                            leftSection={<IconPlus style={{ width: rem(16), height: rem(16) }} />}
                         >
                             Add request
                         </Menu.Item>
-                        <Menu.Item>
+                        <Menu.Item
+                            leftSection={<IconBallpen style={{ width: rem(16), height: rem(16)}}/>}
+                        >
                             Rename
                         </Menu.Item>
                         <Menu.Item
                             color="red"
-                            leftSection={<IconTrash style={{ width: rem(14), height: rem(14) }} />}
+                            leftSection={<IconTrash style={{ width: rem(16), height: rem(16) }} />}
                             onClick={event => {openDeleteModal(event)}}
                         >
                             Delete
@@ -209,4 +213,4 @@ const Collection = ({ collection }: Props): JSX.Element => {
     )
 }
 
-export default React.memo(Collection)
+export default Collection
