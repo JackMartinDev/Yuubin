@@ -77,6 +77,19 @@ fn sync_files() -> String {
 }
 
 #[tauri::command]
+fn sync_config() -> String {
+    let path = Path::new("../data/config.toml");
+
+    let file_content = fs::read_to_string(&path).unwrap();
+    //handle unwrap
+    let config: Config = toml::from_str(&file_content).unwrap();
+
+    let json = serde_json::to_string(&config).unwrap();
+
+    return json
+}
+
+#[tauri::command]
 fn delete_file(collection: String, request: String) -> Response{
     let path = Path::new("../data").join(collection).join(request).with_extension("toml");
 
@@ -130,7 +143,15 @@ fn create_file(data: String, collection: String) -> Response{
 
     let path = Path::new("../data").join(collection).join(request.meta.name).with_extension("toml");
 
-    let mut file = match File::create_new(&path){
+    if !metadata(&path).is_err(){
+        return Response {
+            error: true,
+            message: "File already exists".to_string(),
+        };
+    }
+
+
+    let mut file = match File::create(&path){
         Ok(file) => file,
         Err(e) => return Response{
             error: true,
@@ -217,7 +238,7 @@ fn rename_file(data:String, collection:String, old_request_name: String) -> Resp
     let path = Path::new("../data").join(&collection).join(old_request_name).with_extension("toml");
     let new_path = Path::new("../data").join(&collection).join(request.meta.name).with_extension("toml");
 
-    if !metadata(&new_path).is_err() {
+    if !metadata(&new_path).is_err(){
         return Response {
             error: true,
             message: "New file already exists".to_string(),
@@ -330,7 +351,7 @@ fn main() {
             });
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![sync_files, delete_file, create_file, edit_file, rename_file])
+        .invoke_handler(tauri::generate_handler![sync_files, sync_config, delete_file, create_file, edit_file, rename_file])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -381,9 +402,6 @@ fn parse_object(path: &Path) -> Result<String, Error> {
                                 if request_entry.file_type().is_file()
                                     && request_entry.path().extension().map(|e| e == "toml").unwrap_or(false)
                                 {
-                                    //Consider using this for the object
-                                    let request_name = request_entry.path().file_stem().unwrap();
-                                    println!("{:?}",request_name);
                                     //handle unwrap
                                     let file_content =
                                         fs::read_to_string(request_entry.path()).unwrap();
