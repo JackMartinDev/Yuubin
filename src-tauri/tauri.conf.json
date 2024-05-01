@@ -37,8 +37,8 @@
                 "fullscreen": false,
                 "resizable": true,
                 "title": "Yuubin",
-                "width": 1280,
-                "height": 760,
+                "width": 1920,
+                "height": 1080,
                 "visible": false
             },
             {
