@@ -58,18 +58,18 @@ const Collection = ({ collection }: Props): JSX.Element => {
     }
 
 
-        const openDeleteModal = (event: React.MouseEvent) =>{
+    const openDeleteModal = (event: React.MouseEvent) =>{
         event.stopPropagation()
 
         modals.openConfirmModal({
-            title: "Delete Request",
+            title: "Delete Collection",
             children: (
                 <Text size="md">
                     You are about to delete a the collection {collection.name} and all of its requests. 
                     Are you sure you want to proceed?
                 </Text>
             ),
-            labels: { confirm: 'Delete Request', cancel: 'Cancel' },
+            labels: { confirm: 'Delete Collection', cancel: 'Cancel' },
             centered: true,
             confirmProps: { color: 'red' },
             onCancel: () => console.log('Cancel'),
