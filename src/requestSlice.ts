@@ -9,7 +9,7 @@ export interface RequestState{
 
 const initialState: RequestState = {
     activeRequest: "1",
-    activeRequests: ["bc7b7e92-321e-4e21-bd6a-d38881fbcd96","2","3"],
+    activeRequests: [],
     files: [] 
 }
 

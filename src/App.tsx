@@ -19,6 +19,7 @@ function App(): JSX.Element {
     const syncFileSystem = () => {
         //TODO: Remove collecion key from this object
         invoke('sync_files').then((files) => dispatch(updatefiles(JSON.parse(files as string))))
+        invoke('sync_config').then((config) => dispatch(updateRequests(JSON.parse(config as string).active_tabs)))
     }
 
     useEffect(() => {
