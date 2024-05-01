@@ -32,7 +32,6 @@ const FileTree = ({ files }: Props) => {
     const [submittedValues, setSubmittedValues] = useState<typeof form.values>(form.values);
 
     const openModalHandler = (event: React.MouseEvent) =>{
-        event.stopPropagation();
         open();
     }
 
@@ -86,10 +85,10 @@ const FileTree = ({ files }: Props) => {
                     Add collection
                 </Button>
                 <TextInput placeholder="Search collections" leftSection={icon} mb="sm" m="xs"/>
-                {files.map(collection => (<Collection key={crypto.randomUUID()} collection={collection}/>))}
+                {files.map(collection => (<Collection key={collection.name} collection={collection}/>))}
             </Box>
         </>
     )
 }
 
-export default React.memo(FileTree)
+export default FileTree
