@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { invoke } from "@tauri-apps/api/tauri";
 import { updatefiles } from "../../requestSlice";
+import { notifications } from "@mantine/notifications";
 
 interface Props {
     files: Collection[],
@@ -35,7 +36,7 @@ const FileTree = ({ files }: Props) => {
         open();
     }
 
-    const closeModalHandler = () => {
+    const closeModal = () => {
         close();
         form.reset()
     }
@@ -51,17 +52,20 @@ const FileTree = ({ files }: Props) => {
             .then((res) => {
                 if(!res.error){
                     dispatch(updatefiles(newFiles))
-                    console.log(res.message)
-                    close()
+                    closeModal()
                 }else{
-                    console.log(res.message)
+                    notifications.show({
+                        title: 'Error',
+                        message: res.message,
+                        color: 'red'
+                    })
                 }
             })
     }
 
     return (
         <>
-            <Modal opened={opened} onClose={close} title="New Collection" centered size="lg">
+            <Modal opened={opened} onClose={closeModal} title="New Collection" centered size="lg">
                 <form onSubmit={form.onSubmit((values) => addCollectionHandler(values))}>
                     <TextInput 
                         {...form.getInputProps('name')}
@@ -72,7 +76,7 @@ const FileTree = ({ files }: Props) => {
 
                     />
                     <Flex justify="right" gap="sm">
-                        <Button variant="light" color="gray" onClick={closeModalHandler}>Cancel</Button>
+                        <Button variant="light" color="gray" onClick={closeModal}>Cancel</Button>
                         <Button variant="default" color="gray" type="submit">Create</Button>
                     </Flex>
                 </form>

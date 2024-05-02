@@ -3,6 +3,7 @@ import FileTree from "./components/FileTree/FileTree";
 import classes from "./App.module.css"
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { CloseButton, Flex, Tabs, Text, Title } from "@mantine/core";
+import { Notifications } from '@mantine/notifications';
 import { useEffect } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
 import { useDispatch, useSelector } from "react-redux";
@@ -43,6 +44,7 @@ function App(): JSX.Element {
 
     return (
         <div className={classes.container}>
+            <Notifications/>
             <PanelGroup direction="horizontal">
                 <Panel defaultSize={15} minSize={10}>
                     <div className={classes.file}>

@@ -11,6 +11,7 @@ import { RootState } from "../../store/store";
 import { updateActiveRequest, updatefiles, updateRequests } from "../../requestSlice";
 import { invoke } from "@tauri-apps/api/tauri";
 import { modals } from "@mantine/modals";
+import { notifications } from "@mantine/notifications";
 
 type Props = {
     collection: Collection,
@@ -52,7 +53,7 @@ const Collection = ({ collection }: Props): JSX.Element => {
         open();
     }
 
-    const closeModalHandler = () => {
+    const closeModal = () => {
         close();
         form.reset()
     }
@@ -95,7 +96,11 @@ const Collection = ({ collection }: Props): JSX.Element => {
                     console.log(newCollections)
                     console.log(res.message) 
                 }else{
-                    console.log(res.message) 
+                    notifications.show({
+                        title: 'Error',
+                        message: res.message,
+                        color: 'red'
+                    })
                 }
             })
     }
@@ -124,17 +129,20 @@ const Collection = ({ collection }: Props): JSX.Element => {
                     dispatch(updatefiles(newFiles))
                     dispatch(updateRequests([...requests, id]))
                     dispatch(updateActiveRequest(id))
-                    form.reset()
-                    close()
+                    closeModal()
                 }else{
-                    console.log(res.message)
+                    notifications.show({
+                        title: 'Error',
+                        message: res.message,
+                        color: 'red'
+                    })
                 }
             })
     }
 
     return(
         <Box mb={3}>
-            <Modal opened={opened} onClose={close} title="New Request" centered size="lg">
+            <Modal opened={opened} onClose={closeModal} title="New Request" centered size="lg">
                 <form onSubmit={form.onSubmit((values) => addRequestHandler(values))}>
                     <TextInput 
                         {...form.getInputProps('name')}
@@ -163,7 +171,7 @@ const Collection = ({ collection }: Props): JSX.Element => {
                         />
                     </Flex>
                     <Flex justify="right" gap="sm">
-                        <Button variant="light" color="gray" onClick={closeModalHandler}>Cancel</Button>
+                        <Button variant="light" color="gray" onClick={closeModal}>Cancel</Button>
                         <Button variant="default" color="gray" type="submit">Create</Button>
                     </Flex>
                 </form>

@@ -9,6 +9,7 @@ import { modals } from '@mantine/modals';
 import { IconTrash } from '@tabler/icons-react';
 import { RootState } from "../../store/store";
 import { invoke } from '@tauri-apps/api/tauri';
+import { notifications } from "@mantine/notifications"
 
 type Props = {
     request: YuubinRequest,
@@ -82,7 +83,11 @@ const Request = ({ request, collectionName }:Props) => {
                     console.log(res.message) 
                     //.filter(collection => collection.requests.length > 0); // Optionally, remove collections that are empty after deletion 
                 }else{
-                    console.log(res.message) 
+                    notifications.show({
+                        title: 'Error',
+                        message: res.message,
+                        color: 'red'
+                    })
                 }
             })
     }
