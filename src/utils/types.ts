@@ -8,7 +8,7 @@ type YuubinRequest = {
     url: string,
     body?: string,
     headers?: KeyValuePair[],
-    queryParams?: KeyValuePair[],
+    params?: KeyValuePair[],
     auth?: string,
     meta: MetaData,
 }

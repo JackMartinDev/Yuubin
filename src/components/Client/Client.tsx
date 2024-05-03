@@ -10,10 +10,14 @@ import Headers from "../Headers/Headers"
 import Authentication from "../Authentication/Authentication"
 import { useState } from "react"
 import useSendRequest from "../../hooks/useSendRequest"
-import axios, { AxiosHeaders, HttpStatusCode } from "axios"
+import { HttpStatusCode } from "axios"
+import { invoke } from "@tauri-apps/api/tauri"
+import { notifications } from "@mantine/notifications"
+import { deepCompare } from "../../utils/utils"
 
 interface Props {
-    request: YuubinRequest
+    request: YuubinRequest,
+    collectionName: String
 }
 
 type Response = {
@@ -28,21 +32,62 @@ type ResponseError = {
     status?: number
 }
 
-const Client = ({request}: Props): JSX.Element => {
+const Client = ({request, collectionName}: Props): JSX.Element => {
     const status = useSelector((state:RootState) => state.response.status)
     const loading = useSelector((state:RootState) => state.response.loading)
 
     const [url, setUrl] = useState(request.url);
     const [method, setMethod] = useState(request.method);
-    const [queryParams, setQueryParams] = useState(request.queryParams);
+    const [params, setParams] = useState(request.params);
     const [body, setBody] = useState(request.body);
     const [headers, setHeaders] = useState(request.headers);
     const [auth, setAuth] = useState(request.auth);
 
+    //Deep compare params and headers
+    //TODO Think about how they should be treated when empty. undefined? empty array?
+    const hasChanged = url !== request.url 
+        || method !== request.method 
+        || auth !== request.auth
+        || body !== request.body
+        || params !== request.params
+        || headers !== request.headers;
+
+    //const test = deepCompare(params, request.params);
+    //console.log(test)
+
+    console.log("Has changed: ", hasChanged)
+
     const [response, setResponse] = useState<Response | undefined>(undefined);
     const [error, setError] = useState<{message: string, status?: number} | undefined>(undefined)
 
-    const sendRequest = useSendRequest(queryParams, url, method, body);
+    const sendRequest = useSendRequest(params, url, method, body);
+
+    const onTest = () => {
+        const meta = request.meta
+        const updatedRequest: YuubinRequest = {
+            method,
+            url,
+            body,
+            headers,
+            params,
+            auth,
+            meta
+        }
+        console.log(updatedRequest)
+
+        invoke('edit_file', {data: JSON.stringify(updatedRequest), collection: collectionName})
+            .then((res) => {
+                if(!res.error){
+                    console.log(res.message)
+                }else{
+                    notifications.show({
+                        title: 'Error',
+                        message: res.message,
+                        color: 'red'
+                    })
+                }
+            })
+    }
 
     const onSubmitHandler = async() => {
         try {
@@ -63,6 +108,7 @@ const Client = ({request}: Props): JSX.Element => {
 
     return(
         <Box>
+            {hasChanged && <Button onClick={onTest}>Test update</Button>}
             <Flex bg="#F5F5F5" align="center" p="0.5rem" gap={10}>
                 <SearchBar url={url} method={method} onUrlChange={setUrl} onMethodChange={setMethod}/>
                 <Button type="submit" w={100} variant="default" color="gray" onClick={onSubmitHandler}>Send</Button>
@@ -89,7 +135,7 @@ const Client = ({request}: Props): JSX.Element => {
                                 </Tabs.List>
 
                                 <Tabs.Panel value="query" mt="sm">
-                                    <QueryParams queryParams={queryParams} onParamsChange={setQueryParams}/>
+                                    <QueryParams queryParams={params} onParamsChange={setParams}/>
                                 </Tabs.Panel>
 
                                 <Tabs.Panel value="body" mt="sm">

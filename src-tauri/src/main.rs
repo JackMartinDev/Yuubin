@@ -25,11 +25,19 @@ struct MetaData {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+struct KeyValuePair {
+    key: String,
+    value: String
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 struct Request {
     method: String,
     url: String,
     body: Option<String>,
     auth: Option<String>,
+    headers: Option<Vec<KeyValuePair>>,
+    params: Option<Vec<KeyValuePair>>,
     meta: MetaData,
 }
 
