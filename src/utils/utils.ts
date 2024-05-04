@@ -14,7 +14,7 @@ export function debounce<T extends (...args: any[]) => void>(func: T, wait: numb
     };
 }
 
-export function deepCompare(array1: KeyValuePair[], array2: KeyValuePair[]): boolean{
+export function deepIsEqual(array1: KeyValuePair[], array2: KeyValuePair[]): boolean{
     if (array1.length !== array2.length) return false;
     for (let i = 0; i < array1.length; i++) {
         const object1 = array1[i];
