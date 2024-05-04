@@ -46,8 +46,6 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
     const [headers, setHeaders] = useState<KeyValuePair[]>(request.headers);
     const [auth, setAuth] = useState<string | undefined>(request.auth);
 
-    //Deep compare params and headers
-    //TODO Think about how they should be treated when empty. undefined? empty array?
     const hasChanged = url !== request.url 
         || method !== request.method 
         || auth !== request.auth
@@ -60,7 +58,7 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
 
     const sendRequest = useSendRequest(params, url, method, body);
 
-    const onTest = () => {
+    const onSaveHandler = () => {
         const meta = request.meta
         const updatedRequest: YuubinRequest = {
             method,
@@ -106,9 +104,8 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
 
     return(
         <Box>
-            {hasChanged && <Button onClick={onTest}>Test update</Button>}
             <Flex bg="#F5F5F5" align="center" p="0.5rem" gap={10}>
-                <SearchBar url={url} method={method} onUrlChange={setUrl} onMethodChange={setMethod}/>
+                <SearchBar url={url} method={method} onUrlChange={setUrl} onMethodChange={setMethod} onSave={onSaveHandler} saveVisible={hasChanged}/>
                 <Button type="submit" w={100} variant="default" color="gray" onClick={onSubmitHandler}>Send</Button>
             </Flex>
 
