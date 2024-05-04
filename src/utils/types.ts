@@ -6,9 +6,9 @@ type MetaData = {
 type YuubinRequest = {
     method: HttpVerb,
     url: string,
-    body?: string,
-    headers?: KeyValuePair[],
-    params?: KeyValuePair[],
+    body: string,
+    headers: KeyValuePair[],
+    params: KeyValuePair[],
     auth?: string,
     meta: MetaData,
 }

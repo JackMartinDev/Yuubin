@@ -3,8 +3,8 @@ import { IconTrash } from "@tabler/icons-react";
 import { ActionIcon, Button, Checkbox, Flex, Grid, TextInput } from "@mantine/core";
 
 type Props = {
-    queryParams: KeyValuePair[] | undefined, 
-    onParamsChange: Dispatch<SetStateAction<KeyValuePair[] | undefined>>,
+    queryParams: KeyValuePair[], 
+    onParamsChange: Dispatch<SetStateAction<KeyValuePair[]>>,
 }
 
 const QueryParams = ({queryParams, onParamsChange}: Props) => {

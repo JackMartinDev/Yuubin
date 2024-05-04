@@ -14,6 +14,7 @@ interface Props {
     files: Collection[],
 }
 
+//TODO Add an indicator for the selected request
 const FileTree = ({ files }: Props) => {
     const icon = <IconSearch style={{ width: rem(16), height: rem(16) }} />;
     const [opened, { open, close }] = useDisclosure(false);

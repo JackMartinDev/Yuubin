@@ -22,7 +22,6 @@ type ResponseError = {
     status: number
 }
 
-
 type Props = {
     response?: Response
     error?: ResponseError

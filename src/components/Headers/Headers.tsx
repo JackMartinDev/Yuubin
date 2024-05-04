@@ -4,7 +4,7 @@ import { ActionIcon, Button, Checkbox, Flex, Grid, TextInput } from "@mantine/co
 
 type Props = {
     header: KeyValuePair[] | undefined, 
-    onHeaderChange: Dispatch<SetStateAction<KeyValuePair[] | undefined>>,
+    onHeaderChange: Dispatch<SetStateAction<KeyValuePair[]>>,
 }
 
 

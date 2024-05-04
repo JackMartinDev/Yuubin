@@ -7,7 +7,7 @@ import { Box } from "@mantine/core"
 
 interface Props {
     body?: string
-    onBodyChange: Dispatch<SetStateAction<string | undefined>>,
+    onBodyChange: Dispatch<SetStateAction<string>>,
 }
 
 const RequestBody = ({body, onBodyChange}: Props) => {

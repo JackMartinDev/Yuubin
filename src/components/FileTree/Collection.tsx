@@ -112,7 +112,14 @@ const Collection = ({ collection }: Props): JSX.Element => {
 
         const id = crypto.randomUUID() as string
         const meta: MetaData = {name: formValues.name, id}
-        const newRequest:YuubinRequest = {method: formValues.method as HttpVerb, url:formValues.url, meta}
+        const newRequest:YuubinRequest = {
+            method: formValues.method as HttpVerb, 
+            url:formValues.url,
+            body: '{}',
+            headers: [],
+            params: [],
+            meta
+        }
         const newFiles = files.map(col => {
             if (col.name === collection.name) {
                 return {

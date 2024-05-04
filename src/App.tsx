@@ -23,6 +23,7 @@ function App(): JSX.Element {
         //invoke('sync_config').then((config) => dispatch(updateRequests(JSON.parse(config as string).active_tabs)))
     }
 
+    console.log(files)
     useEffect(() => {
         syncFileSystem() //For desktop
     },[]);

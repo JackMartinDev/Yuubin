@@ -34,10 +34,10 @@ struct KeyValuePair {
 struct Request {
     method: String,
     url: String,
-    body: Option<String>,
+    body: String,
     auth: Option<String>,
-    headers: Option<Vec<KeyValuePair>>,
-    params: Option<Vec<KeyValuePair>>,
+    headers: Vec<KeyValuePair>,
+    params: Vec<KeyValuePair>,
     meta: MetaData,
 }
 

@@ -13,7 +13,7 @@ import useSendRequest from "../../hooks/useSendRequest"
 import { HttpStatusCode } from "axios"
 import { invoke } from "@tauri-apps/api/tauri"
 import { notifications } from "@mantine/notifications"
-import { deepCompare } from "../../utils/utils"
+import { deepIsEqual } from "../../utils/utils"
 
 interface Props {
     request: YuubinRequest,
@@ -36,12 +36,15 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
     const status = useSelector((state:RootState) => state.response.status)
     const loading = useSelector((state:RootState) => state.response.loading)
 
+    const testParams = [{key: "Key 1", value: "Value 1"}, {key: "Key 2", value: "Value 2"}]
+    const testHeaders = [{key: "Key 1", value: "Value 1"}, {key: "Key 2", value: "Value 2"}]
+
     const [url, setUrl] = useState(request.url);
     const [method, setMethod] = useState(request.method);
-    const [params, setParams] = useState(request.params);
+    const [params, setParams] = useState<KeyValuePair[]>(request.params);
     const [body, setBody] = useState(request.body);
-    const [headers, setHeaders] = useState(request.headers);
-    const [auth, setAuth] = useState(request.auth);
+    const [headers, setHeaders] = useState<KeyValuePair[]>(request.headers);
+    const [auth, setAuth] = useState<string | undefined>(request.auth);
 
     //Deep compare params and headers
     //TODO Think about how they should be treated when empty. undefined? empty array?
@@ -49,13 +52,8 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
         || method !== request.method 
         || auth !== request.auth
         || body !== request.body
-        || params !== request.params
-        || headers !== request.headers;
-
-    //const test = deepCompare(params, request.params);
-    //console.log(test)
-
-    console.log("Has changed: ", hasChanged)
+        || !deepIsEqual(params, request.params)
+        || !deepIsEqual(headers, request.headers);
 
     const [response, setResponse] = useState<Response | undefined>(undefined);
     const [error, setError] = useState<{message: string, status?: number} | undefined>(undefined)
