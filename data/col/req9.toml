@@ -1,5 +1,8 @@
 method = "GET"
 url = "https://testing.test"
+body = "{}"
+headers = []
+params = []
 
 [meta]
 name = "req9"

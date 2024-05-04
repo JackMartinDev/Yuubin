@@ -2,6 +2,22 @@ method = "POST"
 url = "https://jsonplaceholder.typicode.com/todos"
 body = "{name:Jack}"
 
+[[headers]]
+key = "Header 2"
+value = "Header val 2"
+
+[[headers]]
+key = "1"
+value = "2"
+
+[[params]]
+key = "Key 1"
+value = "Value 1"
+
+[[params]]
+key = "Key 2"
+value = "Value 2"
+
 [meta]
 name = "req2"
 id = "3"

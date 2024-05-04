@@ -1,5 +1,8 @@
 method = "GET"
 url = "www.facebook.com"
+body = "{}"
+headers = []
+params = []
 
 [meta]
 name = "req2"
