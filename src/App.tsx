@@ -25,7 +25,7 @@ function App(): JSX.Element {
 
     console.log(files)
     useEffect(() => {
-        syncFileSystem() //For desktop
+        syncFileSystem() 
     },[]);
 
     const onChangeHandler = (tabId: string) => {

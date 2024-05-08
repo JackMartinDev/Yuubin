@@ -93,7 +93,12 @@ const Request = ({ request, collectionName }:Props) => {
     }
 
     return(
-        <Group className={classes.request} onClick={onClickHandler} justify="space-between" ref={ref}>
+        <Group className={classes.request} 
+            onClick={onClickHandler} 
+            justify="space-between" 
+            ref={ref} 
+            style={activeTab === request.meta.id ? {backgroundColor: '#cccaca'}: {}}
+        >
             <Text>{request.method} {request.meta.name}</Text>
             <Menu shadow="md" width={200}>
                 <Menu.Target>
