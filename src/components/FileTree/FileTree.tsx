@@ -1,8 +1,8 @@
 import { isNotEmpty, useForm } from "@mantine/form";
 import Collection from "./Collection";
-import { Box, Button, Flex, Modal, TextInput, Title, rem } from "@mantine/core";
+import { ActionIcon, Box, Button, Flex, Modal, TextInput, Title, rem } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconSearch } from "@tabler/icons-react";
+import { IconSearch, IconSettings } from "@tabler/icons-react";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
@@ -96,6 +96,9 @@ const FileTree = ({ files }: Props) => {
                 <Button onClick={openModalHandler} variant="default" color="gray">
                     Add collection
                 </Button>
+                <ActionIcon variant="default" color="gray" aria-label="Settings">
+                    <IconSettings style={{ width: '70%', height: '70%' }} stroke={1.5} />
+                </ActionIcon>
                 <TextInput placeholder="Search collections" leftSection={icon} mb="sm" m="xs"/>
                 {files.map(collection => (<Collection key={collection.name} collection={collection}/>))}
             </Box>
