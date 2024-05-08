@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux"
 import axios, { AxiosResponse, AxiosError } from "axios"
 import { updateLoading } from "../responseSlice"
 import prettyBytes from "pretty-bytes"
+import { notifications } from "@mantine/notifications";
 
 interface RequestParams{
     [key: string]: string
@@ -50,7 +51,11 @@ const useSendRequest = (paramsArray: KeyValuePair[] | undefined, url: string, me
             }
         }catch{
             //Do something meaningful here
-            console.log("JSON data is malformed");
+            notifications.show({
+                title: 'JSON Body Error',
+                message: "JSON data is malformed",
+                color: 'red'
+            })
             return
         }
         try{
