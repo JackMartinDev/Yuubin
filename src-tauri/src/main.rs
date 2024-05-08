@@ -106,7 +106,7 @@ fn delete_file(collection: String, request: String) -> Response{
     match fs::remove_file(path){
         Ok(()) => Response{
             error:false, 
-            message:"Success".to_string()
+            message:"Successfully deleted file".to_string()
         },
         Err(error) => handle_delete_file_error(error)
     }
