@@ -158,7 +158,6 @@ fn create_file(data: String, collection: String) -> Response{
         };
     }
 
-//Maybe look into this https://doc.rust-lang.org/std/fs/struct.OpenOptions.html#method.create_new
     let mut file = match File::create(&path){
         Ok(file) => file,
         Err(e) => return Response{
@@ -202,11 +201,18 @@ fn edit_file(data: String, collection: String) -> Response{
 
     let path = Path::new("../data").join(collection).join(request.meta.name).with_extension("toml");
 
-    let mut file = match OpenOptions::new().write(true).open(path) {
+    if metadata(&path).is_err(){
+        return Response {
+            error: true,
+            message: "File does not exist".to_string(),
+        };
+    }
+
+    let mut file = match File::create(&path){
         Ok(file) => file,
         Err(e) => return Response{
             error: true,
-            message: format!("Failed to open file: {}", e)
+            message: format!("Failed to update file: {}", e)
         }
     };
 
