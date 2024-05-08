@@ -2,7 +2,7 @@ import QueryParams from "../QueryParams/QueryParams"
 import RequestBody from "../RequestBody/RequestBody"
 import ResponseBody from "../ResponseBody/ResponseBody"
 import SearchBar from "../SearchBar/SearchBar"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../store/store"
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { Box, Button, Flex, Paper, Tabs } from "@mantine/core"
@@ -14,6 +14,7 @@ import { HttpStatusCode } from "axios"
 import { invoke } from "@tauri-apps/api/tauri"
 import { notifications } from "@mantine/notifications"
 import { deepIsEqual } from "../../utils/utils"
+import { updatefiles } from "../../requestSlice"
 
 interface Props {
     request: YuubinRequest,
@@ -35,9 +36,8 @@ type ResponseError = {
 const Client = ({request, collectionName}: Props): JSX.Element => {
     const status = useSelector((state:RootState) => state.response.status)
     const loading = useSelector((state:RootState) => state.response.loading)
-
-    const testParams = [{key: "Key 1", value: "Value 1"}, {key: "Key 2", value: "Value 2"}]
-    const testHeaders = [{key: "Key 1", value: "Value 1"}, {key: "Key 2", value: "Value 2"}]
+    const files = useSelector((state: RootState) => state.request.files)
+    const dispatch = useDispatch();
 
     const [url, setUrl] = useState(request.url);
     const [method, setMethod] = useState(request.method);
@@ -71,9 +71,28 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
         }
         console.log(updatedRequest)
 
+        const newFiles = files.map(col => {
+            if (col.name === collectionName) {
+                return {
+                    ...col,
+                    requests: col.requests.map(req => {
+
+                        if (req.meta.id === updatedRequest.meta.id) {
+                            return updatedRequest; 
+                        }
+                        return req; 
+                    })
+                };
+            }
+            return col;         
+        });
+
+        console.log(newFiles)
+
         invoke('edit_file', {data: JSON.stringify(updatedRequest), collection: collectionName})
             .then((res) => {
                 if(!res.error){
+                    dispatch(updatefiles(newFiles)) 
                     console.log(res.message)
                     notifications.show({
                         title: 'Success',
@@ -100,10 +119,10 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
         } catch (error) {
             console.log(error)
             //Perform type checking
-                setError({
-                    message: error.message,
-                    status: error.status
-                });
+            setError({
+                message: error.message,
+                status: error.status
+            });
             setResponse(undefined);
         }
     }
