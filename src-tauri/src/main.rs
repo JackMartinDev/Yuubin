@@ -3,7 +3,7 @@
 
 use tauri::Manager;
 //use notify::{event::RemoveKind, EventKind, INotifyWatcher, RecursiveMode, Result as NotifyResult, Watcher};
-use std::{fs::{self, create_dir, metadata, remove_dir_all, File, OpenOptions}, io::{Error, ErrorKind, Write}, path::Path, u8};
+use std::{fs::{self, create_dir, metadata, remove_dir_all, File}, io::{Error, ErrorKind, Write}, path::Path, u8};
 use walkdir::WalkDir;
 use serde::{Deserialize, Serialize};
 
@@ -68,6 +68,7 @@ struct Config {
     active_tabs: Vec<String>,
     //save_on_quit: bool,
     //theme: Theme
+    //data_path
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -292,7 +293,7 @@ fn delete_directory(collection: String) -> Response{
         }
     }
 }
-//TODO test
+
 #[tauri::command]
 fn create_directory(collection: String) -> Response{
     let path = Path::new("../data").join(collection);
@@ -335,7 +336,7 @@ fn rename_directory(collection: String, new_collection: String) -> Response{
 }
 
 fn main() {
-    let path = Path::new("../data/");
+//Once project is complete, revisit the file watcher
 //    let mut watcher = create_file_watcher();
 //
 //    watcher
@@ -350,7 +351,7 @@ fn main() {
             tauri::async_runtime::spawn(async move {
                 // initialize your app here instead of sleeping :)
                 println!("Initializing...");
-                //TODO: Get this path from the frontend user input
+                //TODO: Get this path from the frontend user settings then save in config.toml
                 let path = Path::new("../data/");
 
                 //Handler unwrap
@@ -365,7 +366,7 @@ fn main() {
             });
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![sync_files, sync_config, delete_file, create_file, edit_file, rename_file, delete_directory, create_directory])
+        .invoke_handler(tauri::generate_handler![sync_files, sync_config, delete_file, create_file, edit_file, rename_file, delete_directory, create_directory, rename_directory])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
