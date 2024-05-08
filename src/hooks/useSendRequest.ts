@@ -46,7 +46,7 @@ const useSendRequest = (paramsArray: KeyValuePair[] | undefined, url: string, me
             params = filteredArray.reduce((obj, item) => (obj[item.key] = item.value, obj) ,{});
         }
         try{
-            if(body){ 
+            if(body && (method === "POST" || method === "PUT" || method === "PATCH")){ 
                 data = JSON.parse(body);
             }
         }catch{
