@@ -192,7 +192,7 @@ const Collection = ({ collection }: Props): JSX.Element => {
                 <Menu shadow="md" width={200}>
                     <Menu.Target>
                         <ActionIcon onClick={(event => (event.stopPropagation()))} variant="transparent" color="dark" style={hovered ? {visibility:"visible"}: {visibility:"hidden"}}>
-                            <IconDots style={{ width: '70%', height: '70%' }} stroke={1.5} />
+                            <IconDots style={{ width: '85%', height: '85%' }} stroke={2} />
                         </ActionIcon>
                     </Menu.Target>
 

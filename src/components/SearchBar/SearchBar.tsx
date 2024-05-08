@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
-import styles from "./SearchBar.module.css"
+import classes from "./SearchBar.module.css"
 import { Select, TextInput, rem } from "@mantine/core"
 import { IconDeviceFloppy } from "@tabler/icons-react"
 
@@ -24,10 +24,10 @@ const SearchBar = ({url, method, onUrlChange, onMethodChange, saveVisible, onSav
         onMethodChange(localMethod);
     }, [localMethod, onMethodChange]);
 
-    const saveIcon = saveVisible ? <IconDeviceFloppy onClick={onSave} style={{ width: rem(24), height: rem(24)}}/> : null
+    const saveIcon = saveVisible ? <IconDeviceFloppy onClick={onSave} className={classes.save}/> : null
 
     return(
-        <form className={styles.body}>
+        <form className={classes.body}>
             <Select
                 w={150}
                 withCheckIcon={false}

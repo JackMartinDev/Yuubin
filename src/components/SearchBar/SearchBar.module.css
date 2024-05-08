@@ -4,3 +4,12 @@
     display: flex;
     gap: 10px;
 }
+
+.save{
+    width: 24px;
+    height: 24px;
+}
+
+.save:hover{
+    cursor: pointer;
+}

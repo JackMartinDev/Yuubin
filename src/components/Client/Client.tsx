@@ -75,6 +75,12 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
             .then((res) => {
                 if(!res.error){
                     console.log(res.message)
+                    notifications.show({
+                        title: 'Success',
+                        message: res.message,
+                        color: 'green'
+                    })
+
                 }else{
                     notifications.show({
                         title: 'Error',
