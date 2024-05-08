@@ -10,6 +10,7 @@ import { IconTrash } from '@tabler/icons-react';
 import { RootState } from "../../store/store";
 import { invoke } from '@tauri-apps/api/tauri';
 import { notifications } from "@mantine/notifications"
+import MethodIcon from "../MethodIcon"
 
 type Props = {
     request: YuubinRequest,
@@ -50,8 +51,7 @@ const Request = ({ request, collectionName }:Props) => {
             labels: { confirm: 'Delete Request', cancel: 'Cancel' },
             centered: true,
             confirmProps: { color: 'red' },
-            onCancel: () => console.log('Cancel'),
-            onConfirm: () => deleteHandler(),
+            onConfirm: ()=> deleteHandler(),
         });
     }
 
@@ -79,9 +79,15 @@ const Request = ({ request, collectionName }:Props) => {
                         dispatch(updateActiveRequest(newTabs[newTabs.length -1]))
                     }
 
-                    console.log(newCollections)
-                    console.log(res.message) 
+                    notifications.show({
+                        title: 'Success',
+                        message: "Request succesfully deleted",
+                        color: 'green'
+                    })
+
+                    //Add this to a config option
                     //.filter(collection => collection.requests.length > 0); // Optionally, remove collections that are empty after deletion 
+
                 }else{
                     notifications.show({
                         title: 'Error',
@@ -92,6 +98,23 @@ const Request = ({ request, collectionName }:Props) => {
             })
     }
 
+    const renameHandler = (event: React.MouseEvent) => {
+        event.stopPropagation()
+        notifications.show({
+            title: 'In development',
+            message: "This feature is currently not available",
+            color: 'yellow'
+        })
+    }
+    const runHandler = (event: React.MouseEvent) => {
+        event.stopPropagation()
+        notifications.show({
+            title: 'In development',
+            message: "This feature is currently not available",
+            color: 'yellow'
+        })
+    }
+
     return(
         <Flex className={classes.request} 
             onClick={onClickHandler} 
@@ -100,7 +123,7 @@ const Request = ({ request, collectionName }:Props) => {
             style={activeTab === request.meta.id ? {backgroundColor: '#cccaca'}: {}}
         >
             <Tooltip label={request.meta.name} openDelay={300} position="right" offset={{ mainAxis: -20, crossAxis: -35 }}>
-                <Text className={classes.truncate}>{request.method} {request.meta.name}</Text>
+                <Text className={classes.truncate} size="sm" ><MethodIcon method={request.method}/> {request.meta.name}</Text>
             </Tooltip>
             <Menu shadow="md" width={200}>
                 <Menu.Target>
@@ -116,11 +139,13 @@ const Request = ({ request, collectionName }:Props) => {
                 <Menu.Dropdown>
                     <Menu.Item
                         leftSection={<IconPlayerPlay style={{ width: rem(16), height: rem(16)}}/>}
+                        onClick={event => {runHandler(event)}}
                     >
                         Run
                     </Menu.Item>
                     <Menu.Item
                         leftSection={<IconBallpen style={{ width: rem(16), height: rem(16)}}/>}
+                        onClick={event => {renameHandler(event)}}
                     >
                         Rename
                     </Menu.Item>

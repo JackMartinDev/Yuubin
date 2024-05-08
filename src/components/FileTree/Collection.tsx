@@ -92,9 +92,13 @@ const Collection = ({ collection }: Props): JSX.Element => {
                     if(collectionIds.includes(activeTab)){
                         dispatch(updateActiveRequest(newTabs[newTabs.length -1]))
                     }
-                    console.log(newTabs)
-                    console.log(newCollections)
-                    console.log(res.message) 
+
+                    notifications.show({
+                        title: 'Success',
+                        message: "Collection succesfully deleted",
+                        color: 'green'
+                    })
+
                 }else{
                     notifications.show({
                         title: 'Error',
@@ -104,7 +108,6 @@ const Collection = ({ collection }: Props): JSX.Element => {
                 }
             })
     }
-
 
     const addRequestHandler = async(values: typeof form.values) => {
         setSubmittedValues(values)
@@ -137,6 +140,13 @@ const Collection = ({ collection }: Props): JSX.Element => {
                     dispatch(updateRequests([...requests, id]))
                     dispatch(updateActiveRequest(id))
                     closeModal()
+
+                    notifications.show({
+                        title: 'Success',
+                        message: "Request succesfully created",
+                        color: 'green'
+                    })
+
                 }else{
                     notifications.show({
                         title: 'Error',
@@ -145,6 +155,14 @@ const Collection = ({ collection }: Props): JSX.Element => {
                     })
                 }
             })
+    }
+    const renameHandler = (event: React.MouseEvent) => {
+        event.stopPropagation()
+        notifications.show({
+            title: 'In development',
+            message: "This feature is currently not available",
+            color: 'yellow'
+        })
     }
 
     return(
@@ -205,6 +223,7 @@ const Collection = ({ collection }: Props): JSX.Element => {
                         </Menu.Item>
                         <Menu.Item
                             leftSection={<IconBallpen style={{ width: rem(16), height: rem(16)}}/>}
+                            onClick={event => renameHandler(event)}
                         >
                             Rename
                         </Menu.Item>

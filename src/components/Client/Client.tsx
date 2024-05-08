@@ -69,7 +69,6 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
             auth,
             meta
         }
-        console.log(updatedRequest)
 
         const newFiles = files.map(col => {
             if (col.name === collectionName) {
@@ -86,8 +85,6 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
             }
             return col;         
         });
-
-        console.log(newFiles)
 
         invoke('edit_file', {data: JSON.stringify(updatedRequest), collection: collectionName})
             .then((res) => {
