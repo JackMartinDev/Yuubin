@@ -1,7 +1,7 @@
 import classes from "./Request.module.css"
 import { useDispatch, useSelector } from "react-redux"
 import { updateActiveRequest, updateRequests, updatefiles } from "../../requestSlice"
-import { ActionIcon, Group, Text } from "@mantine/core"
+import { ActionIcon, Flex, Group, Text, Tooltip } from "@mantine/core"
 import { IconBallpen, IconDots, IconPlayerPlay, IconPlayerPlayFilled } from "@tabler/icons-react"
 import { useHover } from "@mantine/hooks"
 import { Menu,  rem } from '@mantine/core';
@@ -93,17 +93,23 @@ const Request = ({ request, collectionName }:Props) => {
     }
 
     return(
-        <Group className={classes.request} 
+        <Flex className={classes.request} 
             onClick={onClickHandler} 
             justify="space-between" 
             ref={ref} 
             style={activeTab === request.meta.id ? {backgroundColor: '#cccaca'}: {}}
         >
-            <Text>{request.method} {request.meta.name}</Text>
+            <Tooltip label={request.meta.name} openDelay={300} position="right" offset={{ mainAxis: -20, crossAxis: -35 }}>
+                <Text className={classes.truncate}>{request.method} {request.meta.name}</Text>
+            </Tooltip>
             <Menu shadow="md" width={200}>
                 <Menu.Target>
-                    <ActionIcon onClick={(event => (event.stopPropagation()))} variant="transparent" color="dark" style={hovered ? {visibility:"visible"}: {visibility:"hidden"}}>
-                        <IconDots style={{ width: '70%', height: '70%' }} stroke={1.5} />
+                    <ActionIcon 
+                        onClick={(event => (event.stopPropagation()))} 
+                        variant="transparent" 
+                        color="dark" 
+                        style={hovered ? {visibility:"visible"}: {visibility:"hidden"}}>
+                        <IconDots style={{ width: '85%', height: '85%' }} stroke={2} />
                     </ActionIcon>
                 </Menu.Target>
 
@@ -128,7 +134,7 @@ const Request = ({ request, collectionName }:Props) => {
 
                 </Menu.Dropdown>
             </Menu>
-        </Group>
+        </Flex>
     )
 }
 export default Request

@@ -5,6 +5,12 @@
 }
 
 .request:hover{
-    background-color: #cccaca;
+    background-color: #e6e3e3;
     cursor: pointer;
+}
+
+.truncate {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
