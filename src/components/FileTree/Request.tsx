@@ -119,6 +119,7 @@ const Request = ({ request, collectionName }:Props) => {
         <Flex className={classes.request} 
             onClick={onClickHandler} 
             justify="space-between" 
+            align="center" 
             ref={ref} 
             style={activeTab === request.meta.id ? {backgroundColor: '#cccaca'}: {}}
         >
