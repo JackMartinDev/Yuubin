@@ -9,6 +9,7 @@ import { RootState } from "../../store/store";
 import { invoke } from "@tauri-apps/api/tauri";
 import { updatefiles } from "../../requestSlice";
 import { notifications } from "@mantine/notifications";
+import MethodIcon from "../MethodIcon";
 
 interface Props {
     files: Collection[],
@@ -54,6 +55,12 @@ const FileTree = ({ files }: Props) => {
                 if(!res.error){
                     dispatch(updatefiles(newFiles))
                     closeModal()
+                    notifications.show({
+                        title: 'Success',
+                        message: "Collection succesfully created",
+                        color: 'green'
+                    })
+
                 }else{
                     notifications.show({
                         title: 'Error',

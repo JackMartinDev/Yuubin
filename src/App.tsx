@@ -9,6 +9,7 @@ import { invoke } from "@tauri-apps/api/tauri";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import { updateActiveRequest, updateRequests, updatefiles } from "./requestSlice";
+import MethodIcon from "./components/MethodIcon";
 
 function App(): JSX.Element {
     const dispatch = useDispatch()
@@ -23,7 +24,6 @@ function App(): JSX.Element {
         //invoke('sync_config').then((config) => dispatch(updateRequests(JSON.parse(config as string).active_tabs)))
     }
 
-    console.log(files)
     useEffect(() => {
         syncFileSystem() 
     },[]);
@@ -64,7 +64,7 @@ function App(): JSX.Element {
                                         .map(request => (
                                             <Tabs.Tab key={request.meta.id} value={request.meta.id} p="xs">
                                                 <Flex align="center" gap="xs">
-                                                    <Text>{request.method} {request.meta.name}</Text>
+                                                    <Text><MethodIcon method={request.method}/> {request.meta.name}</Text>
                                                     <CloseButton onClick={(event) => onCloseHandler(event, request.meta.id)} size="sm"/>
                                                 </Flex>
                                             </Tabs.Tab>
