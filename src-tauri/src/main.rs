@@ -63,13 +63,13 @@ struct Payload {
 //    LIGHT
 //}
 //
-//#[derive(Serialize, Deserialize, Debug)]
-//struct Config {
+#[derive(Serialize, Deserialize, Debug)]
+struct Config {
 //    active_tabs: Vec<String>,
-//    save_on_quit: bool,
+    save_on_quit: bool,
 //    theme: Theme,
 //    data_path: Path,
-//}
+}
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Response {
