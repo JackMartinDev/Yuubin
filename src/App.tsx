@@ -2,7 +2,7 @@ import Client from "./components/Client/Client"
 import FileTree from "./components/FileTree/FileTree";
 import classes from "./App.module.css"
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { ActionIcon, Box, Button, Checkbox, CloseButton, Divider, FileInput, Flex, Modal, Paper, Switch, Tabs, Text, TextInput, Title } from "@mantine/core";
+import { ActionIcon, Button, Checkbox, CloseButton, Divider, FileInput, Flex, Modal,Switch, Tabs, Text, Title } from "@mantine/core";
 import { Notifications } from '@mantine/notifications';
 import { useEffect } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
@@ -51,10 +51,7 @@ function App(): JSX.Element {
         <div className={classes.container}>
             <Modal opened={opened} onClose={close} title="Settings" centered size="xl">
                 <Checkbox label="Preserve open tabs" size="md"/>
-                <Checkbox label="Setting 2" mt="md" size="md"/>
-                <Checkbox label="Setting 3" mt="md" size="md"/>
-                <Checkbox label="Setting 4" mt="md" size="md"/>
-                <Checkbox label="Setting 5" mt="md" size="md"/>
+                <Checkbox label="Save on quit" mt="md" size="md"/>
                 <FileInput
                     w="30%"
                     miw={300}
