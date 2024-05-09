@@ -1,0 +1,9 @@
+method = "DELETE"
+url = "https://te.te"
+body = "{}"
+headers = []
+params = []
+
+[meta]
+name = "Request_3"
+id = "432b9d2d-a701-4ce2-9be8-65ce11cdb09d"

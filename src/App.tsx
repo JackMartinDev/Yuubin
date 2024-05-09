@@ -2,7 +2,7 @@ import Client from "./components/Client/Client"
 import FileTree from "./components/FileTree/FileTree";
 import classes from "./App.module.css"
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { CloseButton, Flex, Tabs, Text, Title } from "@mantine/core";
+import { ActionIcon, Box, Button, Checkbox, CloseButton, Divider, FileInput, Flex, Modal, Paper, Switch, Tabs, Text, TextInput, Title } from "@mantine/core";
 import { Notifications } from '@mantine/notifications';
 import { useEffect } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
@@ -10,10 +10,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import { updateActiveRequest, updateRequests, updatefiles } from "./requestSlice";
 import MethodIcon from "./components/MethodIcon";
+import { IconSettings } from "@tabler/icons-react";
+import { useDisclosure } from "@mantine/hooks";
+import { moonIcon, sunIcon } from "./components/Settings/Icons";
+import LanguageSelect from "./components/Settings/LanguageSelect";
 
 function App(): JSX.Element {
     const dispatch = useDispatch()
-
+    const [opened, { open, close }] = useDisclosure(false);
     const activeTab = useSelector((state: RootState) => state.request.activeRequest)
     const files = useSelector((state:RootState) => state.request.files)
     const activeRequests = useSelector((state: RootState) => state.request.activeRequests)
@@ -45,11 +49,34 @@ function App(): JSX.Element {
 
     return (
         <div className={classes.container}>
+            <Modal opened={opened} onClose={close} title="Settings" centered size="xl">
+                <Checkbox label="Preserve open tabs" size="md"/>
+                <Checkbox label="Setting 2" mt="md" size="md"/>
+                <Checkbox label="Setting 3" mt="md" size="md"/>
+                <Checkbox label="Setting 4" mt="md" size="md"/>
+                <Checkbox label="Setting 5" mt="md" size="md"/>
+                <FileInput
+                    w="30%"
+                    miw={300}
+                    mt="md"
+                    label="Collection data path"
+                    placeholder="Currently unavailable"
+                />
+                <Divider mt="lg"/>
+                <Text fw={500} size="lg" mt="md" >Display Settings</Text>
+                <LanguageSelect/>
+                <Text size="sm" fw={500} mt={16}>Theme</Text>
+                <Switch labelPosition="right" size="lg" color="dark.4" onLabel={sunIcon} offLabel={moonIcon} />
+                <Button type="submit" mt={16}>Apply Changes</Button>
+            </Modal>
             <Notifications/>
             <PanelGroup direction="horizontal">
                 <Panel defaultSize={15} minSize={10}>
                     <div className={classes.file}>
                         <FileTree files={files} />
+                        <ActionIcon variant="default" color="gray" aria-label="Settings" onClick={open}>
+                            <IconSettings style={{ width: '70%', height: '70%' }} stroke={1.5} />
+                        </ActionIcon>
                     </div>
                 </Panel>
                 <PanelResizeHandle />

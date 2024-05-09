@@ -1,21 +1,19 @@
 import { isNotEmpty, useForm } from "@mantine/form";
 import Collection from "./Collection";
-import { ActionIcon, Box, Button, Flex, Modal, TextInput, Title, rem } from "@mantine/core";
+import { Box, Button, Flex, Modal, TextInput, Title, rem } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconSearch, IconSettings } from "@tabler/icons-react";
+import { IconSearch } from "@tabler/icons-react";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { invoke } from "@tauri-apps/api/tauri";
 import { updatefiles } from "../../requestSlice";
 import { notifications } from "@mantine/notifications";
-import MethodIcon from "../MethodIcon";
 
 interface Props {
     files: Collection[],
 }
 
-//TODO Add an indicator for the selected request
 const FileTree = ({ files }: Props) => {
     const icon = <IconSearch style={{ width: rem(16), height: rem(16) }} />;
     const [opened, { open, close }] = useDisclosure(false);
@@ -88,7 +86,6 @@ const FileTree = ({ files }: Props) => {
                         <Button variant="default" color="gray" type="submit">Create</Button>
                     </Flex>
                 </form>
-
             </Modal>
 
             <Box bg="#F5F5F5" h="100%">
@@ -96,9 +93,6 @@ const FileTree = ({ files }: Props) => {
                 <Button onClick={openModalHandler} variant="default" color="gray">
                     Add collection
                 </Button>
-                <ActionIcon variant="default" color="gray" aria-label="Settings">
-                    <IconSettings style={{ width: '70%', height: '70%' }} stroke={1.5} />
-                </ActionIcon>
                 <TextInput placeholder="Search collections" leftSection={icon} mb="sm" m="xs"/>
                 {files.map(collection => (<Collection key={collection.name} collection={collection}/>))}
             </Box>
