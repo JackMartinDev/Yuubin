@@ -1,9 +1,0 @@
-method = "OPTIONS"
-url = "https://test.c"
-body = "{}"
-headers = []
-params = []
-
-[meta]
-name = "Request_1"
-id = "cfa05eb3-d1a1-476a-adac-3d3b3dc72756"

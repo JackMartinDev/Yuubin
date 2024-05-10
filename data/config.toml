@@ -1,6 +1,0 @@
-save_on_quit = true
-preserve_open_tabs = false
-active_tabs = []
-language = "en"
-theme = "light"
-data_path = "../data"

@@ -1,6 +1,6 @@
-method = "POST"
+method = "GET"
 url = "https://jsonplaceholder.typicode.com/todos"
-body = "{name:Jack}"
+body = ""
 
 [[headers]]
 key = "Header 2"

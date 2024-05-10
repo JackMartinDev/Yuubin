@@ -1,9 +1,0 @@
-method = "GET"
-url = "https://testing.test"
-body = "{}"
-headers = []
-params = []
-
-[meta]
-name = "req9"
-id = "667ee472-8e12-4995-b63f-ed03206125ce"
