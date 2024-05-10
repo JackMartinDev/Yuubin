@@ -1,1 +1,6 @@
-active_tabs=["3", "2", "76da8648-5d05-47eb-8a7c-f665d60899df", "de6c9d44-606e-498d-984d-1b669c24f12b"]
+save_on_quit = true
+preserve_open_tabs = false
+active_tabs = []
+language = "en"
+theme = "light"
+data_path = "../data"

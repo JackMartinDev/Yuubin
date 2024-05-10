@@ -29,3 +29,11 @@ type KeyValuePair = {
 
 type HttpVerb = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"  | "OPTIONS" | "HEAD"
 
+type Config = {
+    activeTabs: string[],
+    dataPath: string,
+    language: "en" | "jp",
+    preserveOpenTabs: boolean,
+    saveOnQuit: boolean,
+    theme: "light" | "dark"
+}

@@ -2,9 +2,9 @@ import Client from "./components/Client/Client"
 import FileTree from "./components/FileTree/FileTree";
 import classes from "./App.module.css"
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { ActionIcon, Button, Checkbox, CloseButton, Divider, FileInput, Flex, Modal,Switch, Tabs, Text, Title } from "@mantine/core";
+import { ActionIcon, Button, Checkbox, CloseButton, Divider, Flex, Group, Modal,Switch, Tabs, Text, TextInput, Title } from "@mantine/core";
 import { Notifications } from '@mantine/notifications';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store/store";
@@ -14,6 +14,9 @@ import { IconSettings } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import { moonIcon, sunIcon } from "./components/Settings/Icons";
 import LanguageSelect from "./components/Settings/LanguageSelect";
+import { open as openTauri } from '@tauri-apps/api/dialog';
+import { appDataDir } from '@tauri-apps/api/path';
+import camelcaseKeys from 'camelcase-keys';
 
 function App(): JSX.Element {
     const dispatch = useDispatch()
@@ -22,15 +25,43 @@ function App(): JSX.Element {
     const files = useSelector((state:RootState) => state.request.files)
     const activeRequests = useSelector((state: RootState) => state.request.activeRequests)
 
+    //Temp state
+    const [config, setConfig] = useState<Config>();
+    const [selectedFolder, setSelectedFolder] = useState<string>()
+
     const syncFileSystem = () => {
-        //TODO: Remove collecion key from this object
+        //Consider having these 2 invokes as a single "sync" invoke
         invoke('sync_files').then((files) => dispatch(updatefiles(JSON.parse(files as string))))
-        //invoke('sync_config').then((config) => dispatch(updateRequests(JSON.parse(config as string).active_tabs)))
+//        invoke('sync_config').then((config) => dispatch(updateRequests(JSON.parse(config as string).active_tabs)))
+
+        //TODO Change this implementation to redux
+        invoke('sync_config').then((res) => { 
+            const config:Config = camelcaseKeys(JSON.parse(res as string))
+            setConfig(config)
+            setSelectedFolder(config.dataPath)
+        })
     }
 
     useEffect(() => {
         syncFileSystem() 
     },[]);
+
+    const selectDirectory = async() => {
+        const selected = await openTauri({
+            directory: true,
+            defaultPath: await appDataDir(),
+        });
+        if (Array.isArray(selected)){
+        }
+        else if (selected === null) {
+            // user cancelled the selection
+            console.log("2",selected)
+        } else {
+            // user selected a single directory
+            console.log("3",selected)
+            setSelectedFolder(selected)
+        }
+    }
 
     const onChangeHandler = (tabId: string) => {
         if(activeTab != tabId){
@@ -52,13 +83,19 @@ function App(): JSX.Element {
             <Modal opened={opened} onClose={close} title="Settings" centered size="xl">
                 <Checkbox label="Preserve open tabs" size="md"/>
                 <Checkbox label="Save on quit" mt="md" size="md"/>
-                <FileInput
-                    w="30%"
-                    miw={300}
-                    mt="md"
-                    label="Collection data path"
-                    placeholder="Currently unavailable"
-                />
+                <Group align="end" gap={4}>
+                    <TextInput
+                        w="30%"
+                        readOnly
+                        miw={300}
+                        value={selectedFolder}
+                        mt="md"
+                        label="Collection data path"
+                    />
+                    <Button onClick={selectDirectory}>
+                        Browse
+                    </Button>
+                </Group>
                 <Divider mt="lg"/>
                 <Text fw={500} size="lg" mt="md" >Display Settings</Text>
                 <LanguageSelect/>

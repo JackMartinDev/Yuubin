@@ -96,6 +96,7 @@ fn sync_config() -> String {
     let config: Config = toml::from_str(&file_content).unwrap();
 
     let json = serde_json::to_string(&config).unwrap();
+    println!("{json}");
 
     return json
 }
