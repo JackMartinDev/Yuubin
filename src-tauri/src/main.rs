@@ -1,7 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use tauri::Manager;
+use tauri::{api::path::config_dir, Manager};
 //use notify::{event::RemoveKind, EventKind, INotifyWatcher, RecursiveMode, Result as NotifyResult, Watcher};
 use std::{fs::{self, create_dir, metadata, remove_dir_all, File}, io::{Error, ErrorKind, Write}, path::Path, u8};
 use walkdir::WalkDir;
@@ -81,7 +81,8 @@ struct Response {
 
 #[tauri::command]
 fn sync_files() -> String {
-    let path = Path::new("../data/");
+    let data_path = get_data_path();
+    let path = Path::new(&data_path);
 
     //Handle unwrap
     parse_object(path).unwrap()
@@ -89,7 +90,8 @@ fn sync_files() -> String {
 
 #[tauri::command]
 fn sync_config() -> String {
-    let path = Path::new("../data/config.toml");
+    let config_dir = config_dir().unwrap();
+    let path = Path::new(&config_dir).join("yuubin").join("config").with_extension("toml");
 
     let file_content = fs::read_to_string(&path).unwrap();
     //handle unwrap
@@ -101,9 +103,21 @@ fn sync_config() -> String {
     return json
 }
 
+fn get_data_path() -> String {
+    let config_dir = config_dir().unwrap();
+    let path = Path::new(&config_dir).join("yuubin").join("config").with_extension("toml");
+
+    let file_content = fs::read_to_string(&path).unwrap();
+    //handle unwrap
+    let config: Config = toml::from_str(&file_content).unwrap();
+
+    config.data_path
+}
+
 #[tauri::command]
 fn delete_file(collection: String, request: String) -> Response{
-    let path = Path::new("../data").join(collection).join(request).with_extension("toml");
+    let data_path = get_data_path();
+    let path = Path::new(&data_path).join(collection).join(request).with_extension("toml");
 
     println!("Attempting to delete file at path: {:?}", path);
     
@@ -153,7 +167,8 @@ fn create_file(data: String, collection: String) -> Response{
 
     println!("{:?}", toml);
 
-    let path = Path::new("../data").join(collection).join(request.meta.name).with_extension("toml");
+    let data_path = get_data_path();
+    let path = Path::new(&data_path).join(collection).join(request.meta.name).with_extension("toml");
 
     if !metadata(&path).is_err(){
         return Response {
@@ -203,7 +218,8 @@ fn edit_file(data: String, collection: String) -> Response{
 
     println!("{:?}", toml);
 
-    let path = Path::new("../data").join(collection).join(request.meta.name).with_extension("toml");
+    let data_path = get_data_path();
+    let path = Path::new(&data_path).join(collection).join(request.meta.name).with_extension("toml");
 
     if metadata(&path).is_err(){
         return Response {
@@ -253,8 +269,9 @@ fn rename_file(data:String, collection:String, old_request_name: String) -> Resp
 
     println!("{:?}", toml);
 
-    let path = Path::new("../data").join(&collection).join(old_request_name).with_extension("toml");
-    let new_path = Path::new("../data").join(&collection).join(request.meta.name).with_extension("toml");
+    let data_path = get_data_path();
+    let path = Path::new(&data_path).join(&collection).join(old_request_name).with_extension("toml");
+    let new_path = Path::new(&data_path).join(&collection).join(request.meta.name).with_extension("toml");
 
     if !metadata(&new_path).is_err(){
         return Response {
@@ -283,7 +300,8 @@ fn rename_file(data:String, collection:String, old_request_name: String) -> Resp
 
 #[tauri::command]
 fn delete_directory(collection: String) -> Response{
-    let path = Path::new("../data").join(collection);
+    let data_path = get_data_path();
+    let path = Path::new(&data_path).join(collection);
     println!("{:?}", path);
     match remove_dir_all(path){
         Ok(()) => Response{
@@ -299,7 +317,8 @@ fn delete_directory(collection: String) -> Response{
 
 #[tauri::command]
 fn create_directory(collection: String) -> Response{
-    let path = Path::new("../data").join(collection);
+    let data_path = get_data_path();
+    let path = Path::new(&data_path).join(collection);
     println!("{:?}", path);
     match create_dir(path){
         Ok(()) => Response{
@@ -316,8 +335,9 @@ fn create_directory(collection: String) -> Response{
 //TODO test
 #[tauri::command]
 fn rename_directory(collection: String, new_collection: String) -> Response{
-    let path = Path::new("../data").join(&collection);
-    let new_path = Path::new("../data").join(&new_collection);
+    let data_path = get_data_path();
+    let path = Path::new(&data_path).join(&collection);
+    let new_path = Path::new(&data_path).join(&new_collection);
 
     if !metadata(&new_path).is_err() {
         return Response {
