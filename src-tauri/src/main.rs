@@ -2,7 +2,6 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use tauri::{api::path::config_dir, Manager};
-//use notify::{event::RemoveKind, EventKind, INotifyWatcher, RecursiveMode, Result as NotifyResult, Watcher};
 use std::{fs::{self, create_dir, metadata, remove_dir_all, File}, io::{Error, ErrorKind, Write}, path::Path, u8};
 use walkdir::WalkDir;
 use serde::{Deserialize, Serialize};
@@ -353,13 +352,6 @@ fn rename_directory(collection: String, new_collection: String) -> Response{
 }
 
 fn main() {
-//Once project is complete, revisit the file watcher
-//    let mut watcher = create_file_watcher();
-//
-//    watcher
-//        .watch(Path::new(path), RecursiveMode::Recursive)
-//        .expect("error watching folder");
-
     tauri::Builder::default()
         .setup(|app| {
             let splashscreen_window = app.get_window("splashscreen").unwrap();
@@ -387,26 +379,6 @@ fn main() {
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
-
-//fn create_file_watcher() -> INotifyWatcher {
-//    let watcher = notify::recommended_watcher(move |res: NotifyResult<notify::event::Event>| match res {
-//        Ok(event) => {
-//            // TODO: Track anytime there is a change/delete in the file system
-//            // and send that information to the front end to update the UI
-//            match event.kind {
-//                EventKind::Remove(RemoveKind::File) => {
-//                    println!("Removed file!");
-//                },
-//                EventKind::Remove(RemoveKind::Folder) => println!("Removed folder!"),
-//                _ => println!("Changed: {:?}", {event})
-//            }
-//        }
-//        Err(e) => println!("watch error: {:?}", e),
-//    })
-//        .expect("error creating file watcher");
-//
-//    return watcher;
-//}
 
 fn parse_object(path: &Path) -> Result<String, Error> {
     let mut data = Data {
