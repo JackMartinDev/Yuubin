@@ -99,7 +99,7 @@ const FileTree = ({ files }: Props) => {
                 <Button onClick={openModalHandler} variant="default" color="gray">
                     Add collection
                 </Button>
-                <TextInput placeholder="Search collections" leftSection={icon} mb="sm" m="xs"/>
+                {/*<TextInput placeholder="Search collections" leftSection={icon} mb="sm" m="xs"/>*/}
                 {files.map(collection => (<Collection key={collection.name} collection={collection}/>))}
             </Box>
         </>
