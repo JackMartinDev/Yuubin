@@ -73,30 +73,76 @@ struct Response {
 }
 
 #[tauri::command]
-fn sync_files() -> String {
-    let data_path = get_data_path();
+fn sync_files() -> Response {
+    let data_path = get_data_path().unwrap();
     let path = Path::new(&data_path);
 
-    //Handle unwrap
-    parse_object(path).unwrap()
+    match parse_object(path) {
+        Ok(data) => {
+            return Response{
+                error: false,
+                message: data
+            };
+        },
+        Err(e) => {
+            println!("error check");
+            return Response{
+                error: true,
+                message: format!("Failed to parse Collections: {}", e)
+            }
+        }
+    }
 }
 
 #[tauri::command]
-fn sync_config() -> String {
-    let config_dir = config_dir().unwrap();
+fn sync_config() -> Response {
+    let config_dir = match config_dir() {
+        Some(dir) => dir,
+        None => {
+            return Response{
+                error: true,
+                message: "Failed to find config directory".to_string()
+            };
+        }
+    };
+
     let path = Path::new(&config_dir).join("yuubin").join("config").with_extension("toml");
 
-    let file_content = fs::read_to_string(&path).unwrap();
-    //handle unwrap
-    let config: Config = toml::from_str(&file_content).unwrap();
+    let file_content = match fs::read_to_string(&path){
+        Ok(file) => file,
+        Err(e) => {
+            return Response {
+                error: true,
+                message: format!("Failed to read file: {}", e)
+            };
+        }
+    };
 
-    let json = serde_json::to_string(&config).unwrap();
+    let config: Config = match toml::from_str(&file_content){
+        Ok(config) => config,
+        Err(e) => {
+            return Response{
+                error: true,
+                message: format!("Failed to parse from TOML: {}", e)
+            };
+        }
+    };
+
+    let json = match serde_json::to_string(&config){
+        Ok(json) => json,
+        Err(e) => {
+            return Response{
+                error: true,
+                message: format!("Failed to parse to JSON: {}", e)
+            };
+        }
+    };
     println!("{json}");
 
-    return json
+    return Response{error: false, message: json}
 }
 
-fn get_data_path() -> String {
+fn get_data_path() -> Result<String, Error> {
     let config_dir = config_dir().unwrap();
     let path = Path::new(&config_dir).join("yuubin").join("config").with_extension("toml");
 
@@ -104,12 +150,12 @@ fn get_data_path() -> String {
     //handle unwrap
     let config: Config = toml::from_str(&file_content).unwrap();
 
-    config.data_path
+    Ok(config.data_path)
 }
 
 #[tauri::command]
 fn delete_file(collection: String, request: String) -> Response{
-    let data_path = get_data_path();
+    let data_path = get_data_path().unwrap();
     let path = Path::new(&data_path).join(collection).join(request).with_extension("toml");
 
     println!("Attempting to delete file at path: {:?}", path);
@@ -160,7 +206,7 @@ fn create_file(data: String, collection: String) -> Response{
 
     println!("{:?}", toml);
 
-    let data_path = get_data_path();
+    let data_path = get_data_path().unwrap();
     let path = Path::new(&data_path).join(collection).join(request.meta.name).with_extension("toml");
 
     if !metadata(&path).is_err(){
@@ -211,7 +257,7 @@ fn edit_file(data: String, collection: String) -> Response{
 
     println!("{:?}", toml);
 
-    let data_path = get_data_path();
+    let data_path = get_data_path().unwrap();
     let path = Path::new(&data_path).join(collection).join(request.meta.name).with_extension("toml");
 
     if metadata(&path).is_err(){
@@ -262,7 +308,7 @@ fn rename_file(data:String, collection:String, old_request_name: String) -> Resp
 
     println!("{:?}", toml);
 
-    let data_path = get_data_path();
+    let data_path = get_data_path().unwrap();
     let path = Path::new(&data_path).join(&collection).join(old_request_name).with_extension("toml");
     let new_path = Path::new(&data_path).join(&collection).join(request.meta.name).with_extension("toml");
 
@@ -293,7 +339,7 @@ fn rename_file(data:String, collection:String, old_request_name: String) -> Resp
 
 #[tauri::command]
 fn delete_directory(collection: String) -> Response{
-    let data_path = get_data_path();
+    let data_path = get_data_path().unwrap();
     let path = Path::new(&data_path).join(collection);
     println!("{:?}", path);
     match remove_dir_all(path){
@@ -310,7 +356,7 @@ fn delete_directory(collection: String) -> Response{
 
 #[tauri::command]
 fn create_directory(collection: String) -> Response{
-    let data_path = get_data_path();
+    let data_path = get_data_path().unwrap();
     let path = Path::new(&data_path).join(collection);
     println!("{:?}", path);
     match create_dir(path){
@@ -328,7 +374,7 @@ fn create_directory(collection: String) -> Response{
 //TODO test
 #[tauri::command]
 fn rename_directory(collection: String, new_collection: String) -> Response{
-    let data_path = get_data_path();
+    let data_path = get_data_path().unwrap();
     let path = Path::new(&data_path).join(&collection);
     let new_path = Path::new(&data_path).join(&new_collection);
 
@@ -360,17 +406,10 @@ fn main() {
             tauri::async_runtime::spawn(async move {
                 // initialize your app here instead of sleeping :)
                 println!("Initializing...");
-                //TODO: Get this path from the frontend user settings then save in config.toml
-                let path = Path::new("../data/");
-
-                //Handler unwrap
-                let data = parse_object(path).unwrap();
-                println!("{}", data);
                 std::thread::sleep(std::time::Duration::from_secs(2));
                 println!("Done initializing.");
                 // After it's done, close the splashscreen and display the main window
                 splashscreen_window.close().unwrap();
-                main_window.emit("event-name", Payload { message: data }).unwrap();
                 main_window.show().unwrap();
             });
             Ok(())

@@ -32,7 +32,7 @@ function App(): JSX.Element {
 
     const syncFileSystem = () => {
         //Consider having these 2 invokes as a single "sync" invoke
-        invoke('sync_files').then((files) => dispatch(updatefiles(JSON.parse(files as string)))).catch((error) => 
+        invoke('sync_files').then((files) => dispatch(updatefiles(JSON.parse(files.message as string)))).catch((error) => 
             notifications.show({
                 title: 'Unexpected Error',
                 message: error,
@@ -42,7 +42,7 @@ function App(): JSX.Element {
         
         //TODO Change this implementation to redux
         invoke('sync_config').then((res) => { 
-            const config:Config = camelcaseKeys(JSON.parse(res as string))
+            const config:Config = camelcaseKeys(JSON.parse(res.message as string))
             setConfig(config)
             setSelectedFolder(config.dataPath)
         }).catch((error) => 
