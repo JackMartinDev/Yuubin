@@ -95,7 +95,13 @@ const Request = ({ request, collectionName }:Props) => {
                         color: 'red'
                     })
                 }
-            })
+            }).catch((error) => 
+                notifications.show({
+                    title: 'Unexpected Error',
+                    message: error,
+                    color: 'red'
+                })
+            )
     }
 
     const renameHandler = (event: React.MouseEvent) => {

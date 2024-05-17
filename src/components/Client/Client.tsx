@@ -90,7 +90,6 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
             .then((res) => {
                 if(!res.error){
                     dispatch(updatefiles(newFiles)) 
-                    console.log(res.message)
                     notifications.show({
                         title: 'Success',
                         message: res.message,
@@ -104,7 +103,13 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
                         color: 'red'
                     })
                 }
-            })
+            }).catch((error) => 
+                notifications.show({
+                    title: 'Unexpected Error',
+                    message: error,
+                    color: 'red'
+                })
+            )
     }
 
     const onSubmitHandler = async() => {

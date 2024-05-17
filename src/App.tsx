@@ -4,6 +4,7 @@ import classes from "./App.module.css"
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { ActionIcon, Button, Checkbox, CloseButton, Divider, Flex, Group, Modal,Switch, Tabs, Text, TextInput, Title } from "@mantine/core";
 import { Notifications } from '@mantine/notifications';
+import { notifications } from "@mantine/notifications"
 import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,15 +32,26 @@ function App(): JSX.Element {
 
     const syncFileSystem = () => {
         //Consider having these 2 invokes as a single "sync" invoke
-        invoke('sync_files').then((files) => dispatch(updatefiles(JSON.parse(files as string))))
-//        invoke('sync_config').then((config) => dispatch(updateRequests(JSON.parse(config as string).active_tabs)))
-
+        invoke('sync_files').then((files) => dispatch(updatefiles(JSON.parse(files as string)))).catch((error) => 
+            notifications.show({
+                title: 'Unexpected Error',
+                message: error,
+                color: 'red'
+            })
+        )
+        
         //TODO Change this implementation to redux
         invoke('sync_config').then((res) => { 
             const config:Config = camelcaseKeys(JSON.parse(res as string))
             setConfig(config)
             setSelectedFolder(config.dataPath)
-        })
+        }).catch((error) => 
+                notifications.show({
+                    title: 'Unexpected Error',
+                    message: error,
+                    color: 'red'
+                })
+            )
     }
 
     useEffect(() => {

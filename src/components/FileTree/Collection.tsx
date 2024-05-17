@@ -106,7 +106,13 @@ const Collection = ({ collection }: Props): JSX.Element => {
                         color: 'red'
                     })
                 }
-            })
+            }).catch((error) => 
+                notifications.show({
+                    title: 'Unexpected Error',
+                    message: error,
+                    color: 'red'
+                })
+            )
     }
 
     const addRequestHandler = async(values: typeof form.values) => {
@@ -154,7 +160,13 @@ const Collection = ({ collection }: Props): JSX.Element => {
                         color: 'red'
                     })
                 }
-            })
+            }).catch((error) => 
+                notifications.show({
+                    title: 'Unexpected Error',
+                    message: error,
+                    color: 'red'
+                })
+            )
     }
     const renameHandler = (event: React.MouseEvent) => {
         event.stopPropagation()

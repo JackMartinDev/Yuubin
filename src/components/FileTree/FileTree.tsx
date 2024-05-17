@@ -66,7 +66,13 @@ const FileTree = ({ files }: Props) => {
                         color: 'red'
                     })
                 }
-            })
+            }).catch((error) => 
+                notifications.show({
+                    title: 'Unexpected Error',
+                    message: error,
+                    color: 'red'
+                })
+            )
     }
 
     return (
