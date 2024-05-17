@@ -57,12 +57,6 @@ struct Payload {
     message: String,
 }
 
-//#[derive(Serialize, Deserialize, Debug)]
-//enum Theme {
-//    DARK,
-//    LIGHT
-//}
-//
 #[derive(Serialize, Deserialize, Debug)]
 struct Config {
     save_on_quit: bool,
