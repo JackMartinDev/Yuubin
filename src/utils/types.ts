@@ -32,7 +32,7 @@ type HttpVerb = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"  | "OPTIONS" | "HEAD
 type Config = {
     activeTabs: string[],
     dataPath: string,
-    language: "en" | "jp",
+    language: string,
     preserveOpenTabs: boolean,
     saveOnQuit: boolean,
     theme: "light" | "dark"
