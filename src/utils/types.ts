@@ -37,3 +37,5 @@ type Config = {
     saveOnQuit: boolean,
     theme: "light" | "dark"
 }
+
+type Settings = Omit<Config, 'activeTabs'>

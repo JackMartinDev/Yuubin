@@ -9,6 +9,9 @@ import { isNotEmpty, useForm } from "@mantine/form"
 
 import { Combobox, Image, Input, InputBase, useCombobox } from "@mantine/core";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux"
+import { RootState } from "../../store/store"
+import { updateSettings } from "../../configSlice"
 
 interface Item {
     icon: string;
@@ -40,17 +43,22 @@ const options = languages.map((item) => (
     </Combobox.Option>
 ));
 
-const Settings = () => {
-    const [selectedFolder, setSelectedFolder] = useState<string>("../data")
+type Props = {
+    closeModal: () => void
+}
 
-    //TODO have default values come from backend config file
+const Settings = ({closeModal}: Props) => {
+    const {language, theme, dataPath, saveOnQuit, preserveOpenTabs, activeTabs} = useSelector((state: RootState) => state.config)
+    const dispatch = useDispatch();
+
+    //TODO Change from 'theme' to 'darkMode' since it is a boolean switch
     const form = useForm({
         initialValues: {
-            language: 'en',
-            theme: true,
-            dataPath: selectedFolder,
-            saveOnQuit: true,
-            preserveOpenTabs: true
+            language,
+            theme: theme === "dark" ? true : false,
+            dataPath,
+            saveOnQuit,
+            preserveOpenTabs
         },
 
         validate: {
@@ -68,15 +76,17 @@ const Settings = () => {
 
     const onSubmitHandler = (values: typeof form.values) => {
         setSubmittedValues(values)
-        const formValues = form.getValues()
-        const theme = formValues.theme ? "dark" : "light"
+        const {language, theme, dataPath, saveOnQuit, preserveOpenTabs} = form.getValues()
+        const parsedTheme = theme ? "dark" : "light"
 
-        const config: Config = {saveOnQuit: formValues.saveOnQuit, preserveOpenTabs: formValues.preserveOpenTabs, activeTabs: ["1","2"], dataPath: formValues.dataPath,language: formValues.language, theme}
+        const config: Config = {saveOnQuit, preserveOpenTabs, dataPath, language, theme: parsedTheme, activeTabs}
+
         console.log(config)
         invoke('edit_config', {data: JSON.stringify(snakecaseKeys(config))})
             .then((res) => {
                 if(!res.error){
-                    //Update config redux state here
+                    dispatch(updateSettings({saveOnQuit, preserveOpenTabs, dataPath, language, theme: parsedTheme}))
+                    closeModal();
 
                     notifications.show({
                         title: 'Success',
@@ -112,7 +122,6 @@ const Settings = () => {
         } else {
             // user selected a single directory
             console.log("3",selected)
-            setSelectedFolder(selected)
             form.setValues({dataPath: selected})
         }
     }
@@ -194,7 +203,6 @@ const Settings = () => {
             <Button type="submit" mt={16} >Apply Changes</Button>
         </form>
     )
-
 }
 
 export default Settings

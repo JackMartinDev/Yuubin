@@ -2,10 +2,10 @@ import Client from "./components/Client/Client"
 import FileTree from "./components/FileTree/FileTree";
 import classes from "./App.module.css"
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { ActionIcon, Box, Button, Checkbox, CloseButton, Divider, Flex, Group, Modal,Switch, Tabs, Text, TextInput, Title } from "@mantine/core";
+import { ActionIcon, CloseButton,Flex, Modal, Tabs, Text, Title } from "@mantine/core";
 import { Notifications } from '@mantine/notifications';
 import { notifications } from "@mantine/notifications"
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store/store";
@@ -14,8 +14,8 @@ import MethodIcon from "./components/MethodIcon";
 import { IconSettings } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import camelcaseKeys from 'camelcase-keys';
-import snakecaseKeys from 'snakecase-keys';
 import Settings from "./components/Settings/Settings";
+import { updateActiveTabs, updateSettings } from "./configSlice";
 
 function App(): JSX.Element {
     const dispatch = useDispatch()
@@ -23,9 +23,6 @@ function App(): JSX.Element {
     const activeTab = useSelector((state: RootState) => state.request.activeRequest)
     const files = useSelector((state:RootState) => state.request.files)
     const activeRequests = useSelector((state: RootState) => state.request.activeRequests)
-
-    //Temp state
-    const [config, setConfig] = useState<Config>();
 
     const syncFileSystem = () => {
         //Consider having these 2 invokes as a single "sync" invoke
@@ -36,11 +33,11 @@ function App(): JSX.Element {
                 color: 'red'
             })
         )
-        
-        //TODO Change this implementation to redux
+
         invoke('sync_config').then((res) => { 
-            const config:Config = camelcaseKeys(JSON.parse(res.message as string))
-            setConfig(config)
+            const {activeTabs, theme, dataPath, language, saveOnQuit, preserveOpenTabs}:Config = camelcaseKeys(JSON.parse(res.message as string))
+            dispatch(updateActiveTabs(activeTabs))
+            dispatch(updateSettings({theme, dataPath, language, saveOnQuit, preserveOpenTabs}))
         }).catch((error) => 
                 notifications.show({
                     title: 'Unexpected Error',
@@ -74,7 +71,7 @@ function App(): JSX.Element {
     return (
         <div className={classes.container}>
             <Modal opened={opened} onClose={close} title="Settings" centered size="xl">
-                <Settings/>
+                <Settings closeModal={close}/>
             </Modal>
             <Notifications/>
             <PanelGroup direction="horizontal">

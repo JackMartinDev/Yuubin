@@ -6,29 +6,31 @@ export interface ConfigState{
 }
 
 const initialState: Config = {
-    activeTabs: [],
+    activeTabs: ["1", "2"],
     dataPath: "",
     preserveOpenTabs: false,
     saveOnQuit: false,
     language: "en",
-    theme: "light"
+    theme: "dark"
 }
 
 export const configSlice = createSlice({
     name: "config",
     initialState,
     reducers: {
-        updateConfig: (state, action: PayloadAction<Config>) => {
-            state.activeTabs = action.payload.activeTabs;
+        updateSettings: (state, action: PayloadAction<Settings>) => {
             state.theme = action.payload.theme;
             state.language = action.payload.language;
             state.preserveOpenTabs = action.payload.preserveOpenTabs;
             state.dataPath = action.payload.dataPath;
             state.saveOnQuit = action.payload.saveOnQuit;
         },
+        updateActiveTabs: (state, action: PayloadAction<string[]>) => {
+            state.activeTabs = action.payload;
+        }
     },
 })
 
-export const {updateConfig} = configSlice.actions
+export const {updateSettings, updateActiveTabs} = configSlice.actions
 
 export default configSlice.reducer
