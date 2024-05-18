@@ -142,6 +142,67 @@ fn sync_config() -> Response {
     return Response{error: false, message: json}
 }
 
+#[tauri::command]
+fn edit_config(data: String) -> Response{
+    let config:Config = match serde_json::from_str(&data){
+        Ok(config) => config,
+        Err(e) => return Response{
+            error: true,
+            message: format!("Failed to parse JSON: {}", e) 
+        }
+    };
+    println!("{:?}", config);
+
+    let toml =  match toml::to_string(&config){
+        Ok(toml) => toml,
+        Err(e) => return Response{
+            error: true,
+            message: format!("Failed to serialise TOML: {}", e)
+        }
+    };
+
+    println!("{:?}", toml);
+
+    let config_dir = match config_dir() {
+        Some(dir) => dir,
+        None => {
+            return Response{
+                error: true,
+                message: "Failed to find config directory".to_string()
+            };
+        }
+    };
+
+    let path = Path::new(&config_dir).join("yuubin").join("config").with_extension("toml");
+
+    if metadata(&path).is_err(){
+        return Response {
+            error: true,
+            message: "File does not exist".to_string(),
+        };
+    }
+
+    let mut file = match File::create(&path){
+        Ok(file) => file,
+        Err(e) => return Response{
+            error: true,
+            message: format!("Failed to update file: {}", e)
+        }
+    };
+
+    match file.write_all(toml.as_bytes()){
+        Ok(()) => Response{
+            error: false, 
+            message: "Succesfully updated config".to_owned()
+        },
+        Err(e) => Response{
+            error: true, 
+            message: format!("Failed to write to file: {}", e)
+        }
+    }
+}
+
+
 fn get_data_path() -> Result<String, Error> {
     let config_dir = config_dir().unwrap();
     let path = Path::new(&config_dir).join("yuubin").join("config").with_extension("toml");
@@ -414,7 +475,7 @@ fn main() {
             });
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![sync_files, sync_config, delete_file, create_file, edit_file, rename_file, delete_directory, create_directory, rename_directory])
+        .invoke_handler(tauri::generate_handler![sync_files, sync_config, edit_config, delete_file, create_file, edit_file, rename_file, delete_directory, create_directory, rename_directory])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

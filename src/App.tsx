@@ -18,6 +18,7 @@ import LanguageSelect from "./components/Settings/LanguageSelect";
 import { open as openTauri } from '@tauri-apps/api/dialog';
 import { appDataDir } from '@tauri-apps/api/path';
 import camelcaseKeys from 'camelcase-keys';
+import snakecaseKeys from 'snakecase-keys';
 
 function App(): JSX.Element {
     const dispatch = useDispatch()
@@ -90,6 +91,34 @@ function App(): JSX.Element {
         }
     }
 
+    const onSubmitHandler = () => {
+        const config: Config = {saveOnQuit: true, preserveOpenTabs: true, activeTabs: ["1","2"], dataPath: "../data",language: "jp", theme: "dark"}
+        invoke('edit_config', {data: JSON.stringify(snakecaseKeys(config))})
+            .then((res) => {
+                if(!res.error){
+                    //Update config redux state here
+
+                    notifications.show({
+                        title: 'Success',
+                        message: "Config succesfully updated",
+                        color: 'green'
+                    })
+                }else{
+                    notifications.show({
+                        title: 'Error',
+                        message: res.message,
+                        color: 'red'
+                    })
+                }
+            }).catch((error) => 
+                notifications.show({
+                    title: 'Unexpected Error',
+                    message: error,
+                    color: 'red'
+                })
+            )
+    }
+
     return (
         <div className={classes.container}>
             <Modal opened={opened} onClose={close} title="Settings" centered size="xl">
@@ -113,7 +142,7 @@ function App(): JSX.Element {
                 <LanguageSelect/>
                 <Text size="sm" fw={500} mt={16}>Theme</Text>
                 <Switch labelPosition="right" size="lg" color="dark.4" onLabel={sunIcon} offLabel={moonIcon} />
-                <Button type="submit" mt={16}>Apply Changes</Button>
+                <Button type="submit" mt={16} onClick={onSubmitHandler}>Apply Changes</Button>
             </Modal>
             <Notifications/>
             <PanelGroup direction="horizontal">
