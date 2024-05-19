@@ -24,7 +24,8 @@ type Data = {
 
 type KeyValuePair = {
     key: string, 
-    value: string
+    value: string,
+    checked: boolean
 }
 
 type HttpVerb = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"  | "OPTIONS" | "HEAD"

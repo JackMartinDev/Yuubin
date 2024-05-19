@@ -11,7 +11,7 @@ const QueryParams = ({queryParams, onParamsChange}: Props) => {
     const [queries, setQueries] = useState<KeyValuePair[]>(queryParams ? queryParams : []);
 
     const incrementQueryCount = () =>{
-        setQueries([...queries, {key: "", value: ""}]);
+        setQueries([...queries, {key: "", value: "", checked: true}]);
     }
 
     useEffect(() => {
@@ -25,6 +25,13 @@ const QueryParams = ({queryParams, onParamsChange}: Props) => {
         );
         setQueries(newArray);
     };
+
+    const checkChangeHandler = (index: number, checked: boolean) => {
+        const newArray = queries.map((query, queryIndex) =>
+            index === queryIndex ? { ...query, checked } : query
+        );
+        setQueries(newArray);
+    }
 
     const removeQuery = (index: number) =>{
         const newArray = queries.filter((_query, i) => i !== index)
@@ -43,7 +50,8 @@ const QueryParams = ({queryParams, onParamsChange}: Props) => {
             <Grid.Col span={2}>
                 <Flex align="center" direction="row" justify="space-evenly" wrap="wrap" h="100%">
                     <Checkbox size="xs"
-                        defaultChecked
+                        checked={queries[index].checked}
+                        onChange={(event) => checkChangeHandler(index, event.target.checked)}
                     />
                     <ActionIcon
                         variant="default" 

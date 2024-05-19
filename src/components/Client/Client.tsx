@@ -5,7 +5,7 @@ import SearchBar from "../SearchBar/SearchBar"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../store/store"
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { Box, Button, Flex, Paper, Tabs } from "@mantine/core"
+import { Box, Button, Flex, Loader, Paper, Tabs } from "@mantine/core"
 import Headers from "../Headers/Headers"
 import Authentication from "../Authentication/Authentication"
 import { useState } from "react"
@@ -179,7 +179,7 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
                         <Paper mih="100%" >
                             <div>
                                 {loading 
-                                    ? <p>Loading...</p> 
+                                    ? <Loader color="blue" type="dots" size="xl" m="auto" mt={100}/> 
                                     : response || error 
                                         ? <ResponseBody response={response} error={error}/> 
                                         : <p style={{textAlign: 'center'}}>Make a request using the URL bar above</p>}

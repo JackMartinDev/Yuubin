@@ -8,9 +8,9 @@ interface KeyValueObject{
     [key: string]: string
 }
 
-//remove empty key value pairs and convert to a single object
+//remove empty/unchecked key value pairs and convert to a single object
 const ConvertArrayToObject = (array: KeyValuePair[]): KeyValueObject => {
-    const filteredArray = array.filter((pair) => pair.key !== "" && pair.value !== "")
+    const filteredArray = array.filter((pair) => pair.key !== "" && pair.value !== "" && pair.checked === true)
     return filteredArray.reduce((obj, item) => (obj[item.key] = item.value, obj) ,{});
 }
 

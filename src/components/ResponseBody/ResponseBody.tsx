@@ -19,7 +19,7 @@ type Response = {
 
 type ResponseError = {
     message: string,
-    status: number
+    status?: number | undefined
 }
 
 type Props = {

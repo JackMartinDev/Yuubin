@@ -1,22 +1,21 @@
 method = "GET"
 url = "https://jsonplaceholder.typicode.com/todos"
-body = ""
+body = "{}"
 
 [[headers]]
-key = "Header 2"
-value = "Header val 2"
-
-[[headers]]
-key = "1"
-value = "2"
+key = "Header2"
+value = "Headerval2"
+checked = true
 
 [[params]]
 key = "Key 1"
 value = "Value 1"
+checked = true
 
 [[params]]
 key = "Key 2"
 value = "Value 2"
+checked = true
 
 [meta]
 name = "req2"

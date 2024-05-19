@@ -17,7 +17,7 @@ const Headers = ( {header, onHeaderChange}:Props) => {
 
 
     const incrementheaderCount = () =>{
-        setHeaders([...headers, {key: "", value: ""}]);
+        setHeaders([...headers, {key: "", value: "", checked: true}]);
     }
 
     const inputChangeHandler = (index: number, field:string, newValue: string) => {
@@ -26,6 +26,14 @@ const Headers = ( {header, onHeaderChange}:Props) => {
         );
         setHeaders(newArray);
     };
+
+    const checkChangeHandler = (index: number, checked: boolean) => {
+        const newArray = headers.map((header, headerIndex) =>
+            index === headerIndex ? { ...header, checked } : header
+        );
+        setHeaders(newArray);
+    }
+
 
     const removeheader = (index: number) =>{
         const newArray = headers.filter((_header, i) => i !== index)
@@ -44,7 +52,8 @@ const Headers = ( {header, onHeaderChange}:Props) => {
             <Grid.Col span={2}>
                 <Flex align="center" direction="row" justify="space-evenly" wrap="wrap" h="100%">
                     <Checkbox size="xs"
-                        defaultChecked
+                        checked={headers[index].checked}
+                        onChange={(event) => checkChangeHandler(index, event.target.checked)}
                     />
                     <ActionIcon
                         variant="default" 

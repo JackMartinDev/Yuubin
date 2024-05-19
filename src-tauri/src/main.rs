@@ -26,7 +26,8 @@ struct MetaData {
 #[derive(Serialize, Deserialize, Debug)]
 struct KeyValuePair {
     key: String,
-    value: String
+    value: String,
+    checked: bool
 }
 
 #[derive(Serialize, Deserialize, Debug)]
