@@ -56,7 +56,7 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
     const [response, setResponse] = useState<Response | undefined>(undefined);
     const [error, setError] = useState<{message: string, status?: number} | undefined>(undefined)
 
-    const sendRequest = useSendRequest(params, url, method, body);
+    const sendRequest = useSendRequest(params, headers, url, method, body, auth);
 
     const onSaveHandler = () => {
         const meta = request.meta

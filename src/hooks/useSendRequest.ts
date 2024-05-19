@@ -4,13 +4,21 @@ import { updateLoading } from "../responseSlice"
 import prettyBytes from "pretty-bytes"
 import { notifications } from "@mantine/notifications";
 
-interface RequestParams{
+interface KeyValueObject{
     [key: string]: string
 }
 
-const useSendRequest = (paramsArray: KeyValuePair[] | undefined, url: string, method: HttpVerb, body: string | undefined) => {    
+//remove empty key value pairs and convert to a single object
+const ConvertArrayToObject = (array: KeyValuePair[]): KeyValueObject => {
+    const filteredArray = array.filter((pair) => pair.key !== "" && pair.value !== "")
+    return filteredArray.reduce((obj, item) => (obj[item.key] = item.value, obj) ,{});
+}
+
+const useSendRequest = (paramsArray: KeyValuePair[] | undefined, headersArray: KeyValuePair[] | undefined, url: string, method: HttpVerb, body: string | undefined, auth: string | undefined) => {    
+
     let data:string
-    let params: RequestParams
+    let params: KeyValueObject
+    let headers: KeyValueObject
 
     let startTime: number;
     let endTime: number;
@@ -19,8 +27,8 @@ const useSendRequest = (paramsArray: KeyValuePair[] | undefined, url: string, me
 
     //Investigate if setting up the interceptor in the hook is okay
     axios.interceptors.request.use(config => {
-        dispatch(updateLoading(true));
         startTime = new Date().getTime();
+        dispatch(updateLoading(true));
         return config;
     }, (error: AxiosError) => {
             dispatch(updateLoading(false));
@@ -29,8 +37,8 @@ const useSendRequest = (paramsArray: KeyValuePair[] | undefined, url: string, me
         });
 
     axios.interceptors.response.use((response: AxiosResponse) => {
-        dispatch(updateLoading(false));
         endTime = new Date().getTime();
+        dispatch(updateLoading(false));
         return response;
     }, (error: AxiosError) => {
             dispatch(updateLoading(false));
@@ -41,9 +49,10 @@ const useSendRequest = (paramsArray: KeyValuePair[] | undefined, url: string, me
 
     const sendRequest = async () => {
         if(paramsArray){
-            //remove empty key value pairs
-            const filteredArray = paramsArray.filter((pair) => pair.key !== "" && pair.value !== "")
-            params = filteredArray.reduce((obj, item) => (obj[item.key] = item.value, obj) ,{});
+            params = ConvertArrayToObject(paramsArray)
+        }
+        if(headersArray){
+            headers = ConvertArrayToObject(headersArray)
         }
         try{
             if(body && (method === "POST" || method === "PUT" || method === "PATCH")){ 
@@ -59,11 +68,14 @@ const useSendRequest = (paramsArray: KeyValuePair[] | undefined, url: string, me
             return
         }
         try{
+            //Find out how to add bearer token etc
             const res = await axios({
                 url,
                 method,
                 params,
+                headers,
                 data,
+                //auth
             })
 
             const duration = endTime - startTime;
@@ -71,7 +83,6 @@ const useSendRequest = (paramsArray: KeyValuePair[] | undefined, url: string, me
             return {
                 data: res.data,
                 status: res.status,
-                //headers: res.headers,
                 size: prettyBytes(JSON.stringify(res.data).length + JSON.stringify(res.headers).length),
                 duration: duration
             };
