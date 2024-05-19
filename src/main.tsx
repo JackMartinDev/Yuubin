@@ -6,12 +6,17 @@ import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 import { store } from './store/store'
 import { Provider } from 'react-redux'
-import { MantineProvider } from "@mantine/core";
+import { MantineProvider, createTheme } from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
+
+const theme = createTheme({
+  cursorType: 'pointer',
+});
+
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
-        <MantineProvider>
+        <MantineProvider theme={theme}>
             <ModalsProvider>
             <Provider store={store}>
                 <App />

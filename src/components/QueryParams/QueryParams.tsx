@@ -1,11 +1,12 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { IconTrash } from "@tabler/icons-react";
-import { ActionIcon, Button, Checkbox, Flex, Grid, TextInput } from "@mantine/core";
+import { ActionIcon, Button, Checkbox, Flex, Grid, MantineProvider, TextInput } from "@mantine/core";
 
 type Props = {
     queryParams: KeyValuePair[], 
     onParamsChange: Dispatch<SetStateAction<KeyValuePair[]>>,
 }
+
 
 const QueryParams = ({queryParams, onParamsChange}: Props) => {
     const [queries, setQueries] = useState<KeyValuePair[]>(queryParams ? queryParams : []);
