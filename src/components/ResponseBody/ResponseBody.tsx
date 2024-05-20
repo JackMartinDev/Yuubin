@@ -62,14 +62,14 @@ const ResponseBody = ({response, error}: Props) => {
         //Look into colors
         <Box ml="md">
             {response ? 
-                <Group justify="right" gap={10}>
+                <Group justify="right">
                     <Text c="green">{`${response.status} OK`}</Text>
                     <Text>{response.duration}ms</Text>
                     <Text>{response.size}</Text>
                 </Group>
                 :
                 <Group justify="right">
-                    <Text c="red" >Error</Text>
+                    <Text c="red">Error</Text>
                 </Group>
             }
             {(response || error) && <CodeMirror 
