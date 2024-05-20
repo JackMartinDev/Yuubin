@@ -1,12 +1,9 @@
 import CodeMirror from "@uiw/react-codemirror"
 import { EditorView } from "@codemirror/view";
 import { json } from "@codemirror/lang-json"
-import type { RootState } from "../../store/store"
-import { useSelector } from "react-redux"
-import styles from "./ResponseBody.module.css"
 import { lintGutter } from "@codemirror/lint";
 import {createTheme} from '@uiw/codemirror-themes';
-import { Box } from "@mantine/core";
+import { Box, Group, Text } from "@mantine/core";
 import { tags as t } from '@lezer/highlight';
 import { HttpStatusCode } from "axios";
 
@@ -32,16 +29,16 @@ const ResponseBody = ({response, error}: Props) => {
     const myTheme = createTheme({
         theme: "light",
         settings: {
-//            background: '#ffffff',
-//            backgroundImage: '',
-//            foreground: '#75baff',
-//            caret: '#5d00ff',
-//            selection: '#036dd626',
-//            selectionMatch: '#036dd626',
-//            lineHighlight: '#8a91991a',
-//            gutterBorder: '1px solid #ffffff10',
-//            gutterBackground: '#fff',
-//            gutterForeground: '#8a919966',
+            //            background: '#ffffff',
+            //            backgroundImage: '',
+            //            foreground: '#75baff',
+            //            caret: '#5d00ff',
+            //            selection: '#036dd626',
+            //            selectionMatch: '#036dd626',
+            //            lineHighlight: '#8a91991a',
+            //            gutterBorder: '1px solid #ffffff10',
+            //            gutterBackground: '#fff',
+            //            gutterForeground: '#8a919966',
         },
         styles: [
             { tag: t.comment, color: '#787b8099' },
@@ -62,19 +59,19 @@ const ResponseBody = ({response, error}: Props) => {
     })
 
     return(
-        //Refactor
+        //Look into colors
         <Box ml="md">
-                {response ? 
-                <div className={styles.stats}>
-                    <p style={{color:"green"}}>{`${response.status} OK`}</p>
-                    <p>{response.duration}ms</p>
-                    <p>{response.size}</p>
-                </div>
+            {response ? 
+                <Group justify="right" gap={10}>
+                    <Text c="green">{`${response.status} OK`}</Text>
+                    <Text>{response.duration}ms</Text>
+                    <Text>{response.size}</Text>
+                </Group>
                 :
-                <div className={styles.stats}>
-                <p style={{color: "red"}}>{`Error`}</p>
-                </div>
-                }
+                <Group justify="right">
+                    <Text c="red" >Error</Text>
+                </Group>
+            }
             {(response || error) && <CodeMirror 
                 value={JSON.stringify(response ? response.data : error?.message, null, 2)} 
                 theme={myTheme} 

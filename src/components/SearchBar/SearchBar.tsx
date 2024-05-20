@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import classes from "./SearchBar.module.css"
-import { Select, TextInput, rem } from "@mantine/core"
+import { Group, Select, TextInput } from "@mantine/core"
 import { IconDeviceFloppy } from "@tabler/icons-react"
 
 interface Props {
@@ -24,10 +24,10 @@ const SearchBar = ({url, method, onUrlChange, onMethodChange, saveVisible, onSav
         onMethodChange(localMethod);
     }, [localMethod, onMethodChange]);
 
-    const saveIcon = saveVisible ? <IconDeviceFloppy onClick={onSave} className={classes.save}/> : null
+    const saveIcon = saveVisible ? <IconDeviceFloppy onClick={onSave} width={24} height={24} className={classes.save}/> : null
 
     return(
-        <form className={classes.body}>
+        <Group w="100%" gap={10} wrap="nowrap">
             <Select
                 w={150}
                 withCheckIcon={false}
@@ -38,7 +38,7 @@ const SearchBar = ({url, method, onUrlChange, onMethodChange, saveVisible, onSav
                 data={['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD']}
             />
             <TextInput type="url" rightSection={saveIcon} w="100%" value={localUrl} onChange={(e) => setLocalUrl(e.target.value)}/>
-        </form>
+        </Group>
     )
 }
 
