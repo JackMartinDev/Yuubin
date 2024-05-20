@@ -75,7 +75,7 @@ const ResponseBody = ({response, error}: Props) => {
             {(response || error) && <CodeMirror 
                 value={JSON.stringify(response ? response.data : error?.message, null, 2)} 
                 theme={myTheme} 
-                height="700px"
+                height="80vh"
                 readOnly 
                 extensions={[json(), lintGutter(), EditorView.theme({
                     "&": {

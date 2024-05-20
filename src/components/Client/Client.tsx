@@ -5,7 +5,7 @@ import SearchBar from "../SearchBar/SearchBar"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../store/store"
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { Box, Button, Flex, Loader, Paper, Tabs } from "@mantine/core"
+import { Box, Button, Flex, Loader, Tabs, Text } from "@mantine/core"
 import Headers from "../Headers/Headers"
 import Authentication from "../Authentication/Authentication"
 import { useState } from "react"
@@ -26,11 +26,6 @@ type Response = {
     duration: number,
     size: string,
     status: HttpStatusCode
-}
-
-type ResponseError = {
-    message: string,
-    status?: number
 }
 
 const Client = ({request, collectionName}: Props): JSX.Element => {
@@ -142,52 +137,48 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
             <Box>
                 <PanelGroup direction="horizontal" style={{height: "85vh"}}>
                     <Panel defaultSize={50} minSize={30}>
-                        <Paper mih="100%">
-                            <Tabs variant="outline" defaultValue="query" mt="sm">
-                                <Tabs.List>
-                                    <Tabs.Tab value="query">
-                                        Query
-                                    </Tabs.Tab>
-                                    <Tabs.Tab value="body">
-                                        Body
-                                    </Tabs.Tab>
-                                    <Tabs.Tab value="headers">
-                                        Headers
-                                    </Tabs.Tab>
-                                    <Tabs.Tab value="auth">
-                                        Auth
-                                    </Tabs.Tab>
-                                </Tabs.List>
+                        <Tabs variant="outline" defaultValue="query" mt="sm">
+                            <Tabs.List>
+                                <Tabs.Tab value="query">
+                                    Query
+                                </Tabs.Tab>
+                                <Tabs.Tab value="body">
+                                    Body
+                                </Tabs.Tab>
+                                <Tabs.Tab value="headers">
+                                    Headers
+                                </Tabs.Tab>
+                                <Tabs.Tab value="auth">
+                                    Auth
+                                </Tabs.Tab>
+                            </Tabs.List>
 
-                                <Tabs.Panel value="query" mt="sm">
-                                    <QueryParams queryParams={params} onParamsChange={setParams}/>
-                                </Tabs.Panel>
+                            <Tabs.Panel value="query" mt="sm">
+                                <QueryParams queryParams={params} onParamsChange={setParams}/>
+                            </Tabs.Panel>
 
-                                <Tabs.Panel value="body" mt="sm">
-                                    <RequestBody body={body} onBodyChange={setBody}/>
-                                </Tabs.Panel>
+                            <Tabs.Panel value="body" mt="sm">
+                                <RequestBody body={body} onBodyChange={setBody}/>
+                            </Tabs.Panel>
 
-                                <Tabs.Panel value="headers" mt="sm">
-                                    <Headers header={headers} onHeaderChange={setHeaders}/>
-                                </Tabs.Panel>
+                            <Tabs.Panel value="headers" mt="sm">
+                                <Headers header={headers} onHeaderChange={setHeaders}/>
+                            </Tabs.Panel>
 
-                                <Tabs.Panel value="auth" mt="sm">
-                                    <Authentication auth={auth} onAuthChange={setAuth}/>
-                                </Tabs.Panel>
-                            </Tabs>
-                        </Paper>
+                            <Tabs.Panel value="auth" mt="sm">
+                                <Authentication auth={auth} onAuthChange={setAuth}/>
+                            </Tabs.Panel>
+                        </Tabs>
                     </Panel>
                     <PanelResizeHandle style={{backgroundColor: "#DEE2E6", width: "1px"}}/>
                     <Panel defaultSize={50} minSize={30}>
-                        <Paper mih="100%" >
-                            <div>
-                                {loading 
-                                    ? <Loader color="blue" type="dots" size="xl" m="auto" mt={100}/> 
-                                    : response || error 
-                                        ? <ResponseBody response={response} error={error}/> 
-                                        : <p style={{textAlign: 'center'}}>Make a request using the URL bar above</p>}
-                            </div>
-                        </Paper>
+                        <div>
+                            {loading 
+                                ? <Loader color="blue" type="dots" size="xl" m="auto" mt={100}/> 
+                                : response || error 
+                                    ? <ResponseBody response={response} error={error}/> 
+                                    : <Text ta="center">Make a request using the URL bar above</Text>}
+                        </div>
                     </Panel>
                 </PanelGroup>
             </Box>

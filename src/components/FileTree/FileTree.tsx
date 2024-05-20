@@ -94,7 +94,7 @@ const FileTree = ({ files }: Props) => {
                 </form>
             </Modal>
 
-            <Box bg="#F5F5F5">
+            <Box>
                 <Title order={1}>Collections</Title>
                 <Button onClick={openModalHandler} variant="default" color="gray">
                     Add collection

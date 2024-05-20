@@ -2,7 +2,7 @@ import Client from "./components/Client/Client"
 import FileTree from "./components/FileTree/FileTree";
 import classes from "./App.module.css"
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { ActionIcon, CloseButton,Flex, Modal, Tabs, Text, Title } from "@mantine/core";
+import { ActionIcon, Box, CloseButton,Flex, Modal, Stack, Tabs, Text, Title } from "@mantine/core";
 import { Notifications } from '@mantine/notifications';
 import { notifications } from "@mantine/notifications"
 import { useEffect } from "react";
@@ -69,19 +69,19 @@ function App(): JSX.Element {
 
 
     return (
-        <div className={classes.container}>
+        <Box h="100vh">
             <Modal opened={opened} onClose={close} title="Settings" centered size="xl">
                 <Settings closeModal={close}/>
             </Modal>
             <Notifications/>
             <PanelGroup direction="horizontal">
                 <Panel defaultSize={15} minSize={10}>
-                    <div className={classes.file}>
+                    <Stack bg="#F5F5F5" h="100%" justify="space-between">
                         <FileTree files={files} />
                         <ActionIcon variant="default" color="gray" aria-label="Settings" onClick={open}>
                             <IconSettings style={{ width: '70%', height: '70%' }} stroke={1.5} />
                         </ActionIcon>
-                    </div>
+                    </Stack>
                 </Panel>
                 <PanelResizeHandle />
                 <Panel defaultSize={90} minSize={70}>
@@ -122,7 +122,7 @@ function App(): JSX.Element {
 
                 </Panel>
             </PanelGroup>
-        </div>
+        </Box>
     )
 }
 
