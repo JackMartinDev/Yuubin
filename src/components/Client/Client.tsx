@@ -112,7 +112,8 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
             )
     }
 
-    const onSubmitHandler = async() => {
+    const onSubmitHandler = async(event) => {
+        event.preventDefault();
         try {
             const response = await sendRequest()
             console.log(response)
@@ -131,10 +132,12 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
 
     return(
         <Box>
-            <Flex bg="#F5F5F5" align="center" p="0.5rem" gap={10}>
-                <SearchBar url={url} method={method} onUrlChange={setUrl} onMethodChange={setMethod} onSave={onSaveHandler} saveVisible={hasChanged}/>
-                <Button type="submit" w={100} variant="default" color="gray" onClick={onSubmitHandler}>Send</Button>
-            </Flex>
+            <form onSubmit={(event) => onSubmitHandler(event)}>
+                <Flex bg="#F5F5F5" align="center" p="0.5rem" gap={10}>
+                    <SearchBar url={url} method={method} onUrlChange={setUrl} onMethodChange={setMethod} onSave={onSaveHandler} saveVisible={hasChanged}/>
+                    <Button type="submit" w={100} variant="default" color="gray">Send</Button>
+                </Flex>
+            </form>
 
             <Box>
                 <PanelGroup direction="horizontal" style={{height: "85vh"}}>
