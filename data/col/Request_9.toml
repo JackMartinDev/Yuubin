@@ -1,0 +1,9 @@
+method = "GET"
+url = "https://gogole.com"
+body = "{}"
+headers = []
+params = []
+
+[meta]
+name = "Request_9"
+id = "8ff07f2d-df8d-4574-8e25-23ed3ddf2ff1"
