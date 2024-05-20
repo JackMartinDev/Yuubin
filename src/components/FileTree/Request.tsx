@@ -122,7 +122,7 @@ const Request = ({ request, collectionName }:Props) => {
     }
 
     return(
-        <Flex className={classes.request} 
+        <Flex pl="lg" className={classes.request} 
             onClick={onClickHandler} 
             justify="space-between" 
             align="center" 

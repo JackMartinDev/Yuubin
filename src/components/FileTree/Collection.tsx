@@ -215,10 +215,10 @@ const Collection = ({ collection }: Props): JSX.Element => {
 
             </Modal>
             <Group justify="space-between" className={classes.collection} onClick={toggle} ref={ref}>
-                <div className={classes.accordion}>
-                    <span><IconChevronRight size={16} stroke={2} className={cx(classes.icon, {[classes.toggle]: isToggled})}/></span>
-                    <p>{collection.name}</p>
-                </div>
+                <Flex justify="left" align="center" pl="xs">
+                    <IconChevronRight size={16} stroke={2} className={cx(classes.icon, {[classes.toggle]: isToggled})}/>
+                    <Text>{collection.name}</Text>
+                </Flex>
                 <Menu shadow="md" width={200}>
                     <Menu.Target>
                         <ActionIcon onClick={(event => (event.stopPropagation()))} variant="transparent" color="dark" style={hovered ? {visibility:"visible"}: {visibility:"hidden"}}>

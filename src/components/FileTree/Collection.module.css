@@ -1,9 +1,3 @@
-.accordion{
-    display: flex;
-    padding-left: 8px;
-    justify-content: left; 
-}
-
 .collection:hover{
     cursor: pointer;
 }
