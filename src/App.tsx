@@ -75,7 +75,7 @@ function App(): JSX.Element {
             </Modal>
             <Notifications/>
             <PanelGroup direction="horizontal">
-                <Panel defaultSize={15} minSize={10}>
+                <Panel defaultSize={15} minSize={15}>
                     <Stack bg="#F5F5F5" h="100%" justify="space-between">
                         <FileTree files={files} />
                         <ActionIcon variant="default" color="gray" aria-label="Settings" onClick={open}>
@@ -84,9 +84,9 @@ function App(): JSX.Element {
                     </Stack>
                 </Panel>
                 <PanelResizeHandle />
-                <Panel defaultSize={90} minSize={70}>
+                <Panel defaultSize={80} minSize={70}>
                     {activeRequests.length > 0 ?
-                        <Tabs variant="outline" value={activeTab} onChange={(val) => onChangeHandler(val!)} mx="md" mt="md" >
+                        <Tabs variant="outline" value={activeTab} onChange={(val) => onChangeHandler(val!)} mx="xs" mt="xs" >
                             <Tabs.List>
                                 {activeRequests.map(activeRequestId => 
                                     files.flatMap(collection => 
@@ -109,7 +109,7 @@ function App(): JSX.Element {
                                     collection.requests
                                     .filter(request => activeRequestId === request.meta.id)
                                     .map(request => (
-                                        <Tabs.Panel value={request.meta.id} mt="sm" key={request.meta.id}>
+                                        <Tabs.Panel value={request.meta.id} mt="xs" key={request.meta.id}>
                                             <Client request={request} collectionName={collection.name}/>
                                         </Tabs.Panel>
                                     ))
