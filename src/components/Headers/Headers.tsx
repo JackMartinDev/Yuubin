@@ -72,7 +72,7 @@ const Headers = ( {header, onHeaderChange}:Props) => {
         <div>
             <Grid mb={16} gutter={8}>
                 <Grid.Col span={4}>
-                    Name
+                    Key
                 </Grid.Col>
 
                 <Grid.Col span={6}>

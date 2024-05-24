@@ -120,7 +120,7 @@ function App(): JSX.Element {
                             )
                             }
                         </Tabs>
-                        :<Title>Introduction Page</Title>
+                        :<Title order={2} m="xs">Introduction Page</Title>
                     }
 
                 </Panel>
