@@ -78,7 +78,7 @@ function App(): JSX.Element {
                 <Panel defaultSize={15} minSize={15}>
                     <Stack bg="#F5F5F5" h="100%" justify="space-between" p="xs">
                         <FileTree files={files} />
-                        <Group justify="space-between" align="center">
+                        <Group justify="space-between" align="baseline">
                             <ActionIcon variant="default" color="gray" aria-label="Settings" onClick={open}>
                                 <IconSettings style={{ width: '70%', height: '70%' }} stroke={1.5} />
                             </ActionIcon>

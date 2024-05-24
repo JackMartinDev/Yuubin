@@ -26,10 +26,16 @@ const Request = ({ request, collectionName }:Props) => {
 
     const onClickHandler = () => {
         const opened = activeRequests.includes(request.meta.id)
+        console.log(activeRequests)
 
-        if(!opened) {
-            const newTabs = [...activeRequests, request.meta.id]
-            dispatch(updateRequests(newTabs))
+        if(!opened){
+            if(activeRequests.length >= 6){
+                const newTabs = [...activeRequests.slice(0, -1), request.meta.id]
+                dispatch(updateRequests(newTabs))
+            }else{
+                const newTabs = [...activeRequests, request.meta.id]
+                dispatch(updateRequests(newTabs))
+            }
         }
 
         if(activeTab != request.meta.id){
