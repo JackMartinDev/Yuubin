@@ -215,7 +215,7 @@ const Collection = ({ collection }: Props): JSX.Element => {
 
             </Modal>
             <Group justify="space-between" className={classes.collection} onClick={toggle} ref={ref}>
-                <Flex justify="left" align="center" pl="xs">
+                <Flex justify="left" align="center">
                     <IconChevronRight size={16} stroke={2} className={cx(classes.icon, {[classes.toggle]: isToggled})}/>
                     <Text>{collection.name}</Text>
                 </Flex>

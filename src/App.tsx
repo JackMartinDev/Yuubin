@@ -2,7 +2,7 @@ import Client from "./components/Client/Client"
 import FileTree from "./components/FileTree/FileTree";
 import classes from "./App.module.css"
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { ActionIcon, Box, CloseButton,Flex, Modal, Stack, Tabs, Text, Title } from "@mantine/core";
+import { ActionIcon, Box, CloseButton,Flex, Group, Modal, Stack, Tabs, Text, Title } from "@mantine/core";
 import { Notifications } from '@mantine/notifications';
 import { notifications } from "@mantine/notifications"
 import { useEffect } from "react";
@@ -76,11 +76,14 @@ function App(): JSX.Element {
             <Notifications/>
             <PanelGroup direction="horizontal">
                 <Panel defaultSize={15} minSize={15}>
-                    <Stack bg="#F5F5F5" h="100%" justify="space-between">
+                    <Stack bg="#F5F5F5" h="100%" justify="space-between" p="xs">
                         <FileTree files={files} />
-                        <ActionIcon variant="default" color="gray" aria-label="Settings" onClick={open}>
-                            <IconSettings style={{ width: '70%', height: '70%' }} stroke={1.5} />
-                        </ActionIcon>
+                        <Group justify="space-between" align="center">
+                            <ActionIcon variant="default" color="gray" aria-label="Settings" onClick={open}>
+                                <IconSettings style={{ width: '70%', height: '70%' }} stroke={1.5} />
+                            </ActionIcon>
+                            <Text size="xs">Yuubin v0.1</Text>
+                        </Group>
                     </Stack>
                 </Panel>
                 <PanelResizeHandle />

@@ -95,9 +95,9 @@ const FileTree = ({ files }: Props) => {
             </Modal>
 
             <Box>
-                <Title order={1}>Collections</Title>
-                <Button onClick={openModalHandler} variant="default" color="gray">
-                    Add collection
+                <Title order={2}>Yuubin</Title>
+                <Button onClick={openModalHandler} variant="default" color="gray" mb="xs" w="100%">
+                    Create collection
                 </Button>
                 {/*<TextInput placeholder="Search collections" leftSection={icon} mb="sm" m="xs"/>*/}
                 {files.map(collection => (<Collection key={collection.name} collection={collection}/>))}
