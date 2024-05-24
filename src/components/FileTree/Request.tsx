@@ -29,7 +29,7 @@ const Request = ({ request, collectionName }:Props) => {
         console.log(activeRequests)
 
         if(!opened){
-            if(activeRequests.length >= 7){
+            if(activeRequests.length >= 6){
                 const newTabs = [...activeRequests.slice(0, -1), request.meta.id]
                 dispatch(updateRequests(newTabs))
             }else{
@@ -136,7 +136,7 @@ const Request = ({ request, collectionName }:Props) => {
             style={activeTab === request.meta.id ? {backgroundColor: '#cccaca'}: {}}
         >
             <Tooltip label={request.meta.name} openDelay={300} position="right" offset={{ mainAxis: -20, crossAxis: -35 }}>
-                <Text className={classes.truncate} size="sm" ><MethodIcon method={request.method}/> {request.meta.name}</Text>
+                <Text className={classes.truncate} size="sm" ml="xs"><MethodIcon method={request.method}/> {request.meta.name}</Text>
             </Tooltip>
             <Menu shadow="md" width={200}>
                 <Menu.Target>

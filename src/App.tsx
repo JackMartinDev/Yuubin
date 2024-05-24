@@ -76,9 +76,9 @@ function App(): JSX.Element {
             <Notifications/>
             <PanelGroup direction="horizontal">
                 <Panel defaultSize={15} minSize={15}>
-                    <Stack bg="#F5F5F5" h="100%" justify="space-between" p="xs">
+                    <Stack bg="#F5F5F5" h="100%" justify="space-between">
                         <FileTree files={files} />
-                        <Group justify="space-between" align="baseline">
+                        <Group justify="space-between" align="baseline" m="xs">
                             <ActionIcon variant="default" color="gray" aria-label="Settings" onClick={open}>
                                 <IconSettings style={{ width: '70%', height: '70%' }} stroke={1.5} />
                             </ActionIcon>
@@ -96,7 +96,7 @@ function App(): JSX.Element {
                                         collection.requests
                                         .filter(request => request.meta.id === activeRequestId)
                                         .map(request => (
-                                            <Tabs.Tab key={request.meta.id} value={request.meta.id} p="xs" >
+                                            <Tabs.Tab key={request.meta.id} value={request.meta.id} p="xs">
                                                 <Flex align="center" gap="4px" maw={175}>
                                                     <Text className={classes.truncate} size="sm"><MethodIcon method={request.method}/> {request.meta.name}</Text>
                                                     <CloseButton onClick={(event) => onCloseHandler(event, request.meta.id)} size="sm"/>
