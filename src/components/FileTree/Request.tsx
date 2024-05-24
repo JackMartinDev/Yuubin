@@ -29,7 +29,7 @@ const Request = ({ request, collectionName }:Props) => {
         console.log(activeRequests)
 
         if(!opened){
-            if(activeRequests.length >= 6){
+            if(activeRequests.length >= 7){
                 const newTabs = [...activeRequests.slice(0, -1), request.meta.id]
                 dispatch(updateRequests(newTabs))
             }else{
