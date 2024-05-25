@@ -69,7 +69,7 @@ const ResponseBody = ({response, error}: Props) => {
                 </Group>
                 :
                 <Group justify="right">
-                    <Text c="red">Error</Text>
+                    <Text c="red">{error?.status ? `${error?.status} Error`: "Error" }</Text>
                 </Group>
             }
             {(response || error) && <CodeMirror 

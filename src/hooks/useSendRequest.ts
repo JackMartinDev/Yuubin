@@ -1,8 +1,7 @@
-import { useDispatch } from "react-redux"
 import axios, { AxiosResponse, AxiosError } from "axios"
-import { updateLoading } from "../responseSlice"
 import prettyBytes from "pretty-bytes"
 import { notifications } from "@mantine/notifications";
+import { message } from "@tauri-apps/api/dialog";
 
 interface KeyValueObject{
     [key: string]: string
@@ -23,25 +22,19 @@ const useSendRequest = (paramsArray: KeyValuePair[] | undefined, headersArray: K
     let startTime: number;
     let endTime: number;
 
-    const dispatch = useDispatch();
-
     //Investigate if setting up the interceptor in the hook is okay
     axios.interceptors.request.use(config => {
         startTime = new Date().getTime();
-        dispatch(updateLoading(true));
         return config;
     }, (error: AxiosError) => {
-            dispatch(updateLoading(false));
             console.log("request error", error);
             return Promise.reject(error);
         });
 
     axios.interceptors.response.use((response: AxiosResponse) => {
         endTime = new Date().getTime();
-        dispatch(updateLoading(false));
         return response;
     }, (error: AxiosError) => {
-            dispatch(updateLoading(false));
             console.log("response error", error);
             return Promise.reject(error);
         });
@@ -89,13 +82,14 @@ const useSendRequest = (paramsArray: KeyValuePair[] | undefined, headersArray: K
         } catch(error) {
             if (axios.isAxiosError(error)) {
                 throw {
-                    message: `Status ${error.response?.status}: ${error.message}`,
+                    message: error.message,
                     status: error.response?.status
                 };
             } else {
-                throw new Error("An unexpected error occurred");
+                throw {
+                    message:"An unexpected error occurred"
+                }
             }
-
         }
     }
     return sendRequest

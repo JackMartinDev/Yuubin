@@ -29,10 +29,8 @@ type Response = {
 }
 
 const Client = ({request, collectionName}: Props): JSX.Element => {
-    const status = useSelector((state:RootState) => state.response.status)
-    const loading = useSelector((state:RootState) => state.response.loading)
-    const files = useSelector((state: RootState) => state.request.files)
     const dispatch = useDispatch();
+    const files = useSelector((state: RootState) => state.request.files)
 
     const [url, setUrl] = useState(request.url);
     const [method, setMethod] = useState(request.method);
@@ -50,6 +48,7 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
 
     const [response, setResponse] = useState<Response | undefined>(undefined);
     const [error, setError] = useState<{message: string, status?: number} | undefined>(undefined)
+    const [loading, setLoading] = useState(false);
 
     const sendRequest = useSendRequest(params, headers, url, method, body, auth);
 
@@ -109,6 +108,7 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
 
     const onSubmitHandler = async(event) => {
         event.preventDefault();
+        setLoading(true)
         try {
             const response = await sendRequest()
             console.log(response)
@@ -117,11 +117,13 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
         } catch (error) {
             console.log(error)
             //Perform type checking
+            setResponse(undefined);
             setError({
                 message: error.message,
                 status: error.status
             });
-            setResponse(undefined);
+        } finally{
+            setLoading(false)
         }
     }
 
