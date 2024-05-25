@@ -130,7 +130,7 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
     return(
         <Box>
             <form onSubmit={(event) => onSubmitHandler(event)}>
-                <Flex bg="#F5F5F5" align="center" p="xs" gap={10}>
+                <Flex bg="#F5F5F5" align="center" p="xs" gap={10} style={{borderRadius: 4}}>
                     <SearchBar url={url} method={method} onUrlChange={setUrl} onMethodChange={setMethod} onSave={onSaveHandler} saveVisible={hasChanged}/>
                     <Button type="submit" w={100} variant="default" color="gray">Send</Button>
                 </Flex>
