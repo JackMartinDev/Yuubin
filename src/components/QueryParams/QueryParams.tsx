@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { IconTrash } from "@tabler/icons-react";
-import { ActionIcon, Button, Checkbox, Flex, Grid, MantineProvider, TextInput } from "@mantine/core";
+import { ActionIcon, Button, Checkbox, Flex, Grid, ScrollArea, TextInput } from "@mantine/core";
 
 type Props = {
     queryParams: KeyValuePair[], 
@@ -69,25 +69,26 @@ const QueryParams = ({queryParams, onParamsChange}: Props) => {
     ))
 
     return(
-        <div>
-            <Grid mb={16} gutter={8}>
-                <Grid.Col span={4}>
-                    Key
-                </Grid.Col>
+        <ScrollArea scrollbars="y" h="70vh" offsetScrollbars>
+        <Grid mb={16} gutter={8}>
+            <Grid.Col span={4}>
+                Key
+            </Grid.Col>
 
-                <Grid.Col span={6}>
-                    Value
-                </Grid.Col>
+            <Grid.Col span={6}>
+                Value
+            </Grid.Col>
 
-                <Grid.Col span={2} >
-                </Grid.Col>
+            <Grid.Col span={2} >
+                <Flex justify="center">
+                    <Button onClick={incrementQueryCount} variant="default" color="gray" size="xs" p={8}>
+                        + Add
+                    </Button>
+                </Flex>
+            </Grid.Col>
                 {queryInput}
-            </Grid>
-
-            <Button onClick={incrementQueryCount} variant="default" color="gray">
-                + Add Param
-            </Button>
-        </div>
+        </Grid>
+        </ScrollArea>
     )
 }
 

@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { IconTrash } from "@tabler/icons-react";
-import { ActionIcon, Button, Checkbox, Flex, Grid, TextInput } from "@mantine/core";
+import { ActionIcon, Button, Checkbox, Flex, Grid, ScrollArea, TextInput } from "@mantine/core";
 
 type Props = {
     header: KeyValuePair[] | undefined, 
@@ -69,7 +69,7 @@ const Headers = ( {header, onHeaderChange}:Props) => {
     ))
 
     return(
-        <div>
+        <ScrollArea scrollbars="y" h="70vh" offsetScrollbars>
             <Grid mb={16} gutter={8}>
                 <Grid.Col span={4}>
                     Key
@@ -79,15 +79,17 @@ const Headers = ( {header, onHeaderChange}:Props) => {
                     Value
                 </Grid.Col>
 
-                <Grid.Col span={2} >
+                <Grid.Col span={2}>
+                    <Flex justify="center">
+                        <Button onClick={incrementheaderCount} variant="default" color="gray" p={8} size="xs">
+                            + Add
+                        </Button>
+                    </Flex>
                 </Grid.Col>
                 {headerInput}
             </Grid>
 
-            <Button onClick={incrementheaderCount} variant="default" color="gray">
-                + Add Header
-            </Button>
-        </div>
+        </ScrollArea>
     )
 }
 
