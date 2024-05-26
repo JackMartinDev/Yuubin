@@ -2,7 +2,7 @@ import Client from "./components/Client/Client"
 import FileTree from "./components/FileTree/FileTree";
 import classes from "./App.module.css"
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { ActionIcon, Box, CloseButton,Flex, Group, Modal, Stack, Tabs, Text, Title } from "@mantine/core";
+import { ActionIcon, Box, CloseButton,Flex, Group, Modal, Stack, Tabs, Text, Title, useMantineColorScheme } from "@mantine/core";
 import { Notifications } from '@mantine/notifications';
 import { notifications } from "@mantine/notifications"
 import { useEffect } from "react";
@@ -22,6 +22,7 @@ import i18next from 'i18next';
 function App(): JSX.Element {
     const dispatch = useDispatch()
     const { t } = useTranslation();
+    const { setColorScheme } = useMantineColorScheme();
     const [opened, { open, close }] = useDisclosure(false);
     const activeTab = useSelector((state: RootState) => state.request.activeRequest)
     const files = useSelector((state:RootState) => state.request.files)
@@ -40,6 +41,7 @@ function App(): JSX.Element {
         invoke('sync_config').then((res) => { 
             const {activeTabs, theme, dataPath, language, saveOnQuit, preserveOpenTabs}:Config = camelcaseKeys(JSON.parse(res.message as string))
             i18next.changeLanguage(language);
+            setColorScheme(theme);
             dispatch(updateActiveTabs(activeTabs))
             dispatch(updateSettings({theme, dataPath, language, saveOnQuit, preserveOpenTabs}))
         }).catch((error) => 

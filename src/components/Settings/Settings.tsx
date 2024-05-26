@@ -1,4 +1,4 @@
-import { Box, Button, Checkbox, Divider, Group, Switch, Text, TextInput } from "@mantine/core"
+import { Box, Button, Checkbox, Divider, Group, Switch, Text, TextInput, useMantineColorScheme } from "@mantine/core"
 import { moonIcon, sunIcon } from "./Icons"
 import { invoke } from "@tauri-apps/api/tauri"
 import snakecaseKeys from "snakecase-keys"
@@ -6,8 +6,8 @@ import { notifications } from "@mantine/notifications"
 import { open as openTauri } from '@tauri-apps/api/dialog';
 import { appDataDir } from '@tauri-apps/api/path';
 import { isNotEmpty, useForm } from "@mantine/form"
-
 import { Combobox, Image, Input, InputBase, useCombobox } from "@mantine/core";
+
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../store/store"
@@ -53,6 +53,7 @@ const Settings = ({closeModal}: Props) => {
     const {language, theme, dataPath, saveOnQuit, preserveOpenTabs, activeTabs} = useSelector((state: RootState) => state.config)
     const dispatch = useDispatch();
     const { t } = useTranslation()
+    const { setColorScheme } = useMantineColorScheme();
 
     //TODO Change from 'theme' to 'darkMode' since it is a boolean switch
     const form = useForm({
@@ -90,6 +91,7 @@ const Settings = ({closeModal}: Props) => {
                 if(!res.error){
                     dispatch(updateSettings({saveOnQuit, preserveOpenTabs, dataPath, language, theme: parsedTheme}))
                     i18next.changeLanguage(language)
+                    setColorScheme(parsedTheme)
                     closeModal();
 
                     notifications.show({
