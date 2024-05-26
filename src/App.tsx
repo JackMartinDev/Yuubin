@@ -44,6 +44,10 @@ function App(): JSX.Element {
             setColorScheme(theme);
             dispatch(updateActiveTabs(activeTabs))
             dispatch(updateSettings({theme, dataPath, language, saveOnQuit, preserveOpenTabs}))
+            if (preserveOpenTabs) {
+                dispatch(updateRequests(activeTabs))
+                dispatch(updateActiveRequest(activeTabs[0]))
+            }
         }).catch((error) => 
                 notifications.show({
                     title: t("unexpected_error"),
