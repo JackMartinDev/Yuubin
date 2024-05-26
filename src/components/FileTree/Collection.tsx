@@ -189,11 +189,11 @@ const Collection = ({ collection }: Props): JSX.Element => {
                         placeholder="Request Name" 
 
                     />
-                    <Text fw={500} size="sm">URL</Text>
                     <Flex gap={10} mb="sm">
                         <Select
                             {...form.getInputProps('method')}
                             key={form.key('method')}
+                            label="Method"
                             w={150}
                             withCheckIcon={false}
                             allowDeselect={false}
@@ -201,6 +201,7 @@ const Collection = ({ collection }: Props): JSX.Element => {
                             data={['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD']}
                         />
                         <TextInput 
+                            label="URL"
                             type="url"
                             w="100%" 
                             {...form.getInputProps('url')}
