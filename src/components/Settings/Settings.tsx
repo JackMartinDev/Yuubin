@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../store/store"
 import { updateSettings } from "../../configSlice"
 import { useTranslation } from "react-i18next"
+import i18next from 'i18next';
 
 interface Item {
     icon: string;
@@ -88,6 +89,7 @@ const Settings = ({closeModal}: Props) => {
             .then((res) => {
                 if(!res.error){
                     dispatch(updateSettings({saveOnQuit, preserveOpenTabs, dataPath, language, theme: parsedTheme}))
+                    i18next.changeLanguage(language)
                     closeModal();
 
                     notifications.show({

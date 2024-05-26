@@ -17,6 +17,7 @@ import camelcaseKeys from 'camelcase-keys';
 import Settings from "./components/Settings/Settings";
 import { updateActiveTabs, updateSettings } from "./configSlice";
 import { useTranslation } from "react-i18next";
+import i18next from 'i18next';
 
 function App(): JSX.Element {
     const dispatch = useDispatch()
@@ -38,6 +39,7 @@ function App(): JSX.Element {
 
         invoke('sync_config').then((res) => { 
             const {activeTabs, theme, dataPath, language, saveOnQuit, preserveOpenTabs}:Config = camelcaseKeys(JSON.parse(res.message as string))
+            i18next.changeLanguage(language);
             dispatch(updateActiveTabs(activeTabs))
             dispatch(updateSettings({theme, dataPath, language, saveOnQuit, preserveOpenTabs}))
         }).catch((error) => 
