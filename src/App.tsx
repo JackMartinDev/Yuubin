@@ -39,11 +39,11 @@ function App(): JSX.Element {
         )
 
         invoke('sync_config').then((res) => { 
-            const {activeTabs, theme, dataPath, language, saveOnQuit, preserveOpenTabs}:Config = camelcaseKeys(JSON.parse(res.message as string))
+            const {activeTabs, theme, dataPath, language, preserveOpenTabs}:Config = camelcaseKeys(JSON.parse(res.message as string))
             i18next.changeLanguage(language);
             setColorScheme(theme);
             dispatch(updateActiveTabs(activeTabs))
-            dispatch(updateSettings({theme, dataPath, language, saveOnQuit, preserveOpenTabs}))
+            dispatch(updateSettings({theme, dataPath, language, preserveOpenTabs}))
             if (preserveOpenTabs) {
                 dispatch(updateRequests(activeTabs))
                 dispatch(updateActiveRequest(activeTabs[0]))

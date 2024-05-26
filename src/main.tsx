@@ -30,12 +30,12 @@ i18next.use(initReactI18next).init({
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
-        <Provider store={store}>
-            <MantineProvider theme={theme} defaultColorScheme="light">
-                <ModalsProvider>
+        <MantineProvider theme={theme} defaultColorScheme="light">
+            <ModalsProvider>
+                <Provider store={store}>
                     <App />
-                </ModalsProvider>
-            </MantineProvider>
-        </Provider>
+                </Provider>
+            </ModalsProvider>
+        </MantineProvider>
     </React.StrictMode>,
 );

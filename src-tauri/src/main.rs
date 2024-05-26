@@ -59,7 +59,6 @@ struct Payload {
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Config {
-    save_on_quit: bool,
     preserve_open_tabs: bool,
     active_tabs: Vec<String>,
     language: String,

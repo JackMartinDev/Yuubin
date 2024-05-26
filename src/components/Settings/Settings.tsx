@@ -50,18 +50,16 @@ type Props = {
 }
 
 const Settings = ({closeModal}: Props) => {
-    const {language, theme, dataPath, saveOnQuit, preserveOpenTabs, activeTabs} = useSelector((state: RootState) => state.config)
+    const {language, theme, dataPath, preserveOpenTabs, activeTabs} = useSelector((state: RootState) => state.config)
     const dispatch = useDispatch();
     const { t } = useTranslation()
     const { setColorScheme } = useMantineColorScheme();
 
-    //TODO Change from 'theme' to 'darkMode' since it is a boolean switch
     const form = useForm({
         initialValues: {
             language,
             theme: theme === "dark" ? true : false,
             dataPath,
-            saveOnQuit,
             preserveOpenTabs
         },
 
@@ -80,16 +78,16 @@ const Settings = ({closeModal}: Props) => {
 
     const onSubmitHandler = (values: typeof form.values) => {
         setSubmittedValues(values)
-        const {language, theme, dataPath, saveOnQuit, preserveOpenTabs} = form.getValues()
+        const {language, theme, dataPath, preserveOpenTabs} = form.getValues()
         const parsedTheme = theme ? "dark" : "light"
 
-        const config: Config = {saveOnQuit, preserveOpenTabs, dataPath, language, theme: parsedTheme, activeTabs}
+        const config: Config = {preserveOpenTabs, dataPath, language, theme: parsedTheme, activeTabs}
 
         console.log(config)
         invoke('edit_config', {data: JSON.stringify(snakecaseKeys(config))})
             .then((res) => {
                 if(!res.error){
-                    dispatch(updateSettings({saveOnQuit, preserveOpenTabs, dataPath, language, theme: parsedTheme}))
+                    dispatch(updateSettings({preserveOpenTabs, dataPath, language, theme: parsedTheme}))
                     i18next.changeLanguage(language)
                     setColorScheme(parsedTheme)
                     closeModal();
@@ -138,12 +136,6 @@ const Settings = ({closeModal}: Props) => {
                 {...form.getInputProps('preserveOpenTabs', { type: "checkbox" })}
                 key={form.key('preserveOpenTabs')}
                 label={t("preserve_open_tabs")} 
-                size="md"/>
-            <Checkbox 
-                {...form.getInputProps('saveOnQuit', { type: "checkbox" })}
-                key={form.key('saveOnQuit')}
-                label={t("save_on_quit")} 
-                mt="md" 
                 size="md"/>
             <Group align="end" gap={4}>
                 <TextInput

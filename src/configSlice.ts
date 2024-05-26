@@ -9,7 +9,6 @@ const initialState: Config = {
     activeTabs: ["1", "2"],
     dataPath: "",
     preserveOpenTabs: false,
-    saveOnQuit: false,
     language: "en",
     theme: "dark"
 }
@@ -23,7 +22,6 @@ export const configSlice = createSlice({
             state.language = action.payload.language;
             state.preserveOpenTabs = action.payload.preserveOpenTabs;
             state.dataPath = action.payload.dataPath;
-            state.saveOnQuit = action.payload.saveOnQuit;
         },
         updateActiveTabs: (state, action: PayloadAction<string[]>) => {
             state.activeTabs = action.payload;

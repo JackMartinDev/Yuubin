@@ -35,7 +35,6 @@ type Config = {
     dataPath: string,
     language: string,
     preserveOpenTabs: boolean,
-    saveOnQuit: boolean,
     theme: "light" | "dark"
 }
 
