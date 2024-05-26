@@ -1,5 +1,6 @@
 import { Box, Text, TextInput } from "@mantine/core"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { useTranslation } from "react-i18next";
 
 interface Props {
     auth: string | undefined,
@@ -8,6 +9,7 @@ interface Props {
 
 const Authentication = ({auth, onAuthChange}:Props) => {
     const [localAuth, setLocalAuth] = useState(auth);
+    const { t } = useTranslation();
 
     useEffect(() => {
         onAuthChange(localAuth);
@@ -15,7 +17,7 @@ const Authentication = ({auth, onAuthChange}:Props) => {
 
     return(
         <Box mr={16}>
-            <Text>Bearer Token</Text>
+            <Text>{t("token")}</Text>
             <TextInput value={localAuth} onChange={(e) => setLocalAuth(e.target.value)} mt="xs"/>
         </Box>
     )

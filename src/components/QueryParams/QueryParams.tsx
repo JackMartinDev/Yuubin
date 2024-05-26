@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { IconTrash } from "@tabler/icons-react";
 import { ActionIcon, Button, Checkbox, Flex, Grid, ScrollArea, TextInput } from "@mantine/core";
+import { useTranslation } from "react-i18next";
 
 type Props = {
     queryParams: KeyValuePair[], 
@@ -10,6 +11,7 @@ type Props = {
 
 const QueryParams = ({queryParams, onParamsChange}: Props) => {
     const [queries, setQueries] = useState<KeyValuePair[]>(queryParams ? queryParams : []);
+    const { t } =useTranslation();
 
     const incrementQueryCount = () =>{
         setQueries([...queries, {key: "", value: "", checked: true}]);
@@ -72,17 +74,17 @@ const QueryParams = ({queryParams, onParamsChange}: Props) => {
         <ScrollArea scrollbars="y" h="70vh" offsetScrollbars>
         <Grid mb={16} gutter={8}>
             <Grid.Col span={4}>
-                Key
+                {t("key")}
             </Grid.Col>
 
             <Grid.Col span={6}>
-                Value
+                {t("value")}
             </Grid.Col>
 
             <Grid.Col span={2} >
                 <Flex justify="center">
                     <Button onClick={incrementQueryCount} variant="default" color="gray" size="xs" p={8}>
-                        + Add
+                        + {t("add")}
                     </Button>
                 </Flex>
             </Grid.Col>

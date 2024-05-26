@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { IconTrash } from "@tabler/icons-react";
 import { ActionIcon, Button, Checkbox, Flex, Grid, ScrollArea, TextInput } from "@mantine/core";
+import { useTranslation } from "react-i18next";
 
 type Props = {
     header: KeyValuePair[] | undefined, 
@@ -10,6 +11,7 @@ type Props = {
 
 const Headers = ( {header, onHeaderChange}:Props) => {
     const [headers, setHeaders] = useState<KeyValuePair[]>(header ? header : []);
+    const { t } = useTranslation();
 
     useEffect(() => {
         onHeaderChange(headers);
@@ -72,17 +74,17 @@ const Headers = ( {header, onHeaderChange}:Props) => {
         <ScrollArea scrollbars="y" h="70vh" offsetScrollbars>
             <Grid mb={16} gutter={8}>
                 <Grid.Col span={4}>
-                    Key
+                    {t("key")}
                 </Grid.Col>
 
                 <Grid.Col span={6}>
-                    Value
+                    {t("value")}
                 </Grid.Col>
 
                 <Grid.Col span={2}>
                     <Flex justify="center">
                         <Button onClick={incrementheaderCount} variant="default" color="gray" p={8} size="xs">
-                            + Add
+                            + {t("add")}
                         </Button>
                     </Flex>
                 </Grid.Col>

@@ -12,6 +12,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../store/store"
 import { updateSettings } from "../../configSlice"
+import { useTranslation } from "react-i18next"
 
 interface Item {
     icon: string;
@@ -50,6 +51,7 @@ type Props = {
 const Settings = ({closeModal}: Props) => {
     const {language, theme, dataPath, saveOnQuit, preserveOpenTabs, activeTabs} = useSelector((state: RootState) => state.config)
     const dispatch = useDispatch();
+    const { t } = useTranslation()
 
     //TODO Change from 'theme' to 'darkMode' since it is a boolean switch
     const form = useForm({
@@ -62,7 +64,7 @@ const Settings = ({closeModal}: Props) => {
         },
 
         validate: {
-            dataPath: isNotEmpty('Data Path is a required field'),
+            dataPath: isNotEmpty(t("data_path_required")),
         },
     });
 
@@ -89,20 +91,20 @@ const Settings = ({closeModal}: Props) => {
                     closeModal();
 
                     notifications.show({
-                        title: 'Success',
-                        message: "Config succesfully updated",
+                        title: t("success"),
+                        message: t("update_config_success"),
                         color: 'green'
                     })
                 }else{
                     notifications.show({
-                        title: 'Error',
+                        title: t("error"),
                         message: res.message,
                         color: 'red'
                     })
                 }
             }).catch((error) => 
                 notifications.show({
-                    title: 'Unexpected Error',
+                    title: t("unexpected_error"),
                     message: error,
                     color: 'red'
                 })
@@ -131,12 +133,12 @@ const Settings = ({closeModal}: Props) => {
             <Checkbox
                 {...form.getInputProps('preserveOpenTabs', { type: "checkbox" })}
                 key={form.key('preserveOpenTabs')}
-                label="Preserve open tabs" 
+                label={t("preserve_open_tabs")} 
                 size="md"/>
             <Checkbox 
                 {...form.getInputProps('saveOnQuit', { type: "checkbox" })}
                 key={form.key('saveOnQuit')}
-                label="Save on quit" 
+                label={t("save_on_quit")} 
                 mt="md" 
                 size="md"/>
             <Group align="end" gap={4}>
@@ -147,14 +149,14 @@ const Settings = ({closeModal}: Props) => {
                     {...form.getInputProps('dataPath')}
                     key={form.key('dataPath')}
                     mt="md"
-                    label="Collection data path"
+                    label={t("collection_path")}
                 />
                 <Button onClick={selectDirectory}>
-                    Browse
+                    {t("browse")}
                 </Button>
             </Group>
             <Divider mt="lg"/>
-            <Text fw={500} size="lg" mt="md" >Display Settings</Text>
+            <Text fw={500} size="lg" mt="md">{t("display_settings")}</Text>
 
             <Combobox
                 store={combobox}
@@ -167,7 +169,7 @@ const Settings = ({closeModal}: Props) => {
                 <Combobox.Target>
                     <InputBase
                         component="button"
-                        label="Language"
+                        label={t("language")}
                         type="button"
                         pointer
                         rightSection={<Combobox.Chevron />}
@@ -180,7 +182,7 @@ const Settings = ({closeModal}: Props) => {
                         {selectedOption ? (
                             <SelectOption {...selectedOption} />
                         ) : (
-                                <Input.Placeholder>Select Language</Input.Placeholder>
+                                <Input.Placeholder>{t("select_language")}</Input.Placeholder>
                             )}
                     </InputBase>
                 </Combobox.Target>
@@ -190,7 +192,7 @@ const Settings = ({closeModal}: Props) => {
                 </Combobox.Dropdown>
             </Combobox>
 
-            <Text size="sm" fw={500} mt={16}>Theme</Text>
+            <Text size="sm" fw={500} mt={16}>{t("theme")}</Text>
             <Box w={65}>
                 <Switch 
                     {...form.getInputProps('theme', { type: "checkbox" })}
@@ -200,7 +202,7 @@ const Settings = ({closeModal}: Props) => {
                     onLabel={sunIcon} 
                     offLabel={moonIcon} />
             </Box>
-            <Button type="submit" mt={16} >Apply Changes</Button>
+            <Button type="submit" mt={16}>{t("apply")}</Button>
         </form>
     )
 }

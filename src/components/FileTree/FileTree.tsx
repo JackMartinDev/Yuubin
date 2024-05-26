@@ -9,6 +9,7 @@ import { RootState } from "../../store/store";
 import { invoke } from "@tauri-apps/api/tauri";
 import { updatefiles } from "../../requestSlice";
 import { notifications } from "@mantine/notifications";
+import { useTranslation } from "react-i18next";
 
 interface Props {
     files: Collection[],
@@ -19,6 +20,7 @@ const FileTree = ({ files }: Props) => {
     const [opened, { open, close }] = useDisclosure(false);
     const localFiles = useSelector((state: RootState) => state.request.files)
     const dispatch = useDispatch();
+    const {t} = useTranslation();
 
     const form = useForm({
         initialValues: {
@@ -26,7 +28,7 @@ const FileTree = ({ files }: Props) => {
         },
 
         validate: {
-            name: isNotEmpty('Collection Name is a required field'),
+            name: isNotEmpty(t("collection_name_required")),
         },
     });
 
@@ -54,21 +56,21 @@ const FileTree = ({ files }: Props) => {
                     dispatch(updatefiles(newFiles))
                     closeModal()
                     notifications.show({
-                        title: 'Success',
-                        message: "Collection succesfully created",
+                        title: t("success"),
+                        message: t("create_collection_success"),
                         color: 'green'
                     })
 
                 }else{
                     notifications.show({
-                        title: 'Error',
+                        title: t("error"),
                         message: res.message,
                         color: 'red'
                     })
                 }
             }).catch((error) => 
                 notifications.show({
-                    title: 'Unexpected Error',
+                    title: t("unexpected_error"),
                     message: error,
                     color: 'red'
                 })
@@ -77,28 +79,27 @@ const FileTree = ({ files }: Props) => {
 
     return (
         <>
-            <Modal opened={opened} onClose={closeModal} title="New Collection" centered size="lg">
+            <Modal opened={opened} onClose={closeModal} title={t("new_collection")} centered size="lg">
                 <form onSubmit={form.onSubmit((values) => addCollectionHandler(values))}>
                     <TextInput 
                         {...form.getInputProps('name')}
                         key={form.key('name')}
                         mb="sm" 
-                        label="Collection Name" 
-                        placeholder="Collection Name" 
+                        label={t("collection_name")} 
 
                     />
                     <Flex justify="right" gap="sm">
-                        <Button variant="light" color="gray" onClick={closeModal}>Cancel</Button>
-                        <Button variant="default" color="gray" type="submit">Create</Button>
+                        <Button variant="light" color="gray" onClick={closeModal}>{t("cancel")}</Button>
+                        <Button variant="default" color="gray" type="submit">{t("create")}</Button>
                     </Flex>
                 </form>
             </Modal>
 
             <Box>
                 <Box m="xs">
-                    <Title order={2} >Yuubin</Title>
+                    <Title order={2}>{t("yuubin")}</Title>
                     <Button onClick={openModalHandler} variant="default" color="gray" mb="xs" w="100%">
-                        Create collection
+                        {t("create_collection")}
                     </Button>
                 </Box>
                 {/*<TextInput placeholder="Search collections" leftSection={icon} mb="sm" m="xs"/>*/}

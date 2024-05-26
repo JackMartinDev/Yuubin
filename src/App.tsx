@@ -16,9 +16,11 @@ import { useDisclosure } from "@mantine/hooks";
 import camelcaseKeys from 'camelcase-keys';
 import Settings from "./components/Settings/Settings";
 import { updateActiveTabs, updateSettings } from "./configSlice";
+import { useTranslation } from "react-i18next";
 
 function App(): JSX.Element {
     const dispatch = useDispatch()
+    const { t } = useTranslation();
     const [opened, { open, close }] = useDisclosure(false);
     const activeTab = useSelector((state: RootState) => state.request.activeRequest)
     const files = useSelector((state:RootState) => state.request.files)
@@ -28,7 +30,7 @@ function App(): JSX.Element {
         //Consider having these 2 invokes as a single "sync" invoke
         invoke('sync_files').then((files) => dispatch(updatefiles(JSON.parse(files.message as string)))).catch((error) => 
             notifications.show({
-                title: 'Unexpected Error',
+                title: t("unexpected_error"),
                 message: error,
                 color: 'red'
             })
@@ -40,7 +42,7 @@ function App(): JSX.Element {
             dispatch(updateSettings({theme, dataPath, language, saveOnQuit, preserveOpenTabs}))
         }).catch((error) => 
                 notifications.show({
-                    title: 'Unexpected Error',
+                    title: t("unexpected_error"),
                     message: error,
                     color: 'red'
                 })
@@ -70,7 +72,7 @@ function App(): JSX.Element {
 
     return (
         <Box h="100vh">
-            <Modal opened={opened} onClose={close} title="Settings" centered size="xl">
+            <Modal opened={opened} onClose={close} title={t("settings")} centered size="xl">
                 <Settings closeModal={close}/>
             </Modal>
             <Notifications/>
@@ -82,7 +84,7 @@ function App(): JSX.Element {
                             <ActionIcon variant="default" color="gray" aria-label="Settings" onClick={open}>
                                 <IconSettings style={{ width: '70%', height: '70%' }} stroke={1.5} />
                             </ActionIcon>
-                            <Text size="xs">Yuubin v0.1</Text>
+                            <Text size="xs">{t("yuubin")} v0.1</Text>
                         </Group>
                     </Stack>
                 </Panel>

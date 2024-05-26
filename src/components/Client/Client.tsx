@@ -15,6 +15,7 @@ import { invoke } from "@tauri-apps/api/tauri"
 import { notifications } from "@mantine/notifications"
 import { deepIsEqual } from "../../utils/utils"
 import { updatefiles } from "../../requestSlice"
+import { useTranslation } from "react-i18next"
 
 interface Props {
     request: YuubinRequest,
@@ -30,6 +31,7 @@ type Response = {
 
 const Client = ({request, collectionName}: Props): JSX.Element => {
     const dispatch = useDispatch();
+    const { t } = useTranslation();
     const files = useSelector((state: RootState) => state.request.files)
 
     const [url, setUrl] = useState(request.url);
@@ -79,27 +81,29 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
             }
             return col;         
         });
-
+        //Create and delete use success messages set on the front end, 
+        //but here it is using a message from the backend
+        //CHECK THIS LATER
         invoke('edit_file', {data: JSON.stringify(updatedRequest), collection: collectionName})
             .then((res) => {
                 if(!res.error){
                     dispatch(updatefiles(newFiles)) 
                     notifications.show({
-                        title: 'Success',
+                        title: t("success"),
                         message: res.message,
                         color: 'green'
                     })
 
                 }else{
                     notifications.show({
-                        title: 'Error',
+                        title: t("error"),
                         message: res.message,
                         color: 'red'
                     })
                 }
             }).catch((error) => 
                 notifications.show({
-                    title: 'Unexpected Error',
+                    title: t("unexpected_error"),
                     message: error,
                     color: 'red'
                 })
@@ -132,7 +136,7 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
             <form onSubmit={(event) => onSubmitHandler(event)}>
                 <Flex bg="#F5F5F5" align="center" p="xs" gap={10} style={{borderRadius: 4}}>
                     <SearchBar url={url} method={method} onUrlChange={setUrl} onMethodChange={setMethod} onSave={onSaveHandler} saveVisible={hasChanged}/>
-                    <Button type="submit" w={100} variant="default" color="gray">Send</Button>
+                    <Button type="submit" w={100} variant="default" color="gray">{t("send")}</Button>
                 </Flex>
             </form>
 
@@ -142,16 +146,16 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
                         <Tabs variant="outline" defaultValue="query" mt="xs">
                             <Tabs.List>
                                 <Tabs.Tab value="query">
-                                    Query
+                                    {t("query")}
                                 </Tabs.Tab>
                                 <Tabs.Tab value="body">
-                                    Body
+                                    {t("body")}
                                 </Tabs.Tab>
                                 <Tabs.Tab value="headers">
-                                    Headers
+                                    {t("headers")}
                                 </Tabs.Tab>
                                 <Tabs.Tab value="auth">
-                                    Auth
+                                    {t("auth")}
                                 </Tabs.Tab>
                             </Tabs.List>
 
@@ -179,7 +183,7 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
                                 ? <Loader color="blue" type="dots" size="xl" m="auto" mt={100}/> 
                                 : response || error 
                                     ? <ResponseBody response={response} error={error}/> 
-                                    : <Text ta="center">Make a request using the URL bar above</Text>}
+                                    : <Text ta="center">{t("pre_request_message")}</Text>}
                         </div>
                     </Panel>
                 </PanelGroup>

@@ -11,6 +11,7 @@ import { RootState } from "../../store/store";
 import { invoke } from '@tauri-apps/api/tauri';
 import { notifications } from "@mantine/notifications"
 import MethodIcon from "../MethodIcon"
+import { useTranslation } from "react-i18next"
 
 type Props = {
     request: YuubinRequest,
@@ -19,6 +20,7 @@ type Props = {
 
 const Request = ({ request, collectionName }:Props) => {
     const dispatch = useDispatch();
+    const { t } = useTranslation();
     const { hovered, ref } = useHover();
     const files = useSelector((state: RootState) => state.request.files)
     const activeRequests = useSelector((state: RootState) => state.request.activeRequests)
@@ -47,14 +49,13 @@ const Request = ({ request, collectionName }:Props) => {
         event.stopPropagation()
 
         modals.openConfirmModal({
-            title: "Delete Request",
+            title: t("delete_request"),
             children: (
                 <Text size="md">
-                    You are about to delete a request from the {collectionName} collection. 
-                    Are you sure you want to proceed?
+                   {t("delete_request_warning", {name: collectionName})}
                 </Text>
             ),
-            labels: { confirm: 'Delete Request', cancel: 'Cancel' },
+            labels: { confirm: t("delete_request"), cancel: t("cancel") },
             centered: true,
             confirmProps: { color: 'red' },
             onConfirm: ()=> deleteHandler(),
@@ -86,8 +87,8 @@ const Request = ({ request, collectionName }:Props) => {
                     }
 
                     notifications.show({
-                        title: 'Success',
-                        message: "Request succesfully deleted",
+                        title: t("success"),
+                        message: t("delete_request_success"),
                         color: 'green'
                     })
 
@@ -96,14 +97,14 @@ const Request = ({ request, collectionName }:Props) => {
 
                 }else{
                     notifications.show({
-                        title: 'Error',
+                        title: t("error"),
                         message: res.message,
                         color: 'red'
                     })
                 }
             }).catch((error) => 
                 notifications.show({
-                    title: 'Unexpected Error',
+                    title: t("unexpected_error"),
                     message: error,
                     color: 'red'
                 })
@@ -113,16 +114,16 @@ const Request = ({ request, collectionName }:Props) => {
     const renameHandler = (event: React.MouseEvent) => {
         event.stopPropagation()
         notifications.show({
-            title: 'In development',
-            message: "This feature is currently not available",
+            title: t("in_development"),
+            message: t("in_development_message"),
             color: 'yellow'
         })
     }
     const runHandler = (event: React.MouseEvent) => {
         event.stopPropagation()
         notifications.show({
-            title: 'In development',
-            message: "This feature is currently not available",
+            title: t("in_development"),
+            message: t("in_development_message"),
             color: 'yellow'
         })
     }
@@ -154,20 +155,20 @@ const Request = ({ request, collectionName }:Props) => {
                         leftSection={<IconPlayerPlay style={{ width: rem(16), height: rem(16)}}/>}
                         onClick={event => {runHandler(event)}}
                     >
-                        Run
+                        {t("run")}
                     </Menu.Item>
                     <Menu.Item
                         leftSection={<IconBallpen style={{ width: rem(16), height: rem(16)}}/>}
                         onClick={event => {renameHandler(event)}}
                     >
-                        Rename
+                        {t("rename")}
                     </Menu.Item>
                     <Menu.Item
                         color="red"
                         onClick={event => {openDeleteModal(event)}}
                         leftSection={<IconTrash style={{ width: rem(16), height: rem(16) }} />}
                     >
-                        Delete
+                        {t("delete")}
                     </Menu.Item>
 
                 </Menu.Dropdown>
