@@ -15,7 +15,7 @@ import { IconSettings } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import camelcaseKeys from 'camelcase-keys';
 import Settings from "./components/Settings/Settings";
-import { updateActiveTabs, updateSettings } from "./configSlice";
+import { updateSettings } from "./configSlice";
 import { useTranslation } from "react-i18next";
 import i18next from 'i18next';
 
@@ -39,14 +39,17 @@ function App(): JSX.Element {
         )
 
         invoke('sync_config').then((res) => { 
-            const {activeTabs, theme, dataPath, language, preserveOpenTabs}:Config = camelcaseKeys(JSON.parse(res.message as string))
+            const {theme, dataPath, language, preserveOpenTabs}:Config = camelcaseKeys(JSON.parse(res.message as string))
             i18next.changeLanguage(language);
             setColorScheme(theme);
-            dispatch(updateActiveTabs(activeTabs))
             dispatch(updateSettings({theme, dataPath, language, preserveOpenTabs}))
             if (preserveOpenTabs) {
-                dispatch(updateRequests(activeTabs))
-                dispatch(updateActiveRequest(activeTabs[0]))
+                const localTabs = localStorage.getItem("activeTabs");
+                if(localTabs != null){
+                    const activeTabs = JSON.parse(localTabs)
+                    dispatch(updateRequests(activeTabs))
+                    dispatch(updateActiveRequest(activeTabs[0]))
+                }
             }
         }).catch((error) => 
                 notifications.show({
@@ -72,11 +75,11 @@ function App(): JSX.Element {
         event.stopPropagation();
         const newTabs = activeRequests.filter(id => id!== tabId)
         dispatch(updateRequests(newTabs))
+        localStorage.setItem("activeTabs", JSON.stringify(newTabs))
         if(activeTab === tabId){
             dispatch(updateActiveRequest(newTabs[newTabs.length -1]))
         }
     }
-
 
     return (
         <Box h="100vh">

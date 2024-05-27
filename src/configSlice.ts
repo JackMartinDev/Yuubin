@@ -6,7 +6,6 @@ export interface ConfigState{
 }
 
 const initialState: Config = {
-    activeTabs: ["1", "2"],
     dataPath: "",
     preserveOpenTabs: false,
     language: "en",
@@ -23,12 +22,9 @@ export const configSlice = createSlice({
             state.preserveOpenTabs = action.payload.preserveOpenTabs;
             state.dataPath = action.payload.dataPath;
         },
-        updateActiveTabs: (state, action: PayloadAction<string[]>) => {
-            state.activeTabs = action.payload;
-        }
     },
 })
 
-export const {updateSettings, updateActiveTabs} = configSlice.actions
+export const {updateSettings} = configSlice.actions
 
 export default configSlice.reducer

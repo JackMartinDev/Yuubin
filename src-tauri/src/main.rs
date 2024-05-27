@@ -60,7 +60,6 @@ struct Payload {
 #[derive(Serialize, Deserialize, Debug)]
 struct Config {
     preserve_open_tabs: bool,
-    active_tabs: Vec<String>,
     language: String,
     theme: String,
     data_path: String,

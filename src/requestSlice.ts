@@ -8,7 +8,7 @@ export interface RequestState{
 }
 
 const initialState: RequestState = {
-    activeRequest: "1",
+    activeRequest: "",
     activeRequests: [],
     files: [] 
 }

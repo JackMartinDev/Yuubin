@@ -31,11 +31,8 @@ type KeyValuePair = {
 type HttpVerb = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"  | "OPTIONS" | "HEAD"
 
 type Config = {
-    activeTabs: string[],
     dataPath: string,
     language: string,
     preserveOpenTabs: boolean,
     theme: "light" | "dark"
 }
-
-type Settings = Omit<Config, 'activeTabs'>

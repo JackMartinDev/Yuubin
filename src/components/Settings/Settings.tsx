@@ -81,7 +81,7 @@ const Settings = ({closeModal}: Props) => {
         const {language, theme, dataPath, preserveOpenTabs} = form.getValues()
         const parsedTheme = theme ? "dark" : "light"
 
-        const config: Config = {preserveOpenTabs, dataPath, language, theme: parsedTheme, activeTabs}
+        const config: Config = {preserveOpenTabs, dataPath, language, theme: parsedTheme}
 
         console.log(config)
         invoke('edit_config', {data: JSON.stringify(snakecaseKeys(config))})

@@ -33,9 +33,11 @@ const Request = ({ request, collectionName }:Props) => {
         if(!opened){
             if(activeRequests.length >= 6){
                 const newTabs = [...activeRequests.slice(0, -1), request.meta.id]
+                localStorage.setItem("activeTabs", JSON.stringify(newTabs))
                 dispatch(updateRequests(newTabs))
             }else{
                 const newTabs = [...activeRequests, request.meta.id]
+                localStorage.setItem("activeTabs", JSON.stringify(newTabs))
                 dispatch(updateRequests(newTabs))
             }
         }
