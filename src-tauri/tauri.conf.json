@@ -45,14 +45,7 @@
                 "title": "Yuubin",
                 "width": 1520,
                 "height": 760,
-                "visible": false
-            },
-            {
-                "width": 1000,
-                "height":700,
-                "decorations": false,
-                "url": "loading.html",
-                "label": "splashscreen"
+                "visible": true
             }
         ]
     }
