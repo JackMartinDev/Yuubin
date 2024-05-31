@@ -1,7 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use tauri::{api::path::config_dir, Manager};
+use tauri::{api::path::config_dir};
 use std::{fs::{self, create_dir, metadata, remove_dir_all, File}, io::{Error, ErrorKind, Write}, path::Path, u8};
 use walkdir::WalkDir;
 use serde::{Deserialize, Serialize};
