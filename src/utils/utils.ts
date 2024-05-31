@@ -22,8 +22,13 @@ export function deepIsEqual(array1: KeyValuePair[], array2: KeyValuePair[]): boo
         const keys1 = Object.keys(object1);
         const keys2 = Object.keys(object2);
         if (keys1.length !== keys2.length) return false;
-        for (const key of keys1) {
-            if (object1[key] !== object2[key]) return false;
+
+        if (
+            object1.key !== object2.key ||
+            object1.value !== object2.value ||
+            object1.checked !== object2.checked
+        ) {
+            return false;
         }
     }
     return true

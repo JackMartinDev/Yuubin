@@ -1,7 +1,6 @@
 import axios, { AxiosResponse, AxiosError } from "axios"
 import prettyBytes from "pretty-bytes"
 import { notifications } from "@mantine/notifications";
-import { message } from "@tauri-apps/api/dialog";
 
 interface KeyValueObject{
     [key: string]: string
@@ -10,10 +9,10 @@ interface KeyValueObject{
 //remove empty/unchecked key value pairs and convert to a single object
 const ConvertArrayToObject = (array: KeyValuePair[]): KeyValueObject => {
     const filteredArray = array.filter((pair) => pair.key !== "" && pair.value !== "" && pair.checked === true)
-    return filteredArray.reduce((obj, item) => (obj[item.key] = item.value, obj) ,{});
+    return filteredArray.reduce<KeyValueObject>((obj, item) => (obj[item.key] = item.value, obj) ,{});
 }
 
-const useSendRequest = (paramsArray: KeyValuePair[] | undefined, headersArray: KeyValuePair[] | undefined, url: string, method: HttpVerb, body: string | undefined, auth: string | undefined) => {    
+const useSendRequest = (paramsArray: KeyValuePair[] | undefined, headersArray: KeyValuePair[] | undefined, url: string, method: HttpVerb, body: string | undefined, _auth: string | undefined) => {    
 
     let data:string
     let params: KeyValueObject
