@@ -1,7 +1,7 @@
 import classes from "./Request.module.css"
 import { useDispatch, useSelector } from "react-redux"
 import { updateActiveRequest, updateRequests, updatefiles } from "../../requestSlice"
-import { ActionIcon, Flex, Text, Tooltip } from "@mantine/core"
+import { ActionIcon, Flex, Text, Tooltip, useMantineColorScheme } from "@mantine/core"
 import { IconBallpen, IconDots, IconPlayerPlay } from "@tabler/icons-react"
 import { useHover } from "@mantine/hooks"
 import { Menu,  rem } from '@mantine/core';
@@ -22,6 +22,7 @@ const Request = ({ request, collectionName }:Props) => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const { hovered, ref } = useHover();
+    const { colorScheme } = useMantineColorScheme();
     const files = useSelector((state: RootState) => state.request.files)
     const activeRequests = useSelector((state: RootState) => state.request.activeRequests)
     const activeTab = useSelector((state: RootState) => state.request.activeRequest)
@@ -136,7 +137,7 @@ const Request = ({ request, collectionName }:Props) => {
             justify="space-between" 
             align="center" 
             ref={ref} 
-            style={activeTab === request.meta.id ? {backgroundColor: '#cccaca'}: {}}
+            style={activeTab === request.meta.id ? {backgroundColor: '#E0DFDF'}: {}}
         >
             <Tooltip label={request.meta.name} openDelay={300} position="right" offset={{ mainAxis: -20, crossAxis: -35 }}>
                 <Text className={classes.truncate} size="sm" ml="xs"><MethodIcon method={request.method}/> {request.meta.name}</Text>
@@ -148,7 +149,7 @@ const Request = ({ request, collectionName }:Props) => {
                         variant="transparent" 
                         color="dark" 
                         style={hovered ? {visibility:"visible"}: {visibility:"hidden"}}>
-                        <IconDots style={{ width: '85%', height: '85%' }} stroke={2} />
+                        <IconDots style={{ width: '85%', height: '85%' }} stroke={2}/>
                     </ActionIcon>
                 </Menu.Target>
 

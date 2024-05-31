@@ -27,7 +27,7 @@ type Props = {
 const ResponseBody = ({response, error}: Props) => {
     const { colorScheme } = useMantineColorScheme();
     return(
-        <Box ml="md">
+        <Box ml="md" mt="xs">
             {response ? 
                 <Group justify="right">
                     <Text c="green">{`${response.status} OK`}</Text>

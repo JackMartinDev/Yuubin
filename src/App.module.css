@@ -3,3 +3,10 @@
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+.handle {
+    background-color: #DEE2E6;
+    width: 1px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}

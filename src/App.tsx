@@ -101,7 +101,7 @@ function App(): JSX.Element {
                         </Group>
                     </Stack>
                 </Panel>
-                <PanelResizeHandle style={{backgroundColor: "#DEE2E6", width: "1px", marginTop: '5px', marginBottom: '10px'}}/>
+                <PanelResizeHandle className={classes.handle}/>
                 <Panel defaultSize={80} minSize={70}>
                     {activeRequests.length > 0 ?
                         <Tabs variant="outline" value={activeTab} onChange={(val) => onChangeHandler(val!)} mx="xs" mt="xs" >
