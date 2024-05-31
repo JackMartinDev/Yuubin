@@ -767,6 +767,13 @@
     "@codemirror/state" "^6.0.0"
     "@codemirror/view" "^6.0.0"
 
+"@uiw/codemirror-theme-quietlight@^4.22.1":
+  version "4.22.1"
+  resolved "https://registry.yarnpkg.com/@uiw/codemirror-theme-quietlight/-/codemirror-theme-quietlight-4.22.1.tgz#86a2b8b2d4ff7c8979864dbf5dce81d41d6e8d7f"
+  integrity sha512-ieDKhs1bycmWigwNiHiVbgoIICgvGpqd0uo18WV+8BaU+p7A6zYmD8Z03qfqK89o/LRzvsa5HiCYHSeE5mvc/w==
+  dependencies:
+    "@uiw/codemirror-themes" "4.22.1"
+
 "@uiw/codemirror-theme-tokyo-night-storm@^4.21.21":
   version "4.21.21"
   resolved "https://registry.yarnpkg.com/@uiw/codemirror-theme-tokyo-night-storm/-/codemirror-theme-tokyo-night-storm-4.21.21.tgz#3f54c206abdf690c4163b2d48be86c446c7cda64"
@@ -774,10 +781,26 @@
   dependencies:
     "@uiw/codemirror-themes" "4.21.21"
 
+"@uiw/codemirror-theme-vscode@^4.22.1":
+  version "4.22.1"
+  resolved "https://registry.yarnpkg.com/@uiw/codemirror-theme-vscode/-/codemirror-theme-vscode-4.22.1.tgz#29cc7c4c5c81d0e0428dd06e11a01915a2243472"
+  integrity sha512-oxOdMLGFtcHyaA/uy7LIKo+hvgpVEgrVaryz+Zg+YU6jD8iLEajyv+rYnzlryyii8gmshQh4RFoTmkMc8eEeHA==
+  dependencies:
+    "@uiw/codemirror-themes" "4.22.1"
+
 "@uiw/codemirror-themes@4.21.21":
   version "4.21.21"
   resolved "https://registry.yarnpkg.com/@uiw/codemirror-themes/-/codemirror-themes-4.21.21.tgz#26efb06ecce9a51aa73d39311c90f8fcb06fdc43"
   integrity sha512-ljVcMGdaxo75UaH+EqxJ+jLyMVVgeSfW2AKyT1VeLy+4SDpuqNQ7wq5XVxktsG6LH+OvgSFndWXgPANf4+gQcA==
+  dependencies:
+    "@codemirror/language" "^6.0.0"
+    "@codemirror/state" "^6.0.0"
+    "@codemirror/view" "^6.0.0"
+
+"@uiw/codemirror-themes@4.22.1":
+  version "4.22.1"
+  resolved "https://registry.yarnpkg.com/@uiw/codemirror-themes/-/codemirror-themes-4.22.1.tgz#e439627572d06ea9840f07d8e80e921aa8ded694"
+  integrity sha512-5TeB8wCc0aNd3YEhzOvgekpAFQfEm4fCTUcGmEIQqaRNgKAM83HYNpE1JF2j7x2oDFugdiO0yJynS6bo1zVOuw==
   dependencies:
     "@codemirror/language" "^6.0.0"
     "@codemirror/state" "^6.0.0"

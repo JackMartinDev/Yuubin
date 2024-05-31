@@ -1,8 +1,10 @@
 import CodeMirror, { EditorView } from "@uiw/react-codemirror"
 import { json, jsonParseLinter } from "@codemirror/lang-json"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import  { vscodeDark } from "@uiw/codemirror-theme-vscode"
+import  { quietlight } from "@uiw/codemirror-theme-quietlight"
 import { lintGutter, linter } from "@codemirror/lint"
-import { Box } from "@mantine/core"
+import { Box, useMantineColorScheme } from "@mantine/core"
 
 interface Props {
     body?: string
@@ -11,39 +13,26 @@ interface Props {
 
 const RequestBody = ({body, onBodyChange}: Props) => {
     const [localBody, setLocalBody] = useState(body ? body : "{}")
+    const { colorScheme } = useMantineColorScheme();
 
     useEffect(() => {
         onBodyChange(localBody);
     }, [localBody, onBodyChange]);
 
-
-//    const myTheme = createTheme({
-//        theme: "light",
-//        settings: {
-//        },
-//        styles: []
-//        
-//    })
-
-    const testTheme = EditorView.theme({
-        "&": {
-            fontSize: "10pt",
-            border: "1px solid #c0c0c0",
-            maxHeight: '50vh',
-            height: '50vh',
-        },
-        "&.cm-editor.cm-focused": {
-            outline: "none"
-        },
-        ".cm-scroller": {overflow: "auto"}
-    })
-
     return(
         <Box mr={16}> 
             <CodeMirror 
                 value={localBody} 
-                theme={testTheme}
-                extensions={[json(), linter(jsonParseLinter()), lintGutter()]}  
+                theme={colorScheme === "dark" ? vscodeDark : quietlight}
+                extensions={[json(), linter(jsonParseLinter()), lintGutter(),EditorView.theme({
+                    "&": {
+                        fontSize: "11pt",
+                        border: "1px solid #c0c0c0",
+                    },
+                    "&.cm-editor.cm-focused": {
+                        outline: "none"
+                    },
+                })]}  
                 onChange={(val, _viewUpdate) => setLocalBody(val)} 
             />
         </Box>
