@@ -87,7 +87,8 @@ const useSendRequest = (paramsArray: KeyValuePair[] | undefined, headersArray: K
                 };
             } else {
                 throw {
-                    message:"An unexpected error occurred"
+                    message:"An unexpected error occurred",
+                    status: 400
                 }
             }
         }

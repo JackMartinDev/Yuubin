@@ -50,7 +50,7 @@ type Props = {
 }
 
 const Settings = ({closeModal}: Props) => {
-    const {language, theme, dataPath, preserveOpenTabs, activeTabs} = useSelector((state: RootState) => state.config)
+    const {language, theme, dataPath, preserveOpenTabs} = useSelector((state: RootState) => state.config)
     const dispatch = useDispatch();
     const { t } = useTranslation()
     const { setColorScheme } = useMantineColorScheme();
@@ -68,7 +68,7 @@ const Settings = ({closeModal}: Props) => {
         },
     });
 
-    const [submittedValues, setSubmittedValues] = useState<typeof form.values>(form.values);
+    const [_submittedValues, setSubmittedValues] = useState<typeof form.values>(form.values);
 
 
     const selectedOption = languages.find((item) => item.value === form.getValues().language);
@@ -84,9 +84,9 @@ const Settings = ({closeModal}: Props) => {
         const config: Config = {preserveOpenTabs, dataPath, language, theme: parsedTheme}
 
         console.log(config)
-        invoke('edit_config', {data: JSON.stringify(snakecaseKeys(config))})
-            .then((res) => {
-                if(!res.error){
+        invoke<TauriResponse>('edit_config', {data: JSON.stringify(snakecaseKeys(config))})
+            .then((response) => {
+                if(!response.error){
                     dispatch(updateSettings({preserveOpenTabs, dataPath, language, theme: parsedTheme}))
                     i18next.changeLanguage(language)
                     setColorScheme(parsedTheme)
@@ -100,7 +100,7 @@ const Settings = ({closeModal}: Props) => {
                 }else{
                     notifications.show({
                         title: t("error"),
-                        message: res.message,
+                        message: response.message,
                         color: 'red'
                     })
                 }

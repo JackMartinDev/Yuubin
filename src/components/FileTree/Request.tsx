@@ -67,9 +67,9 @@ const Request = ({ request, collectionName }:Props) => {
     const deleteHandler = () => {
         let requestName = request.meta.name;
 
-        invoke('delete_file', {collection: collectionName, request: requestName})
-            .then((res) => {
-                if(!res.error){
+        invoke<TauriResponse>('delete_file', {collection: collectionName, request: requestName})
+            .then((response) => {
+                if(!response.error){
                     const newTabs = activeRequests.filter(id => id!== request.meta.id)
                     const newCollections = files.map(collection => {
                         // Filter out the request with the given ID from each collection
@@ -100,7 +100,7 @@ const Request = ({ request, collectionName }:Props) => {
                 }else{
                     notifications.show({
                         title: t("error"),
-                        message: res.message,
+                        message: response.message,
                         color: 'red'
                     })
                 }

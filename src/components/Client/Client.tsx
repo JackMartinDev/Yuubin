@@ -10,7 +10,7 @@ import Headers from "../Headers/Headers"
 import Authentication from "../Authentication/Authentication"
 import { useState } from "react"
 import useSendRequest from "../../hooks/useSendRequest"
-import { HttpStatusCode } from "axios"
+import { AxiosError, HttpStatusCode } from "axios"
 import { invoke } from "@tauri-apps/api/tauri"
 import { notifications } from "@mantine/notifications"
 import { deepIsEqual } from "../../utils/utils"
@@ -84,20 +84,20 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
         //Create and delete use success messages set on the front end, 
         //but here it is using a message from the backend
         //CHECK THIS LATER
-        invoke('edit_file', {data: JSON.stringify(updatedRequest), collection: collectionName})
-            .then((res) => {
-                if(!res.error){
+        invoke<TauriResponse>('edit_file', {data: JSON.stringify(updatedRequest), collection: collectionName})
+            .then((response) => {
+                if(!response.error){
                     dispatch(updatefiles(newFiles)) 
                     notifications.show({
                         title: t("success"),
-                        message: res.message,
+                        message: response.message,
                         color: 'green'
                     })
 
                 }else{
                     notifications.show({
                         title: t("error"),
-                        message: res.message,
+                        message: response.message,
                         color: 'red'
                     })
                 }
@@ -110,7 +110,7 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
             )
     }
 
-    const onSubmitHandler = async(event) => {
+    const onSubmitHandler = async(event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setLoading(true)
         try {
@@ -118,9 +118,9 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
             console.log(response)
             setResponse(response)
             setError(undefined) 
-        } catch (error) {
+        } catch (err) {
+            const error = err as AxiosError
             console.log(error)
-            //Perform type checking
             setResponse(undefined);
             setError({
                 message: error.message,
@@ -134,7 +134,7 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
     return(
         <Box>
             <form onSubmit={(event) => onSubmitHandler(event)}>
-                <Flex bg="#F5F5F5" align="center" p="xs" gap={10} style={{borderRadius: 4}}>
+                <Flex  align="center"  gap={10} style={{borderRadius: 4}}>
                     <SearchBar url={url} method={method} onUrlChange={setUrl} onMethodChange={setMethod} onSave={onSaveHandler} saveVisible={hasChanged}/>
                     <Button type="submit" w={100} variant="default" color="gray">{t("send")}</Button>
                 </Flex>
@@ -176,7 +176,7 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
                             </Tabs.Panel>
                         </Tabs>
                     </Panel>
-                    <PanelResizeHandle style={{backgroundColor: "#DEE2E6", width: "1px"}}/>
+                    <PanelResizeHandle style={{backgroundColor: "#DEE2E6", width: "1px", marginTop: '10px'}}/>
                     <Panel defaultSize={50} minSize={30}>
                         <div>
                             {loading 

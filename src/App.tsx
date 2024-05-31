@@ -30,16 +30,17 @@ function App(): JSX.Element {
 
     const syncFileSystem = () => {
         //Consider having these 2 invokes as a single "sync" invoke
-        invoke('sync_files').then((files) => dispatch(updatefiles(JSON.parse(files.message as string)))).catch((error) => 
+        invoke<TauriResponse>('sync_files').then((response) => dispatch(updatefiles(JSON.parse(response.message)))).catch((error) => { 
             notifications.show({
                 title: t("unexpected_error"),
                 message: error,
                 color: 'red'
             })
+        }
         )
 
-        invoke('sync_config').then((res) => { 
-            const {theme, dataPath, language, preserveOpenTabs}:Config = camelcaseKeys(JSON.parse(res.message as string))
+        invoke<TauriResponse>('sync_config').then((response) => { 
+            const {theme, dataPath, language, preserveOpenTabs}:Config = camelcaseKeys(JSON.parse(response.message))
             i18next.changeLanguage(language);
             setColorScheme(theme);
             dispatch(updateSettings({theme, dataPath, language, preserveOpenTabs}))
@@ -61,6 +62,7 @@ function App(): JSX.Element {
     }
 
     useEffect(() => {
+        console.log("hello")
         syncFileSystem() 
     },[]);
 
@@ -89,7 +91,7 @@ function App(): JSX.Element {
             <Notifications/>
             <PanelGroup direction="horizontal">
                 <Panel defaultSize={15} minSize={15}>
-                    <Stack bg="#F5F5F5" h="100%" justify="space-between">
+                    <Stack h="100%" justify="space-between">
                         <FileTree files={files} />
                         <Group justify="space-between" align="baseline" m="xs">
                             <ActionIcon variant="default" color="gray" aria-label="Settings" onClick={open}>
@@ -99,7 +101,7 @@ function App(): JSX.Element {
                         </Group>
                     </Stack>
                 </Panel>
-                <PanelResizeHandle />
+                <PanelResizeHandle style={{backgroundColor: "#DEE2E6", width: "1px", marginTop: '5px', marginBottom: '10px'}}/>
                 <Panel defaultSize={80} minSize={70}>
                     {activeRequests.length > 0 ?
                         <Tabs variant="outline" value={activeTab} onChange={(val) => onChangeHandler(val!)} mx="xs" mt="xs" >

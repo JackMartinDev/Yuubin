@@ -36,3 +36,8 @@ type Config = {
     preserveOpenTabs: boolean,
     theme: "light" | "dark"
 }
+
+type TauriResponse = {
+    error: boolean 
+    message: "string",
+}

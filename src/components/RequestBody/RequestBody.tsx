@@ -2,7 +2,6 @@ import CodeMirror, { EditorView } from "@uiw/react-codemirror"
 import { json, jsonParseLinter } from "@codemirror/lang-json"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { lintGutter, linter } from "@codemirror/lint"
-import {createTheme} from '@uiw/codemirror-themes';
 import { Box } from "@mantine/core"
 
 interface Props {
@@ -18,13 +17,13 @@ const RequestBody = ({body, onBodyChange}: Props) => {
     }, [localBody, onBodyChange]);
 
 
-    const myTheme = createTheme({
-        theme: "light",
-        settings: {
-        },
-        styles: []
-        
-    })
+//    const myTheme = createTheme({
+//        theme: "light",
+//        settings: {
+//        },
+//        styles: []
+//        
+//    })
 
     const testTheme = EditorView.theme({
         "&": {

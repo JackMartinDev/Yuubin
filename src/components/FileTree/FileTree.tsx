@@ -1,9 +1,8 @@
 import { isNotEmpty, useForm } from "@mantine/form";
 import Collection from "./Collection";
-import { Box, Button, Flex, Modal, TextInput, Title, rem } from "@mantine/core";
+import { Box, Button, Flex, Modal, TextInput, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconSearch } from "@tabler/icons-react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { invoke } from "@tauri-apps/api/tauri";
@@ -16,7 +15,7 @@ interface Props {
 }
 
 const FileTree = ({ files }: Props) => {
-    const icon = <IconSearch style={{ width: rem(16), height: rem(16) }} />;
+    //const icon = <IconSearch style={{ width: rem(16), height: rem(16) }} />;
     const [opened, { open, close }] = useDisclosure(false);
     const localFiles = useSelector((state: RootState) => state.request.files)
     const dispatch = useDispatch();
@@ -32,11 +31,7 @@ const FileTree = ({ files }: Props) => {
         },
     });
 
-    const [submittedValues, setSubmittedValues] = useState<typeof form.values>(form.values);
-
-    const openModalHandler = (event: React.MouseEvent) =>{
-        open();
-    }
+    const [_submittedValues, setSubmittedValues] = useState<typeof form.values>(form.values);
 
     const closeModal = () => {
         close();
@@ -50,9 +45,9 @@ const FileTree = ({ files }: Props) => {
         const newCollection: Collection = {name: formValues.name, requests: []}
         const newFiles = [...localFiles, newCollection]
 
-        invoke('create_directory', {collection: formValues.name})
-            .then((res) => {
-                if(!res.error){
+        invoke<TauriResponse>('create_directory', {collection: formValues.name})
+            .then((response) => {
+                if(!response.error){
                     dispatch(updatefiles(newFiles))
                     closeModal()
                     notifications.show({
@@ -64,7 +59,7 @@ const FileTree = ({ files }: Props) => {
                 }else{
                     notifications.show({
                         title: t("error"),
-                        message: res.message,
+                        message: response.message,
                         color: 'red'
                     })
                 }
@@ -98,7 +93,7 @@ const FileTree = ({ files }: Props) => {
             <Box>
                 <Box m="xs">
                     <Title order={2}>{t("yuubin")}</Title>
-                    <Button onClick={openModalHandler} variant="default" color="gray" mb="xs" w="100%">
+                    <Button onClick={open} variant="default" color="gray" mb="xs" w="100%">
                         {t("create_collection")}
                     </Button>
                 </Box>

@@ -48,7 +48,7 @@ const Collection = ({ collection }: Props): JSX.Element => {
         },
     });
 
-    const [submittedValues, setSubmittedValues] = useState<typeof form.values>(form.values);
+    const [_submittedValues, setSubmittedValues] = useState<typeof form.values>(form.values);
 
     const openModalHandler = (event: React.MouseEvent) =>{
         event.stopPropagation();
@@ -80,9 +80,9 @@ const Collection = ({ collection }: Props): JSX.Element => {
     }
 
     const deleteHandler = () => {
-        invoke('delete_directory', {collection: collection.name})
-            .then((res) => {
-                if(!res.error){
+        invoke<TauriResponse>('delete_directory', {collection: collection.name})
+            .then((response) => {
+                if(!response.error){
                     const collectionIds = collection.requests.map(req =>  req.meta.id)
                     const newTabs = activeRequests.filter(id => !collectionIds.includes(id))
                     const newCollections = files.filter(col => col.name !== collection.name)                        
@@ -103,7 +103,7 @@ const Collection = ({ collection }: Props): JSX.Element => {
                 }else{
                     notifications.show({
                         title: t("error"),
-                        message: res.message,
+                        message: response.message,
                         color: 'red'
                     })
                 }
@@ -140,9 +140,9 @@ const Collection = ({ collection }: Props): JSX.Element => {
             return col;         
         });
 
-        invoke('create_file', {data: JSON.stringify(newRequest), collection: collection.name})
-            .then((res) => {
-                if(!res.error){
+        invoke<TauriResponse>('create_file', {data: JSON.stringify(newRequest), collection: collection.name})
+            .then((response) => {
+                if(!response.error){
                     dispatch(updatefiles(newFiles))
                     dispatch(updateRequests([...requests, id]))
                     dispatch(updateActiveRequest(id))
@@ -157,7 +157,7 @@ const Collection = ({ collection }: Props): JSX.Element => {
                 }else{
                     notifications.show({
                         title: t("error"),
-                        message: res.message,
+                        message: response.message,
                         color: 'red'
                     })
                 }
