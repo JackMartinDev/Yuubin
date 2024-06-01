@@ -134,14 +134,14 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
     return(
         <Box>
             <form onSubmit={(event) => onSubmitHandler(event)}>
-                <Flex  align="center"  gap={10} style={{borderRadius: 4}}>
+                <Flex  align="center"gap={10} style={{borderRadius: 4}} h='5vh'>
                     <SearchBar url={url} method={method} onUrlChange={setUrl} onMethodChange={setMethod} onSave={onSaveHandler} saveVisible={hasChanged}/>
                     <Button type="submit" w={100} variant="default" color="gray">{t("send")}</Button>
                 </Flex>
             </form>
 
             <Box>
-                <PanelGroup direction="horizontal" style={{height: "85vh"}}>
+                <PanelGroup direction="horizontal" style={{height: "90vh"}}>
                     <Panel defaultSize={50} minSize={30} >
                         <Tabs variant="outline" defaultValue="query" mt="xs">
                             <Tabs.List>
@@ -176,7 +176,7 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
                             </Tabs.Panel>
                         </Tabs>
                     </Panel>
-                    <PanelResizeHandle style={{backgroundColor: "#DEE2E6", width: "1px", marginTop: '10px'}}/>
+                    <PanelResizeHandle style={{backgroundColor: "#DEE2E6", width: "1px"}}/>
                     <Panel defaultSize={50} minSize={30}>
                         <div>
                             {loading 

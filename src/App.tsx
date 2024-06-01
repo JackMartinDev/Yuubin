@@ -22,7 +22,7 @@ import i18next from 'i18next';
 function App(): JSX.Element {
     const dispatch = useDispatch()
     const { t } = useTranslation();
-    const { setColorScheme } = useMantineColorScheme();
+    const { colorScheme, setColorScheme } = useMantineColorScheme();
     const [opened, { open, close }] = useDisclosure(false);
     const activeTab = useSelector((state: RootState) => state.request.activeRequest)
     const files = useSelector((state:RootState) => state.request.files)
@@ -90,7 +90,7 @@ function App(): JSX.Element {
             </Modal>
             <Notifications/>
             <PanelGroup direction="horizontal">
-                <Panel defaultSize={15} minSize={15}>
+                <Panel defaultSize={15} minSize={15} className={colorScheme === "dark" ? classes.fileTreeDark : classes.fileTreeLight}>
                     <Stack h="100%" justify="space-between">
                         <FileTree files={files} />
                         <Group justify="space-between" align="baseline" m="xs">
@@ -105,7 +105,7 @@ function App(): JSX.Element {
                 <Panel defaultSize={80} minSize={70}>
                     {activeRequests.length > 0 ?
                         <Tabs variant="outline" value={activeTab} onChange={(val) => onChangeHandler(val!)} mx="xs" mt="xs" >
-                            <Tabs.List>
+                            <Tabs.List h='5vh'>
                                 {activeRequests.map(activeRequestId => 
                                     files.flatMap(collection => 
                                         collection.requests
@@ -127,7 +127,7 @@ function App(): JSX.Element {
                                     collection.requests
                                     .filter(request => activeRequestId === request.meta.id)
                                     .map(request => (
-                                        <Tabs.Panel value={request.meta.id} mt="xs" key={request.meta.id}>
+                                        <Tabs.Panel value={request.meta.id} mt="xs" key={request.meta.id} h='95vh'>
                                             <Client request={request} collectionName={collection.name}/>
                                         </Tabs.Panel>
                                     ))

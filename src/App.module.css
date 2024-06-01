@@ -7,6 +7,11 @@
 .handle {
     background-color: #DEE2E6;
     width: 1px;
-    margin-top: 5px;
-    margin-bottom: 10px;
+}
+
+.fileTreeLight {
+   background-color: rgba(0, 0, 0, 0.1) 
+}
+.fileTreeDark {
+   background-color: rgba(0, 0, 0, 0.2) 
 }
