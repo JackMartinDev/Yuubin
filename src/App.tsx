@@ -105,7 +105,7 @@ function App(): JSX.Element {
                 <Panel defaultSize={80} minSize={70}>
                     {activeRequests.length > 0 ?
                         <Tabs variant="outline" value={activeTab} onChange={(val) => onChangeHandler(val!)} mx="xs" mt="xs" >
-                            <Tabs.List h='5vh'>
+                            <Tabs.List>
                                 {activeRequests.map(activeRequestId => 
                                     files.flatMap(collection => 
                                         collection.requests
@@ -127,7 +127,7 @@ function App(): JSX.Element {
                                     collection.requests
                                     .filter(request => activeRequestId === request.meta.id)
                                     .map(request => (
-                                        <Tabs.Panel value={request.meta.id} mt="xs" key={request.meta.id} h='95vh'>
+                                        <Tabs.Panel value={request.meta.id} mt="xs" key={request.meta.id}>
                                             <Client request={request} collectionName={collection.name}/>
                                         </Tabs.Panel>
                                     ))
