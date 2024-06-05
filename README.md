@@ -42,8 +42,7 @@ To install Yuubin, follow these steps:
    - Enter a name for your collection and save it.
 
 2. **Adding Requests to a Collection:**
-   - Select the collection you want to add a request to.
-   - Click on the "New Request" button.
+   - Click on the "New Request" button within the desired collection.
    - Save the request to your collection.
    - Enter the request details (method, URL, headers, body).
    - Click "Send" to execute the request and view the response.
