@@ -28,14 +28,12 @@ To install Yuubin, follow these steps:
     ```bash
     yarn tauri build
     ```
+4. Install Yuubin based on your operating system:
+    - **Windows:** Run the `.msi` or `.exe` installer.
+    - **MacOS:** Open the `.app` or `.dmg` file.
+    - **Linux:** Use the `.deb` or `.AppImage` file.
 
-## Usage
-
-1. Start the application:
-    ```bash
-    yarn tauri dev
-    ```
-2. Yuubin will open as a desktop application.
+   You can find the installation files in the distribution directory: `src-tauri\target\release\bundle`.
 
 ## Getting Started
 
