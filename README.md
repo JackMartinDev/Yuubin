@@ -15,19 +15,16 @@ Yuubin is a powerful and user-friendly API client desktop application, similar t
 
 To install Yuubin, follow these steps:
 
-1. Clone the repository:
+1. Clone the repository and navigate to the project directory:
     ```bash
     git clone https://github.com/JackMartinDev/Yuubin.git
-    ```
-2. Navigate to the project directory:
-    ```bash
     cd Yuubin
     ```
-3. Install the dependencies:
+2. Install the dependencies:
     ```bash
     yarn install
     ```
-4. Build the Tauri application:
+3. Build the Tauri application:
     ```bash
     yarn tauri build
     ```
