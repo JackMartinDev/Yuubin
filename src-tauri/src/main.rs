@@ -459,6 +459,11 @@ fn rename_directory(collection: String, new_collection: String) -> Response{
 
 fn main() {
     tauri::Builder::default()
+        .setup(|_app| {
+            //TODO Create config/data dir if they do not exists already
+            //Create default config.toml if it does not exist
+            Ok(())
+        })
         .invoke_handler(tauri::generate_handler![sync_files, sync_config, edit_config, delete_file, create_file, edit_file, rename_file, delete_directory, create_directory, rename_directory])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

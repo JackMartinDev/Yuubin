@@ -1,0 +1,13 @@
+method = "GET"
+url = "https://google.com"
+body = "{}"
+headers = []
+
+[[params]]
+key = "key1"
+value = "val1"
+checked = true
+
+[meta]
+name = "Request_VeryLongNameRequest12222"
+id = "3c130dfc-024b-48b7-8857-0dfe8d3eee05"
