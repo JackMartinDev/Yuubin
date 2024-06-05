@@ -1,6 +1,19 @@
-.request:hover{
-    background-color: #EFEFEF;
+.light:hover{
+    background-color: #E7E7E7;
     cursor: pointer;
+}
+
+.dark:hover{
+    background-color: #333537;
+    cursor: pointer;
+}
+
+.darkSelected {
+    background-color: #3E3E3F;
+}
+
+.lightSelected {
+    background-color: #D2CFCF;
 }
 
 .truncate {

@@ -10,8 +10,8 @@
 }
 
 .fileTreeLight {
-   background-color: rgba(0, 0, 0, 0.1) 
+   background-color: #F2F2F2; 
 }
 .fileTreeDark {
-   background-color: rgba(0, 0, 0, 0.2) 
+   background-color: #1D1D1D; 
 }

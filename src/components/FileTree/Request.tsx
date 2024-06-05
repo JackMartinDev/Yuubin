@@ -131,13 +131,25 @@ const Request = ({ request, collectionName }:Props) => {
         })
     }
 
+    const getRequestClassName = () => {
+        const isSelected = activeTab === request.meta.id; 
+        const isDarkMode = colorScheme === "dark";
+
+        if (isSelected) {
+            return isDarkMode ? classes.darkSelected : classes.lightSelected
+        }
+
+        return isDarkMode ? classes.dark : classes.light
+    }
+
     return(
-        <Flex pl="lg" className={classes.request} 
+        <Flex 
+            pl="lg"  
             onClick={onClickHandler} 
             justify="space-between" 
             align="center" 
             ref={ref} 
-            style={activeTab === request.meta.id ? {backgroundColor: '#E0DFDF'}: {}}
+            className={getRequestClassName()}
         >
             <Tooltip label={request.meta.name} openDelay={300} position="right" offset={{ mainAxis: -20, crossAxis: -35 }}>
                 <Text className={classes.truncate} size="sm" ml="xs"><MethodIcon method={request.method}/> {request.meta.name}</Text>
