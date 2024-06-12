@@ -1,7 +1,7 @@
 # Yuubin
 
 Yuubin is a powerful and user-friendly API client desktop application, similar to Postman, that allows you to create, manage, and test HTTP requests. Unlike some other API clients, Yuubin stores all collection and request data locally on your computer in files, ensuring your data remains private and secure. Yuubin is built using Tauri, making it lightweight and fast.
-
+![Yuubin](./public/yuubin.PNG)
 ## Features
 
 - **Local Data Storage:** All your collections, requests and configs are stored locally on your computer in files, ensuring your data remains private and secure.
