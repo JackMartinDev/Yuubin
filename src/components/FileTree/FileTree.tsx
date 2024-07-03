@@ -47,7 +47,7 @@ const FileTree = ({ files }: Props) => {
 
         invoke<TauriResponse>('create_directory', {collection: formValues.name})
             .then((response) => {
-                if(!response.error){
+                if(response.success){
                     dispatch(updatefiles(newFiles))
                     closeModal()
                     notifications.show({

@@ -82,7 +82,7 @@ const Collection = ({ collection }: Props): JSX.Element => {
     const deleteHandler = () => {
         invoke<TauriResponse>('delete_directory', {collection: collection.name})
             .then((response) => {
-                if(!response.error){
+                if(response.success){
                     const collectionIds = collection.requests.map(req =>  req.meta.id)
                     const newTabs = activeRequests.filter(id => !collectionIds.includes(id))
                     const newCollections = files.filter(col => col.name !== collection.name)                        
@@ -142,7 +142,7 @@ const Collection = ({ collection }: Props): JSX.Element => {
 
         invoke<TauriResponse>('create_file', {data: JSON.stringify(newRequest), collection: collection.name})
             .then((response) => {
-                if(!response.error){
+                if(response.success){
                     dispatch(updatefiles(newFiles))
                     dispatch(updateRequests([...requests, id]))
                     dispatch(updateActiveRequest(id))

@@ -70,7 +70,7 @@ const Request = ({ request, collectionName }:Props) => {
 
         invoke<TauriResponse>('delete_file', {collection: collectionName, request: requestName})
             .then((response) => {
-                if(!response.error){
+                if(response.success){
                     const newTabs = activeRequests.filter(id => id!== request.meta.id)
                     const newCollections = files.map(collection => {
                         // Filter out the request with the given ID from each collection

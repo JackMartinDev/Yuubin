@@ -38,6 +38,6 @@ type Config = {
 }
 
 type TauriResponse = {
-    error: boolean 
+    success: boolean 
     message: "string",
 }

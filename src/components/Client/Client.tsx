@@ -86,7 +86,7 @@ const Client = ({request, collectionName}: Props): JSX.Element => {
         //CHECK THIS LATER
         invoke<TauriResponse>('edit_file', {data: JSON.stringify(updatedRequest), collection: collectionName})
             .then((response) => {
-                if(!response.error){
+                if(response.success){
                     dispatch(updatefiles(newFiles)) 
                     notifications.show({
                         title: t("success"),

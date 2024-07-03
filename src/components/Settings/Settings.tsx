@@ -86,7 +86,7 @@ const Settings = ({closeModal}: Props) => {
         console.log(config)
         invoke<TauriResponse>('edit_config', {data: JSON.stringify(snakecaseKeys(config))})
             .then((response) => {
-                if(!response.error){
+                if(response.success){
                     dispatch(updateSettings({preserveOpenTabs, dataPath, language, theme: parsedTheme}))
                     i18next.changeLanguage(language)
                     setColorScheme(parsedTheme)
