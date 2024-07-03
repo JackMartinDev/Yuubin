@@ -62,7 +62,7 @@ pub struct Config {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Response {
-    pub error: bool,
+    pub success: bool,
     pub message: String
 }
 
@@ -70,11 +70,11 @@ impl Response {
     pub fn from_result<T>(result: Result<T>) -> Self {
         match result {
             Ok(_) => Response {
-                error: false,
+                success: true,
                 message: "Success".to_string(),
             },
             Err(e) => Response {
-                error: true,
+                success: false,
                 message: e.to_string(),
             },
         }
@@ -83,11 +83,11 @@ impl Response {
     pub fn from_result_with_message(result: Result<String>) -> Self {
         match result {
             Ok(message) => Response {
-                error: false,
+                success: true,
                 message,
             },
             Err(e) => Response {
-                error: true,
+                success: false,
                 message: e.to_string(),
             },
         }
