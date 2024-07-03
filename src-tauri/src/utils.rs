@@ -21,6 +21,7 @@ pub fn get_data_path() -> Result<PathBuf> {
 
     let config: Config = toml::from_str(&file_content)
         .context("Failed to parse config")?;
+
     Ok(PathBuf::from(config.data_path))
 }
 
