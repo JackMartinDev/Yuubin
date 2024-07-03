@@ -98,6 +98,7 @@ const Request = ({ request, collectionName }:Props) => {
                     //Add this to a config option
                     //.filter(collection => collection.requests.length > 0); // Optionally, remove collections that are empty after deletion 
 
+                    //go through and change all error messages to be defined on the front end.
                 }else{
                     notifications.show({
                         title: t("error"),
