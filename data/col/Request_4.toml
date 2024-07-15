@@ -1,9 +1,0 @@
-method = "GET"
-url = "https://gogole.com"
-body = "{}"
-headers = []
-params = []
-
-[meta]
-name = "Request_4"
-id = "b826d008-9da7-414c-a16a-2bbae4b649fe"

@@ -1,9 +1,0 @@
-method = "GET"
-url = "https://lol.com"
-body = "{}"
-headers = []
-params = []
-
-[meta]
-name = "Request_2222"
-id = "e8c1264b-1dd1-4c23-b73b-c8fa66e3d925"

@@ -1,9 +1,0 @@
-method = "GET"
-url = "https://testing.net"
-body = "{}"
-headers = []
-params = []
-
-[meta]
-name = "Request_92"
-id = "555b0f05-0df8-4df2-b035-8c1d4f5f50e6"
