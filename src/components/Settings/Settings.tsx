@@ -119,13 +119,12 @@ const Settings = ({closeModal}: Props) => {
             defaultPath: await appDataDir(),
         });
         if (Array.isArray(selected)){
+            //Add warning here for multiple directory selection
         }
         else if (selected === null) {
             // user cancelled the selection
-            console.log("2",selected)
         } else {
             // user selected a single directory
-            console.log("3",selected)
             form.setValues({dataPath: selected})
         }
     }

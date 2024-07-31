@@ -2,6 +2,8 @@ import { ActionIcon, Box, Group, Text, Title } from "@mantine/core"
 import { IconDownload } from "@tabler/icons-react"
 import { notifications } from "@mantine/notifications";
 import { useTranslation } from "react-i18next";
+import { open as openTauri } from '@tauri-apps/api/dialog';
+import { appDataDir } from '@tauri-apps/api/path';
 
 const IntroductionPage = () => {
     const {t} = useTranslation();
@@ -13,6 +15,26 @@ const IntroductionPage = () => {
             color: 'yellow'
         })
     }
+
+//    const selectFile = async() => {
+//        const selected = await openTauri({
+//            defaultPath: await appDataDir(),
+//            filters: [{
+//                name: 'JSON',
+//                extensions: ['json']
+//            }]
+//        });
+//        if (Array.isArray(selected)){
+//            // user selected multiple files 
+//        }
+//        else if (selected === null) {
+//            // user cancelled the selection
+//        } else {
+//            // user selected a file 
+//            // TODO: Add tauri command call to pass selected to the backend
+//            // for parsing
+//        }
+//    }
 
     return(
         <Box m="xs">
