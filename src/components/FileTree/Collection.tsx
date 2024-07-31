@@ -7,8 +7,8 @@ import { ActionIcon, Box, Button, Flex, Group, Menu, Modal, Select, Text, TextIn
 import { useDisclosure, useHover } from "@mantine/hooks";
 import { isNotEmpty, useForm } from '@mantine/form';
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/store";
-import { updateActiveRequest, updatefiles, updateRequests } from "../../requestSlice";
+import { RootState } from "../../redux/store/store";
+import { updateActiveRequest, updatefiles, updateRequests } from "../../redux/slice/requestSlice";
 import { invoke } from "@tauri-apps/api/tauri";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";

@@ -10,8 +10,8 @@ import { Combobox, Image, Input, InputBase, useCombobox } from "@mantine/core";
 
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { RootState } from "../../store/store"
-import { updateSettings } from "../../configSlice"
+import { RootState } from "../../redux/store/store"
+import { updateSettings } from "../../redux/slice/configSlice"
 import { useTranslation } from "react-i18next"
 import i18next from 'i18next';
 

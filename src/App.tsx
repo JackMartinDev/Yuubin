@@ -8,14 +8,14 @@ import { notifications } from "@mantine/notifications"
 import { useEffect } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "./store/store";
-import { updateActiveRequest, updateRequests, updatefiles } from "./requestSlice";
+import { RootState } from "./redux/store/store";
+import { updateActiveRequest, updateRequests, updatefiles } from "./redux/slice/requestSlice";
 import MethodIcon from "./components/MethodIcon";
 import { IconSettings } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import camelcaseKeys from 'camelcase-keys';
 import Settings from "./components/Settings/Settings";
-import { updateSettings } from "./configSlice";
+import { updateSettings } from "./redux/slice/configSlice";
 import { useTranslation } from "react-i18next";
 import i18next from 'i18next';
 

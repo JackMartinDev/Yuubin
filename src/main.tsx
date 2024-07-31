@@ -3,7 +3,7 @@ import App from "./App";
 import "./styles.css";
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
-import { store } from './store/store'
+import { store } from './redux/store/store'
 import { Provider } from 'react-redux'
 import { MantineProvider, createTheme } from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";

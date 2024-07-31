@@ -1,13 +1,13 @@
 import classes from "./Request.module.css"
 import { useDispatch, useSelector } from "react-redux"
-import { updateActiveRequest, updateRequests, updatefiles } from "../../requestSlice"
+import { updateActiveRequest, updateRequests, updatefiles } from "../../redux/slice/requestSlice"
 import { ActionIcon, Flex, Text, Tooltip, useMantineColorScheme } from "@mantine/core"
 import { IconBallpen, IconDots, IconPlayerPlay } from "@tabler/icons-react"
 import { useHover } from "@mantine/hooks"
 import { Menu,  rem } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { IconTrash } from '@tabler/icons-react';
-import { RootState } from "../../store/store";
+import { RootState } from "../../redux/store/store";
 import { invoke } from '@tauri-apps/api/tauri';
 import { notifications } from "@mantine/notifications"
 import MethodIcon from "../MethodIcon"

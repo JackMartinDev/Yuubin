@@ -4,9 +4,9 @@ import { Box, Button, Flex, Modal, TextInput, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/store";
+import { RootState } from "../../redux/store/store";
 import { invoke } from "@tauri-apps/api/tauri";
-import { updatefiles } from "../../requestSlice";
+import { updatefiles } from "../../redux/slice/requestSlice";
 import { notifications } from "@mantine/notifications";
 import { useTranslation } from "react-i18next";
 

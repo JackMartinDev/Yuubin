@@ -3,7 +3,7 @@ import RequestBody from "../RequestBody/RequestBody"
 import ResponseBody from "../ResponseBody/ResponseBody"
 import SearchBar from "../SearchBar/SearchBar"
 import { useDispatch, useSelector } from "react-redux"
-import { RootState } from "../../store/store"
+import { RootState } from "../../redux/store/store"
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { Box, Button, Flex, Loader, Tabs, Text } from "@mantine/core"
 import Headers from "../Headers/Headers"
@@ -14,7 +14,7 @@ import { AxiosError, HttpStatusCode } from "axios"
 import { invoke } from "@tauri-apps/api/tauri"
 import { notifications } from "@mantine/notifications"
 import { deepIsEqual } from "../../utils/utils"
-import { updatefiles } from "../../requestSlice"
+import { updatefiles } from "../../redux/slice/requestSlice"
 import { useTranslation } from "react-i18next"
 
 interface Props {

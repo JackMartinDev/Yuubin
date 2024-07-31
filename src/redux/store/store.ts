@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import requestReducer from "../requestSlice"
-import responseReducer from "../responseSlice"
-import configReducer from "../configSlice"
+import requestReducer from "../slice/requestSlice"
+import responseReducer from "../slice/responseSlice"
+import configReducer from "../slice/configSlice"
 
 export const store = configureStore({
     reducer: {
