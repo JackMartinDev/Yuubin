@@ -18,6 +18,7 @@ import Settings from "./components/Settings/Settings";
 import { updateSettings } from "./redux/slice/configSlice";
 import { useTranslation } from "react-i18next";
 import i18next from 'i18next';
+import IntroductionPage from "./components/IntroductionPage/IntroductionPage";
 
 function App(): JSX.Element {
     const dispatch = useDispatch()
@@ -135,7 +136,7 @@ function App(): JSX.Element {
                             )
                             }
                         </Tabs>
-                        :<Title order={2} m="xs">Introduction Page</Title>
+                        :<IntroductionPage/>
                     }
 
                 </Panel>
