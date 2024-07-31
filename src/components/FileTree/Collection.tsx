@@ -3,7 +3,7 @@ import classes from "./Collection.module.css"
 import cx from "clsx"
 import Request from "./Request";
 import { IconBallpen, IconChevronRight, IconDots, IconPlus, IconTrash } from "@tabler/icons-react"
-import { ActionIcon, Box, Button, Flex, Group, Menu, Modal, Select, Text, TextInput, rem } from "@mantine/core";
+import { ActionIcon, Anchor, Box, Button, Flex, Group, Menu, Modal, Select, Text, TextInput, rem } from "@mantine/core";
 import { useDisclosure, useHover } from "@mantine/hooks";
 import { isNotEmpty, useForm } from '@mantine/form';
 import { useDispatch, useSelector } from "react-redux";
@@ -252,9 +252,24 @@ const Collection = ({ collection }: Props): JSX.Element => {
             </Group>
 
             <div className={cx(classes.content, {[classes.show]: isToggled})}>
-                {collection.requests.map((request) => <Request key={request.meta.id} request={request} collectionName={collection.name}  />)}
+                {collection.requests.length > 0 ? 
+                    collection.requests.map((request) => (
+                        <Request 
+                            key={request.meta.id} 
+                            request={request} 
+                            collectionName={collection.name}
+                        />
+                    ))
+                    : 
+                    <Text size="sm" ml={30}>
+                        This collection is empty. 
+                        <Anchor component="button" onClick={open}>
+                            Add a new request
+                        </Anchor>
+                        ?
+                    </Text>
+                }
             </div>
-
         </Box>
     )
 }
