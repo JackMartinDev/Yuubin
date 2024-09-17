@@ -1,35 +1,41 @@
-export function debounce<T extends (...args: any[]) => void>(func: T, wait: number): (...args: Parameters<T>) => void {
-    let timeout: ReturnType<typeof setTimeout> | null;
+export function debounce<T extends (...args: any[]) => void>(
+  func: T,
+  wait: number,
+): (...args: Parameters<T>) => void {
+  let timeout: ReturnType<typeof setTimeout> | null;
 
-    return function executedFunction(...args: Parameters<T>): void {
-        const later = () => {
-            timeout = null;
-            func(...args);
-        };
-
-        if (timeout !== null) {
-            clearTimeout(timeout);
-        }
-        timeout = setTimeout(later, wait);
+  return function executedFunction(...args: Parameters<T>): void {
+    const later = () => {
+      timeout = null;
+      func(...args);
     };
+
+    if (timeout !== null) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(later, wait);
+  };
 }
 
-export function deepIsEqual(array1: KeyValuePair[], array2: KeyValuePair[]): boolean{
-    if (array1.length !== array2.length) return false;
-    for (let i = 0; i < array1.length; i++) {
-        const object1 = array1[i];
-        const object2 = array2[i];
-        const keys1 = Object.keys(object1);
-        const keys2 = Object.keys(object2);
-        if (keys1.length !== keys2.length) return false;
+export function deepIsEqual(
+  array1: KeyValuePair[],
+  array2: KeyValuePair[],
+): boolean {
+  if (array1.length !== array2.length) return false;
+  for (let i = 0; i < array1.length; i++) {
+    const object1 = array1[i];
+    const object2 = array2[i];
+    const keys1 = Object.keys(object1);
+    const keys2 = Object.keys(object2);
+    if (keys1.length !== keys2.length) return false;
 
-        if (
-            object1.key !== object2.key ||
-            object1.value !== object2.value ||
-            object1.checked !== object2.checked
-        ) {
-            return false;
-        }
+    if (
+      object1.key !== object2.key ||
+      object1.value !== object2.value ||
+      object1.checked !== object2.checked
+    ) {
+      return false;
     }
-    return true
+  }
+  return true;
 }

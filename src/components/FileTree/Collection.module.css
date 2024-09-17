@@ -1,21 +1,21 @@
-.collection:hover{
-    cursor: pointer;
+.collection:hover {
+  cursor: pointer;
 }
 
-.content{
-    max-height: 0px;
-    overflow: hidden;
+.content {
+  max-height: 0px;
+  overflow: hidden;
 }
 
-.show{
-    height: auto;
-    max-height: 9999px;
+.show {
+  height: auto;
+  max-height: 9999px;
 }
 
-.icon{
-    margin-right: 0.25rem;
+.icon {
+  margin-right: 0.25rem;
 }
 
-.toggle{
-    rotate: 90deg;
+.toggle {
+  rotate: 90deg;
 }

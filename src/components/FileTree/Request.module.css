@@ -1,23 +1,23 @@
-.light:hover{
-    background-color: #E7E7E7;
-    cursor: pointer;
+.light:hover {
+  background-color: #e7e7e7;
+  cursor: pointer;
 }
 
-.dark:hover{
-    background-color: #333537;
-    cursor: pointer;
+.dark:hover {
+  background-color: #333537;
+  cursor: pointer;
 }
 
 .darkSelected {
-    background-color: #3E3E3F;
+  background-color: #3e3e3f;
 }
 
 .lightSelected {
-    background-color: #D2CFCF;
+  background-color: #d2cfcf;
 }
 
 .truncate {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

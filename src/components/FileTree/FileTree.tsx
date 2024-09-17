@@ -11,97 +11,118 @@ import { notifications } from "@mantine/notifications";
 import { useTranslation } from "react-i18next";
 
 interface Props {
-    files: Collection[],
+  files: Collection[];
 }
 
 const FileTree = ({ files }: Props) => {
-    //const icon = <IconSearch style={{ width: rem(16), height: rem(16) }} />;
-    const [opened, { open, close }] = useDisclosure(false);
-    const localFiles = useSelector((state: RootState) => state.request.files)
-    const dispatch = useDispatch();
-    const {t} = useTranslation();
+  //const icon = <IconSearch style={{ width: rem(16), height: rem(16) }} />;
+  const [opened, { open, close }] = useDisclosure(false);
+  const localFiles = useSelector((state: RootState) => state.request.files);
+  const dispatch = useDispatch();
+  const { t } = useTranslation();
 
-    const form = useForm({
-        initialValues: {
-            name: '',
-        },
+  const form = useForm({
+    initialValues: {
+      name: "",
+    },
 
-        validate: {
-            name: isNotEmpty(t("collection_name_required")),
-        },
-    });
+    validate: {
+      name: isNotEmpty(t("collection_name_required")),
+    },
+  });
 
-    const [_submittedValues, setSubmittedValues] = useState<typeof form.values>(form.values);
+  const [_submittedValues, setSubmittedValues] = useState<typeof form.values>(
+    form.values,
+  );
 
-    const closeModal = () => {
-        close();
-        form.reset()
-    }
+  const closeModal = () => {
+    close();
+    form.reset();
+  };
 
-    const addCollectionHandler = async(values: typeof form.values) => {
-        setSubmittedValues(values)
-        const formValues = form.getValues()
+  const addCollectionHandler = async (values: typeof form.values) => {
+    setSubmittedValues(values);
+    const formValues = form.getValues();
 
-        const newCollection: Collection = {name: formValues.name, requests: []}
-        const newFiles = [...localFiles, newCollection]
+    const newCollection: Collection = { name: formValues.name, requests: [] };
+    const newFiles = [...localFiles, newCollection];
 
-        invoke<TauriResponse>('create_directory', {collection: formValues.name})
-            .then((response) => {
-                if(response.success){
-                    dispatch(updatefiles(newFiles))
-                    closeModal()
-                    notifications.show({
-                        title: t("success"),
-                        message: t("create_collection_success"),
-                        color: 'green'
-                    })
+    invoke<TauriResponse>("create_directory", { collection: formValues.name })
+      .then((response) => {
+        if (response.success) {
+          dispatch(updatefiles(newFiles));
+          closeModal();
+          notifications.show({
+            title: t("success"),
+            message: t("create_collection_success"),
+            color: "green",
+          });
+        } else {
+          notifications.show({
+            title: t("error"),
+            message: response.message,
+            color: "red",
+          });
+        }
+      })
+      .catch((error) =>
+        notifications.show({
+          title: t("unexpected_error"),
+          message: error,
+          color: "red",
+        }),
+      );
+  };
 
-                }else{
-                    notifications.show({
-                        title: t("error"),
-                        message: response.message,
-                        color: 'red'
-                    })
-                }
-            }).catch((error) => 
-                notifications.show({
-                    title: t("unexpected_error"),
-                    message: error,
-                    color: 'red'
-                })
-            )
-    }
+  return (
+    <>
+      <Modal
+        opened={opened}
+        onClose={closeModal}
+        title={t("new_collection")}
+        centered
+        size="lg"
+      >
+        <form
+          onSubmit={form.onSubmit((values) => addCollectionHandler(values))}
+        >
+          <TextInput
+            {...form.getInputProps("name")}
+            key={form.key("name")}
+            mb="sm"
+            label={t("collection_name")}
+          />
+          <Flex justify="right" gap="sm">
+            <Button variant="light" color="gray" onClick={closeModal}>
+              {t("cancel")}
+            </Button>
+            <Button variant="default" color="gray" type="submit">
+              {t("create")}
+            </Button>
+          </Flex>
+        </form>
+      </Modal>
 
-    return (
-        <>
-            <Modal opened={opened} onClose={closeModal} title={t("new_collection")} centered size="lg">
-                <form onSubmit={form.onSubmit((values) => addCollectionHandler(values))}>
-                    <TextInput 
-                        {...form.getInputProps('name')}
-                        key={form.key('name')}
-                        mb="sm" 
-                        label={t("collection_name")} 
+      <Box>
+        <Box m="xs">
+          <Title order={2}>{t("yuubin")}</Title>
+          <Button
+            onClick={open}
+            variant="default"
+            color="gray"
+            mb="xs"
+            w="100%"
+          >
+            {t("create_collection")}
+          </Button>
+        </Box>
+        {/*<TextInput placeholder="Search collections" leftSection={icon} mb="sm" m="xs"/>*/}
+        {files.map((collection) => (
+          <Collection key={collection.name} collection={collection} />
+        ))}
+      </Box>
+    </>
+  );
+};
 
-                    />
-                    <Flex justify="right" gap="sm">
-                        <Button variant="light" color="gray" onClick={closeModal}>{t("cancel")}</Button>
-                        <Button variant="default" color="gray" type="submit">{t("create")}</Button>
-                    </Flex>
-                </form>
-            </Modal>
-
-            <Box>
-                <Box m="xs">
-                    <Title order={2}>{t("yuubin")}</Title>
-                    <Button onClick={open} variant="default" color="gray" mb="xs" w="100%">
-                        {t("create_collection")}
-                    </Button>
-                </Box>
-                {/*<TextInput placeholder="Search collections" leftSection={icon} mb="sm" m="xs"/>*/}
-                {files.map(collection => (<Collection key={collection.name} collection={collection}/>))}
-            </Box>
-        </>
-    )
-}
-
-export default FileTree
+export default FileTree;
